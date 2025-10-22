@@ -1,11 +1,14 @@
 import { Link,useRouter } from 'expo-router';
 import { StyleSheet, View, Pressable, Text } from 'react-native';
-
+import { ThemeContext } from "@/context/ThemeContext";
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { useState, useContext, useEffect } from "react";
 
 export default function LoginScreen(){
   const router = useRouter()
+
+  const { colorScheme, setColorScheme, theme } = useContext(ThemeContext)
   
   return (
     <ThemedView style={styles.container}>

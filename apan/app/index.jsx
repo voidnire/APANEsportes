@@ -1,16 +1,20 @@
-import { Text, View, TextInput, Pressable, StyleSheet, FlatList } from "react-native";
+import { Text, View, TextInput, Pressable, StyleSheet, FlatList, Image } from "react-native";
 import { ThemeContext } from "@/context/ThemeContext";
-import React,{ useContext,useMemo } from "react";
+import React,{ useContext } from "react";
+import APANLogo from "../assets/images/APAN.png";
 
 
 export default function HomeScreen() {
-    const { colorScheme, theme } = useContext(ThemeContext)
-  
-  const styles = useMemo(() => createStyles(theme, colorScheme), [theme, colorScheme]);
-    
+const { colorScheme, setColorScheme, theme } = useContext(ThemeContext)  
+
+const styles = createStyles(theme, colorScheme)  
+
+
     return (
     <View style={styles.container}>
-      <Text style={styles.title}>Home Screen</Text>
+     
+      <Image source={APANLogo} style={{ width: 100, height: 100 }} />
+     <Text style={styles.title}>Monitoramento de Atletas</Text>
     </View>
   );
 }
@@ -27,6 +31,7 @@ function createStyles(theme, colorScheme) {
     title: {
       fontSize: 24,
       fontWeight: "bold",
+      color: theme.text,
     },
   });
 }
