@@ -1,0 +1,512 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Moto Match",
+    "description": "Documentação da API",
+    "version": "1.0.0"
+  },
+  "host": "undefined:3001",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/v1/dispositivos/pesquisar": {
+      "post": {
+        "tags": [
+          "dispositivo"
+        ],
+        "summary": "Pesquisa dispositivos por características (ex: RAM = 4GB, Camera = 12MP).",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "caracteristicas": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/dispositivos/": {
+      "get": {
+        "tags": [
+          "dispositivo"
+        ],
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "dispositivo"
+        ],
+        "summary": "Adiciona um novo dispositivo na base com características.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "fabricante": {
+                  "example": "any"
+                },
+                "modelo": {
+                  "example": "any"
+                },
+                "photos": {
+                  "example": "any"
+                },
+                "caracteristicas": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/dispositivos/batch": {
+      "post": {
+        "tags": [
+          "dispositivo"
+        ],
+        "summary": "Adiciona uma lista de dispositivos de uma só vez.",
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/dispositivos/{id}": {
+      "get": {
+        "tags": [
+          "dispositivo"
+        ],
+        "summary": "Recupera dados de um dispositivo específico (com características).",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "dispositivo"
+        ],
+        "summary": "Atualiza dados de um dispositivo existente (com características).",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "fabricante": {
+                  "example": "any"
+                },
+                "modelo": {
+                  "example": "any"
+                },
+                "photos": {
+                  "example": "any"
+                },
+                "caracteristicas": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "dispositivo"
+        ],
+        "summary": "Remove um dispositivo existente.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/usuarios/": {
+      "get": {
+        "tags": [
+          "usuario"
+        ],
+        "summary": "Listagem dos usuários",
+        "description": "",
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/User"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "usuario"
+        ],
+        "summary": "Adicionar um novo usuário na base.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/CreateUsuarioDTO"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/User"
+            },
+            "description": "OK"
+          },
+          "403": {
+            "description": "Fobidden"
+          }
+        }
+      }
+    },
+    "/v1/usuarios/{id}": {
+      "get": {
+        "tags": [
+          "usuario"
+        ],
+        "summary": "Recuperar dados de um usuário específico",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "idUsuario",
+            "description": "ID do usuário",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/User"
+            },
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "usuario"
+        ],
+        "summary": "Atualizar um usuário na base.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "idUsuario",
+            "description": "ID do usuário",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/UpdateUsuarioDTO"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/User"
+            },
+            "description": "OK"
+          },
+          "403": {
+            "description": "Fobidden"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "usuario"
+        ],
+        "summary": "Alterar a senha de um usuário específico",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID do usuário"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/ChangePasswordDTO"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "NO_CONTENT"
+          },
+          "400": {
+            "description": "BAD_REQUEST"
+          },
+          "403": {
+            "description": "Fobidden"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "usuario"
+        ],
+        "summary": "Deletar um usuário específico",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID do usuário"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "NO_CONTENT"
+          },
+          "403": {
+            "description": "Fobidden"
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          }
+        }
+      }
+    },
+    "/v1/auth/signup": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Adiciona um novo usuário no sistema.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/SignUpDTO"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/User"
+            },
+            "description": "OK"
+          },
+          "403": {
+            "description": "Fobidden"
+          }
+        }
+      }
+    },
+    "/v1/auth/login": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Fazer login do usuário no sistema.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/LoginDTO"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Fobidden"
+          }
+        }
+      }
+    },
+    "/v1/auth/logout": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Fazer logout do usuário no sistema.",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Fobidden"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "CreateUsuarioDTO": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "usuario001"
+        },
+        "nome": {
+          "type": "string",
+          "example": "Joao da Silva Pereira"
+        },
+        "nascimento": {
+          "type": "string",
+          "example": "2000-01-10"
+        },
+        "email": {
+          "type": "string",
+          "example": "joao@motomatch.com"
+        },
+        "celular": {
+          "type": "string",
+          "example": "5592988888888"
+        }
+      }
+    },
+    "UpdateUsuarioDTO": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "usuario001"
+        },
+        "nome": {
+          "type": "string",
+          "example": "Joao da Silva Pereira"
+        },
+        "email": {
+          "type": "string",
+          "example": "joao@motomatch.com"
+        },
+        "celular": {
+          "type": "string",
+          "example": "5592988888888"
+        }
+      }
+    },
+    "Usuario": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "8a2053de-5d92-4c43-97c0-c9b2b0d56703"
+        },
+        "username": {
+          "type": "string",
+          "example": "usuario001"
+        },
+        "nome": {
+          "type": "string",
+          "example": "Joao da Silva Pereira"
+        },
+        "nascimento": {
+          "type": "string",
+          "example": "2000-01-10"
+        },
+        "email": {
+          "type": "string",
+          "example": "joao@motomatch.com"
+        },
+        "celular": {
+          "type": "string",
+          "example": "5592988888888"
+        }
+      }
+    }
+  }
+}
