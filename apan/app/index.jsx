@@ -15,6 +15,20 @@ const styles = createStyles(theme, colorScheme)
      
       <Image source={APANLogo} style={{ width: 100, height: 100 }} />
      <Text style={styles.title}>Monitoramento de Atletas</Text>
+    {/* --- BOTÕES ADICIONADOS --- */}
+      <Pressable style={styles.button}>
+        <Text style={styles.buttonText}>Registrar Dados</Text>
+      </Pressable>
+
+      <Pressable style={styles.button}>
+        <Text style={styles.buttonText}>Consultar Desempenho</Text>
+      </Pressable>
+
+      <Pressable style={styles.button}>
+        <Text style={styles.buttonText}>Configurações</Text>
+      </Pressable>
+      {/* --- FIM DOS BOTÕES --- */}
+    
     </View>
   );
 }
