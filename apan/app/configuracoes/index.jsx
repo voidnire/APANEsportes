@@ -11,22 +11,24 @@ import {
 import { Link, useRouter, useSearchParams } from "expo-router";
 import { ThemeContext } from "@/context/ThemeContext";
 
+import {Icon} from "@/assets/images/splash-icon.png"
+
 const screenWidth = Dimensions.get("window").width;
 
 export default function AthleteProfileScreen() {
   const { theme, colorScheme } = useContext(ThemeContext);
   const styles = createStyles(theme, colorScheme);
   const router = useRouter();
-  const params = useSearchParams(); // se você navegar com ?id= ou enviar dados
+  //const params = useSearchParams(); // se você navegar com ?id= ou enviar dados
   // Mock — substitua pelo seu dado real vindo da navegação
   const athlete = {
-    id: params.id || "1",
-    name: "Nome Completo",
+    id: /*params.id ||*/ "1",
+    name: "Maria Dado Mockado da Silva",
     age: "17",
-    modality: "Modalidade",
-    disability: "Nenhuma",
-    avatar:
-      "https://i.imgur.com/4AiXzf8.png", // exemplo; substitua por URL ou imagem local
+    modality: "Corrida",
+    disability: "Amputação de membro superior",
+    avatar:Icon,
+
     bestMark: "3,45 m",
     avgMark: "3,21 m",
   };
@@ -48,66 +50,10 @@ export default function AthleteProfileScreen() {
             <Text style={styles.backArrow}>←</Text>
           </Pressable>
         </Link>
-        <Text style={styles.headerTitle}>PERFIL</Text>
+        <Text style={styles.headerTitle}>TELA DE CONFIGS</Text>
         <View style={{ width: 36 }} />
       </View>
 
-      {/* Avatar */}
-      <View style={styles.avatarWrap}>
-        <View style={styles.avatarBorder}>
-          {athlete.avatar ? (
-            <Image source={{ uri: athlete.avatar }} style={styles.avatar} />
-          ) : (
-            <View style={styles.avatarPlaceholder}>
-              <Text style={styles.avatarInitial}>
-                {athlete.name ? athlete.name[0] : "A"}
-              </Text>
-            </View>
-          )}
-        </View>
-      </View>
-
-      {/* Info rows */}
-      <View style={styles.infoCard}>
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Nome:</Text>
-          <Text style={styles.infoValue}>{athlete.name}</Text>
-        </View>
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Idade:</Text>
-          <Text style={styles.infoValue}>{athlete.age}</Text>
-        </View>
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Modalidade:</Text>
-          <Text style={styles.infoValue}>{athlete.modality}</Text>
-        </View>
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Deficiência:</Text>
-          <Text style={styles.infoValue}>{athlete.disability}</Text>
-        </View>
-      </View>
-
-      {/* Stats cards */}
-      <View style={styles.statsContainer}>
-        <View style={styles.statCard}>
-          <Text style={styles.statIcon}>☆</Text>
-          <Text style={styles.statValue}>{athlete.bestMark}</Text>
-          <Text style={styles.statLabel}>Melhor Marca</Text>
-        </View>
-
-        <View style={styles.statCard}>
-          <Text style={styles.statIcon}>🏅</Text>
-          <Text style={styles.statValue}>{athlete.avgMark}</Text>
-          <Text style={styles.statLabel}>Média Geral</Text>
-        </View>
-      </View>
-
-      {/* Edit button */}
-      <Pressable style={styles.editButton} onPress={handleEdit}>
-        <Text style={styles.editButtonText}>Editar</Text>
-      </Pressable>
-
-      <View style={{ height: 40 }} />
     </ScrollView>
   );
 }

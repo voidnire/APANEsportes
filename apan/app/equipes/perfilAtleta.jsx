@@ -17,16 +17,16 @@ export default function AthleteProfileScreen() {
   const { theme, colorScheme } = useContext(ThemeContext);
   const styles = createStyles(theme, colorScheme);
   const router = useRouter();
-  const params = useSearchParams(); // se você navegar com ?id= ou enviar dados
-  // Mock — substitua pelo seu dado real vindo da navegação
+  //const params = useSearchParams();  se  navegar com ?id= ou enviar dados
+  // Mock
   const athlete = {
-    id: params.id || "1",
-    name: "Nome Completo",
+    id: /* params.id ||*/ "1",
+    name: "Pessoa Exemplo",
     age: "17",
     modality: "Modalidade",
     disability: "Nenhuma",
     avatar:
-      "https://i.imgur.com/4AiXzf8.png", // exemplo; substitua por URL ou imagem local
+      "", // exemplo; substitua por URL ou imagem local
     bestMark: "3,45 m",
     avgMark: "3,21 m",
   };
@@ -43,7 +43,7 @@ export default function AthleteProfileScreen() {
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       {/* Header */}
       <View style={styles.header}>
-        <Link href="/" asChild>
+        <Link href="/equipes/index" asChild>
           <Pressable style={styles.backButton}>
             <Text style={styles.backArrow}>←</Text>
           </Pressable>

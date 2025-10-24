@@ -118,16 +118,15 @@ export default function DesempenhoScreen() {
       style={styles.container}
       contentContainerStyle={styles.contentContainer}
     >
-      {/* Header com botão de voltar */}
+      {/* Header com botão de voltar 
       <View style={styles.header}>
         <Link href="/" asChild>
           <Pressable style={styles.backButton}>
             <Text style={styles.backArrow}>←</Text>
           </Pressable>
         </Link>
-        <Text style={styles.headerTitle}>DESEMPENHO</Text>
-        <View style={{ width: 36 }} /> {/* espaço symétrico */}
-      </View>
+        <View style={{ width: 36 }} />  espaço symétrico
+      </View>*/}
 
       {/* --- FILTROS --- */}
       <View style={styles.filtersContainer}>
