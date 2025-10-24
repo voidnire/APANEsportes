@@ -21,6 +21,7 @@ export default function RootLayout() {
         <Stack.Screen name="registrarDados" options={{ title: 'Home' }} />
 
         <Stack.Screen name="configuracoes" options={{ title: 'Home' }} />
+        <Stack.Screen name="desempenho" options={{ title: 'Home' }} />
 
       </Stack>
       <StatusBar style="auto" />
