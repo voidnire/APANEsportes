@@ -1,5 +1,27 @@
 # APANApp
-> Aplicativo para monitoramento de atletas.
+> Aplicativo para monitoramento de atletas paralímpicos. 
+
+
+## COMO CONTRIBUIR?
+- Crie uma nova branch, e realize suas alterações nela. 
+```
+git checkout -b nova-branch
+```
+
+- Após acabar,  realize o commit.
+
+```
+git add .
+git commit -m "finalizando na branch x (exemplo)" 
+```
+
+- Suba sua branch para o repositório remoto. 
+```
+git push -u origin nova-branch
+```
+
+- Abra uma Pull Request no github. Descreva suas mudanças e aguarde a revisão. (●ˇ∀ˇ●)
+
 
 
 ## Links
@@ -14,5 +36,8 @@
 - **MATERIAL ICONS**: https://icons.expo.fyi/Index
   
 
-## Comandos importantes
-- `npx expo start --tunnel --reset-cache` ->  reseta o cache e reinicia o app
+## 👨‍💻 Comandos Importantes 
+- `npm start` -> inicia o app. Aperte **W para ver a versão web**.
+- `npm install` -> ao **executar o app pela primeira vez**, é necessário rodar este para instalar todos os pacotes. **LEMBRE-SE**: antes disso, vá para o diretório **apan**, com o comando `cd apan/`
+- `npx expo start --tunnel --reset-cache` ->  **reseta o cache** e inicia o app.
+
