@@ -30,7 +30,7 @@ export default function RootLayout() {
           headerShown:false,
           title:"Home",
           tabBarIcon: ({color,size})=>{
-          return <MaterialIcons name="sports-gymnastics" size={size} color={color} />
+          return <MaterialIcons name="home" size={size} color={color} />
         }, 
         }} />
 
@@ -46,21 +46,21 @@ export default function RootLayout() {
         <Tabs.Screen name ="desempenho" options={{ tabBarLabel:"Desempenho", //href ="null" vai esconde, tabBarBadge:3,
           headerShown:false,title:"Desempenho",
           tabBarIcon: ({color,size})=>{
-          return <MaterialIcons name="sports-gymnastics" size={size} color={color} />
+          return <MaterialIcons name="area-chart" size={size} color={color} />
         }, 
         }} />
 
         <Tabs.Screen name ="equipes" options={{ tabBarLabel:"Equipes", //href ="null" vai esconde, tabBarBadge:3,
           headerShown:false,title:"Equipes",
           tabBarIcon: ({color,size})=>{
-          return <MaterialIcons name="sports-gymnastics" size={size} color={color} />
+          return <MaterialIcons name="people" size={size} color={color} />
         }, 
         }} />
 
         <Tabs.Screen name ="configuracoes" options={{ tabBarLabel:"Configurações", //href ="null" vai esconde, tabBarBadge:3,
           headerShown:false,title:"Configurações",
           tabBarIcon: ({color,size})=>{
-          return <MaterialIcons name="sports-gymnastics" size={size} color={color} />
+          return <MaterialIcons name="settings" size={size} color={color} />
         }, 
         }} />
 

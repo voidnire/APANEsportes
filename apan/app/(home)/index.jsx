@@ -5,16 +5,21 @@ import {
   Text,
   TouchableOpacity,
   SafeAreaView,
-  ScrollView,Image
+  ScrollView,
+  Image,
 } from 'react-native';
-import {APANLOGO} from '@/assets/images/APAN.png';
+import APANLOGO from '@/assets/images/APAN.png';
 import {Link} from 'expo-router';
 
 // Uma função de componente reutilizável para os cartões de menu
 const MenuCard = ({ iconName, iconColor, iconBgColor, title, subtitle, onPress }) => (
   <TouchableOpacity style={styles.card} onPress={onPress}>
     <View style={[styles.iconContainer, { backgroundColor: iconBgColor }]}>
-      <Image src={APANLOGO} size={24} color={iconColor} />
+      <Image
+        source={APANLOGO}
+        style={{ width: 25, height: 24, tintColor: iconColor }}
+        resizeMode="cover"
+      />
     </View>
     <View style={styles.cardTextContainer}>
       <Text style={styles.cardTitle}>{title}</Text>
@@ -31,7 +36,6 @@ const HomeScreen = () => {
         <View style={styles.header}>
           <Image source={APANLOGO}    
           style={{width: 50, height: 50}}/>
-          {/*<Text style={styles.headerTitle}>APAN</Text>*/}
           <Text style={styles.headerSubtitle}>Monitoramento de Atletas</Text>
         </View>
 
