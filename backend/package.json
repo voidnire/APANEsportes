@@ -12,6 +12,9 @@
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch"
   },
+  "prisma": {
+    "seed": "node prisma/seed.ts"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -49,7 +52,7 @@
     "@types/express": "^5.0.3",
     "@types/express-session": "^1.18.2",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.8.1",
+    "@types/node": "^24.10.0",
     "@types/papaparse": "^5.3.16",
     "@types/supertest": "^6.0.3",
     "@types/swagger-ui-express": "^4.1.8",

@@ -10,3 +10,152 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+// Define os tipos de sessão permitidos (Tela 2)
+enum TipoSessao {
+  PRE_TREINO
+  POS_TREINO
+}
+
+
+// Armazena as contas dos treinadores (Usuários)
+model Usuario {
+  id         String   @id @default(uuid()) @db.Char(36)
+  nomeCompleto String   @db.VarChar(255)
+  email      String   @unique @db.VarChar(255) // @unique garante que não haja emails duplicados
+  senhaHash  String   @db.VarChar(255) // Para armazenar a senha de forma segura
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relação: Um Usuário (Treinador) pode ter muitos Atletas
+  atletas Atleta[]
+}
+
+// Armazena o perfil de cada atleta
+model Atleta {
+  id             String   @id @default(uuid()) @db.Char(36)
+  nomeCompleto   String   @db.VarChar(255)
+  dataNascimento DateTime @db.Date // @db.Date é melhor para datas de nascimento
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+ 
+  usuarioId String  @db.Char(36)
+  usuario   Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  registros RegistroAvaliacao[]
+
+
+  classificacoes AtletaClassificacao[]
+
+  @@index([nomeCompleto]) 
+}
+
+model RegistroAvaliacao {
+  id          String     @id @default(uuid()) @db.Char(36)
+  dataHora    DateTime   @default(now())
+  tipo        TipoSessao
+  observacoes String?    @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  atletaId String @db.Char(36)
+  atleta   Atleta @relation(fields: [atletaId], references: [id], onDelete: Cascade)
+
+  modalidadeId String     @db.Char(36)
+  modalidade   Modalidade @relation(fields: [modalidadeId], references: [id], onDelete: Restrict)
+
+  resultados ResultadoMetrica[]
+
+  @@index([atletaId, dataHora]) 
+}
+
+
+model ResultadoMetrica {
+  id    String  @id @default(uuid()) @db.Char(36)
+  valor Decimal @db.Decimal(10, 3) 
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  
+  registroId String            @db.Char(36)
+  registro   RegistroAvaliacao @relation(fields: [registroId], references: [id], onDelete: Cascade)
+
+
+  tipoMetricaId String      @db.Char(36)
+  tipoMetrica   TipoMetrica @relation(fields: [tipoMetricaId], references: [id], onDelete: Restrict)
+
+}
+
+
+model Classificacao {
+  id        String   @id @default(uuid()) @db.Char(36)
+  codigo    String   @unique @db.VarChar(10) 
+  descricao String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  atletas AtletaClassificacao[]
+}
+
+model Modalidade {
+  id        String   @id @default(uuid()) @db.Char(36)
+  nome      String   @unique @db.VarChar(100) 
+  categoria String   @db.VarChar(100) 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+
+  registros RegistroAvaliacao[]
+
+
+  metricasPermitidas ModalidadeTipoMetrica[]
+}
+
+
+model TipoMetrica {
+  id            String   @id @default(uuid()) @db.Char(36)
+  nome          String   @unique @db.VarChar(100) 
+  unidadeMedida String   @db.VarChar(10) 
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+
+  resultados ResultadoMetrica[]
+
+
+  modalidades ModalidadeTipoMetrica[]
+}
+
+
+model AtletaClassificacao {
+  id String @id @default(uuid()) @db.Char(36)
+
+  atletaId String @db.Char(36)
+  atleta   Atleta @relation(fields: [atletaId], references: [id], onDelete: Cascade)
+  classificacaoId String        @db.Char(36)
+  classificacao   Classificacao @relation(fields: [classificacaoId], references: [id], onDelete: Cascade)
+
+
+  createdAt DateTime @default(now())
+  @@unique([atletaId, classificacaoId])
+}
+
+model ModalidadeTipoMetrica {
+  id String @id @default(uuid()) @db.Char(36)
+
+
+  modalidadeId String     @db.Char(36)
+  modalidade   Modalidade @relation(fields: [modalidadeId], references: [id], onDelete: Cascade)
+
+
+  tipoMetricaId String      @db.Char(36)
+  tipoMetrica   TipoMetrica @relation(fields: [tipoMetricaId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+
+  @@unique([modalidadeId, tipoMetricaId])
+}
