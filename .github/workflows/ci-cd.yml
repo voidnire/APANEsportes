@@ -1,0 +1,63 @@
+name: CI/CD - Backend (APAN)
+
+on:
+  push:
+    branches: [ main ] # Acionado apenas em push para 'main'
+  
+  # Permite rodar manualmente pela interface do GitHub Actions
+  workflow_dispatch:
+
+jobs:
+  build-test-and-push:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 1. Fazer checkout do código
+        uses: actions/checkout@v4
+
+      - name: 2. Configurar Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24 # Baseado no seu package.json (@types/node: ^24)
+
+      # --- ETAPA DE CACHE ---
+      - name: 3. Cache backend node_modules
+        uses: actions/cache@v4
+        with:
+          # Define o path para o cache
+          path: backend/node_modules
+          # Cria uma chave única baseada no package-lock.json e na versão do node
+          key: backend-npm-24-${{ hashFiles('backend/package-lock.json') }}
+          restore-keys: |
+            backend-npm-24-
+
+      # --- ETAPA DE CI (Testes do Backend) ---
+      - name: 4. Instalar dependências e Rodar Testes (Backend)
+        # O 'working-directory' foca todos os comandos na pasta 'backend'
+        working-directory: ./backend
+        run: |
+          npm ci
+          npx prisma generate
+          # Usa o comando 'test' exato do seu package.json
+          npm run test
+      
+      # --- ETAPA DE CD (Login e Deploy) ---
+      # Esta etapa só roda se a etapa 4 (testes) passar
+      
+      - name: 5. Fazer login no Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: 6. Construir e Enviar Imagem Docker (backapan)
+        uses: docker/build-push-action@v6
+        with:
+          # Contexto: onde o Dockerfile está
+          context: ./backend
+          # Arquivo: o Dockerfile que otimizamos
+          file: ./backend/Dockerfile
+          # Envia a imagem (push: true)
+          push: true
+          # Tags da imagem: (Ex: seunome/backapan:latest)
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/backapan:latest
