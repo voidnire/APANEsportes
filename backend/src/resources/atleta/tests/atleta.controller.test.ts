@@ -70,8 +70,19 @@ describe("Atleta Controller (Unit)", () => {
       };
       req.body = createDTO;
       
-      // O service retorna o atleta sem sanitizar
-      mockedAtletaService.createAtleta.mockResolvedValue(mockAtleta);
+      // *** A CORREÇÃO ESTÁ AQUI ***
+      // O service deve retornar o atleta que foi CRIADO (com os dados do DTO),
+      // não o 'mockAtleta' genérico.
+      const atletaCriado = {
+        id: "uuid-novo-atleta", // ID Fixo para o teste
+        usuarioId: mockUsuarioId,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        ...createDTO, // Inclui nomeCompleto e dataNascimento do DTO
+      };
+      
+      // O service retorna o atleta como ele vem do banco (sem sanitizar)
+      mockedAtletaService.createAtleta.mockResolvedValue(atletaCriado);
 
       await atletaController.createAtleta(req, res);
 
@@ -80,11 +91,12 @@ describe("Atleta Controller (Unit)", () => {
         mockUsuarioId // Verifica se o ID da sessão foi passado
       );
       expect(res.status).toHaveBeenCalledWith(StatusCodes.CREATED);
-      // O controller sanitiza (adiciona a chave 'classificacoes: undefined')
-      // então testamos o que o controller envia
-      expect(res.json).toHaveBeenCalledWith(
-        expect.objectContaining({ nomeCompleto: "Novo Atleta" })
-      );
+
+      // O controller chama 'sanitizeAtleta'.
+      // 'sanitizeAtleta' apenas ajusta 'classificacoes' se existir.
+      // Como 'atletaCriado' não tem 'classificacoes', 'sanitizeAtleta'
+      // retorna o objeto 'atletaCriado' como está.
+      expect(res.json).toHaveBeenCalledWith(atletaCriado);
     });
   });
 
@@ -98,10 +110,13 @@ describe("Atleta Controller (Unit)", () => {
 
       expect(mockedAtletaService.getAtletasByUsuario).toHaveBeenCalledWith(mockUsuarioId);
       expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
-      // O controller sanitiza cada item
-      expect(res.json).toHaveBeenCalledWith(
-         mockLista.map(atleta => ({...atleta, classificacoes: undefined}))
-      );
+
+      // *** A CORREÇÃO ESTÁ AQUI ***
+      // O 'sanitizeAtleta' (como escrevemos) só mexe em 'classificacoes'
+      // se 'classificacoes' existir.
+      // Como 'getAtletasByUsuario' (nosso service) não retorna 'classificacoes',
+      // o 'sanitizeAtleta' mapeia a lista e retorna os objetos como estão.
+      expect(res.json).toHaveBeenCalledWith(mockLista);
     });
   });
 

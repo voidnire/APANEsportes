@@ -113,9 +113,14 @@ export const getAvaliacoesByAtleta = async (
       whereClause.dataHora.gte = dataInicio; // gte = "greater than or equal"
     }
     if (dataFim) {
-      // Adiciona 1 dia - 1ms para garantir que o dia final seja incluído
+      // Copia a data para não modificar o objeto original
       const dataFimAjustada = new Date(dataFim);
-      dataFimAjustada.setHours(23, 59, 59, 999);
+
+      // *** A CORREÇÃO ESTÁ AQUI ***
+      // Usamos setUTCHours para definir o final do dia em UTC (Z),
+      // ignorando o fuso horário local do servidor.
+      dataFimAjustada.setUTCHours(23, 59, 59, 999);
+      
       whereClause.dataHora.lte = dataFimAjustada; // lte = "less than or equal"
     }
   }

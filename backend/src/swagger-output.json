@@ -11,360 +11,12 @@
     "http"
   ],
   "paths": {
-    "/v1/dispositivos/pesquisar": {
-      "post": {
-        "tags": [
-          "dispositivo"
-        ],
-        "summary": "Pesquisa dispositivos por características (ex: RAM = 4GB, Camera = 12MP).",
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "caracteristicas": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/v1/dispositivos/": {
-      "get": {
-        "tags": [
-          "dispositivo"
-        ],
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "dispositivo"
-        ],
-        "summary": "Adiciona um novo dispositivo na base com características.",
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "fabricante": {
-                  "example": "any"
-                },
-                "modelo": {
-                  "example": "any"
-                },
-                "photos": {
-                  "example": "any"
-                },
-                "caracteristicas": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/v1/dispositivos/batch": {
-      "post": {
-        "tags": [
-          "dispositivo"
-        ],
-        "summary": "Adiciona uma lista de dispositivos de uma só vez.",
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/v1/dispositivos/{id}": {
-      "get": {
-        "tags": [
-          "dispositivo"
-        ],
-        "summary": "Recupera dados de um dispositivo específico (com características).",
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "dispositivo"
-        ],
-        "summary": "Atualiza dados de um dispositivo existente (com características).",
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "fabricante": {
-                  "example": "any"
-                },
-                "modelo": {
-                  "example": "any"
-                },
-                "photos": {
-                  "example": "any"
-                },
-                "caracteristicas": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "dispositivo"
-        ],
-        "summary": "Remove um dispositivo existente.",
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/v1/usuarios/": {
-      "get": {
-        "tags": [
-          "usuario"
-        ],
-        "summary": "Listagem dos usuários",
-        "description": "",
-        "responses": {
-          "200": {
-            "schema": {
-              "$ref": "#/definitions/User"
-            },
-            "description": "OK"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "usuario"
-        ],
-        "summary": "Adicionar um novo usuário na base.",
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/CreateUsuarioDTO"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "schema": {
-              "$ref": "#/definitions/User"
-            },
-            "description": "OK"
-          },
-          "403": {
-            "description": "Fobidden"
-          }
-        }
-      }
-    },
-    "/v1/usuarios/{id}": {
-      "get": {
-        "tags": [
-          "usuario"
-        ],
-        "summary": "Recuperar dados de um usuário específico",
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "idUsuario",
-            "description": "ID do usuário",
-            "in": "query",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "schema": {
-              "$ref": "#/definitions/User"
-            },
-            "description": "OK"
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "usuario"
-        ],
-        "summary": "Atualizar um usuário na base.",
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "idUsuario",
-            "description": "ID do usuário",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/UpdateUsuarioDTO"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "schema": {
-              "$ref": "#/definitions/User"
-            },
-            "description": "OK"
-          },
-          "403": {
-            "description": "Fobidden"
-          }
-        }
-      },
-      "patch": {
-        "tags": [
-          "usuario"
-        ],
-        "summary": "Alterar a senha de um usuário específico",
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "ID do usuário"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/ChangePasswordDTO"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "NO_CONTENT"
-          },
-          "400": {
-            "description": "BAD_REQUEST"
-          },
-          "403": {
-            "description": "Fobidden"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "usuario"
-        ],
-        "summary": "Deletar um usuário específico",
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "ID do usuário"
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "NO_CONTENT"
-          },
-          "403": {
-            "description": "Fobidden"
-          },
-          "404": {
-            "description": "Usuário não encontrado"
-          }
-        }
-      }
-    },
     "/v1/auth/signup": {
       "post": {
         "tags": [
-          "auth"
+          "Autenticação"
         ],
-        "summary": "Adiciona um novo usuário no sistema.",
+        "summary": "Cria uma nova conta de treinador no sistema.",
         "description": "",
         "parameters": [
           {
@@ -376,14 +28,14 @@
           }
         ],
         "responses": {
-          "200": {
+          "201": {
+            "description": "Usuário criado com sucesso.",
             "schema": {
               "$ref": "#/definitions/User"
-            },
-            "description": "OK"
+            }
           },
-          "403": {
-            "description": "Fobidden"
+          "400": {
+            "description": "E-mail já cadastrado."
           }
         }
       }
@@ -391,9 +43,9 @@
     "/v1/auth/login": {
       "post": {
         "tags": [
-          "auth"
+          "Autenticação"
         ],
-        "summary": "Fazer login do usuário no sistema.",
+        "summary": "Autentica um treinador e inicia uma sessão.",
         "description": "",
         "parameters": [
           {
@@ -406,10 +58,13 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Login bem-sucedido.",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
           },
-          "403": {
-            "description": "Fobidden"
+          "401": {
+            "description": "Credenciais inválidas."
           }
         }
       }
@@ -417,18 +72,428 @@
     "/v1/auth/logout": {
       "post": {
         "tags": [
-          "auth"
+          "Autenticação"
         ],
-        "summary": "Fazer logout do usuário no sistema.",
+        "summary": "Encerra a sessão do treinador logado.",
         "description": "",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Logout bem-sucedido."
+          },
+          "401": {
+            "description": "Não autenticado."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ]
+      }
+    },
+    "/v1/auth/me": {
+      "get": {
+        "tags": [
+          "Autenticação"
+        ],
+        "summary": "Retorna os dados do treinador atualmente logado.",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Dados do usuário.",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "401": {
+            "description": "Não autenticado."
+          },
+          "404": {
+            "description": "Usuário da sessão não encontrado."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ]
+      }
+    },
+    "/v1/atletas/": {
+      "post": {
+        "tags": [
+          "Atletas"
+        ],
+        "summary": "Cria um novo atleta para o treinador logado.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/CreateAtletaDTO"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Atleta criado."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Atletas"
+        ],
+        "summary": "Lista todos os atletas do treinador logado.",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Lista de atletas."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ]
+      }
+    },
+    "/v1/atletas/{id}": {
+      "get": {
+        "tags": [
+          "Atletas"
+        ],
+        "summary": "Busca um atleta específico (e suas classificações).",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID do Atleta"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados do atleta."
+          },
+          "404": {
+            "description": "Atleta não encontrado ou não pertence ao usuário."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Atletas"
+        ],
+        "summary": "Atualiza dados de um atleta (nome, nascimento).",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/UpdateAtletaDTO"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Atleta atualizado."
+          },
+          "404": {
+            "description": "Atleta não encontrado ou não pertence ao usuário."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Atletas"
+        ],
+        "summary": "Deleta um atleta e todo seu histórico (em cascata).",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Atleta deletado."
+          },
+          "404": {
+            "description": "Atleta não encontrado ou não pertence ao usuário."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ]
+      }
+    },
+    "/v1/atletas/{id}/classificacoes": {
+      "post": {
+        "tags": [
+          "Atletas"
+        ],
+        "summary": "Associa uma classificação paralímpica a um atleta.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID do Atleta"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/AssociateClassificacaoDTO"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Associação criada."
+          },
+          "404": {
+            "description": "Atleta ou Classificação não encontrados."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ]
+      }
+    },
+    "/v1/atletas/{id}/classificacoes/{classificacaoId}": {
+      "delete": {
+        "tags": [
+          "Atletas"
+        ],
+        "summary": "Remove uma classificação de um atleta.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID do Atleta"
+          },
+          {
+            "name": "classificacaoId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID da Classificação"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Associação removida."
+          },
+          "404": {
+            "description": "Associação não encontrada ou não pertence ao usuário."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ]
+      }
+    },
+    "/v1/avaliacoes/": {
+      "post": {
+        "tags": [
+          "Avaliações"
+        ],
+        "summary": "Registra uma nova avaliação de desempenho para um atleta.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/CreateAvaliacaoDTO"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Avaliação registrada."
+          },
+          "400": {
+            "description": "Dados inválidos (validação Joi)."
           },
           "403": {
-            "description": "Fobidden"
+            "description": "Atleta não pertence ao treinador."
           }
-        }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Avaliações"
+        ],
+        "summary": "Lista o histórico de avaliações de um atleta, com filtros.",
+        "description": "Busca o histórico de um atleta. O ?atletaId=uuid é obrigatório nos query params.",
+        "parameters": [
+          {
+            "name": "atletaId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "ID do Atleta (obrigatório)"
+          },
+          {
+            "name": "modalidadeId",
+            "in": "query",
+            "type": "string",
+            "description": "Filtrar por ID da modalidade"
+          },
+          {
+            "name": "tipo",
+            "in": "query",
+            "enum": [
+              "PRE_TREINO",
+              "POS_TREINO"
+            ],
+            "description": "Filtrar por tipo de sessão",
+            "type": "string"
+          },
+          {
+            "name": "dataInicio",
+            "in": "query",
+            "type": "string",
+            "format": "date",
+            "description": "Data inicial (YYYY-MM-DD)"
+          },
+          {
+            "name": "dataFim",
+            "in": "query",
+            "type": "string",
+            "format": "date",
+            "description": "Data final (YYYY-MM-DD)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Histórico de avaliações."
+          },
+          "403": {
+            "description": "Atleta não pertence ao treinador."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ]
+      }
+    },
+    "/v1/dados-auxiliares/classificacoes": {
+      "get": {
+        "tags": [
+          "Dados Auxiliares"
+        ],
+        "summary": "Lista todas as Classificações Paralímpicas (do seed).",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Lista de classificações (ex: T11, F40)."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ]
+      }
+    },
+    "/v1/dados-auxiliares/modalidades": {
+      "get": {
+        "tags": [
+          "Dados Auxiliares"
+        ],
+        "summary": "Lista todas as Modalidades esportivas (do seed).",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Lista de modalidades (ex: 100m Rasos, Salto em Distância)."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ]
+      }
+    },
+    "/v1/dados-auxiliares/modalidades/{id}/metricas": {
+      "get": {
+        "tags": [
+          "Dados Auxiliares"
+        ],
+        "summary": "Lista quais métricas (Tempo, Distância) uma Modalidade exige.",
+        "description": "Endpoint \"mágico\" da Tela 2. Retorna os campos que o frontend deve renderizar.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID da Modalidade"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de tipos de métrica (ex: [ { nome: \"Distância\" }, { nome: \"Velocidade do Vento\" } ])."
+          },
+          "404": {
+            "description": "Modalidade não encontrada."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ]
       }
     }
   },
