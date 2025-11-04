@@ -12,8 +12,8 @@
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch"
   },
-  "prisma": {
-    "seed": "node prisma/seed.ts"
+    "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   },
   "keywords": [],
   "author": "",
@@ -63,6 +63,7 @@
     "prisma": "^6.10.0",
     "supertest": "^7.1.4",
     "swagger-autogen": "^2.23.7",
-    "ts-jest": "^29.4.1"
+    "ts-jest": "^29.4.1",
+    "ts-node": "^10.9.2"
   }
 }
