@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { Link, useRouter, useSearchParams } from "expo-router";
 import { ThemeContext } from "@/context/ThemeContext";
+import { atletas } from "@/models/atletas";
 
 const screenWidth = Dimensions.get("window").width;
 
