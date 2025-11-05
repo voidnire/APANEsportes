@@ -1,4 +1,97 @@
+
 export const atletas = [
+  {
+    id: "m1",
+    nomeCompleto: "Ana Silva", 
+    dataNascimento: "2002-05-10",
+    createdAt: "2025-11-04 04:10:54.359",
+    updatedAt: "2025-11-04 04:10:54.359",
+    usuarioId: "8cde7eca-b452-45b2-b0e5-77a46a90fe7c"
+  },
+   {
+    id: "m2",
+    nomeCompleto: "Carlos Pereira", 
+    dataNascimento: "2002-05-10",
+    createdAt: "2025-11-04 04:10:54.359",
+    updatedAt: "2025-11-04 04:10:54.359",
+    usuarioId: "8cde7eca-b452-45b2-b0e5-77a46a90fe7c"
+  },
+  {
+    id: "m3",
+    nomeCompleto: "Beatriz Alves", 
+    dataNascimento: "2002-05-10",
+    createdAt: "2025-11-04 04:10:54.359",
+    updatedAt: "2025-11-04 04:10:54.359",
+    usuarioId: "8cde7eca-b452-45b2-b0e5-77a46a90fe7c"
+  },
+  {
+    id: "m4",
+    nomeCompleto: "Diego Rocha", 
+    dataNascimento: "2002-05-10",
+    createdAt: "2025-11-04 04:10:54.359",
+    updatedAt: "2025-11-04 04:10:54.359",
+    usuarioId: "8cde7eca-b452-45b2-b0e5-77a46a90fe7c"
+  },
+  {
+    id: "m5",
+    nomeCompleto: "Ezequiel", 
+    dataNascimento: "2002-05-10",
+    createdAt: "2025-11-04 04:10:54.359",
+    updatedAt: "2025-11-04 04:10:54.359",
+    usuarioId: "8cde7eca-b452-45b2-b0e5-77a46a90fe7c"
+  },
+  {
+    id: "m6",
+    nomeCompleto: "Timóteo Jesus", 
+    dataNascimento: "2002-05-10",
+    createdAt: "2025-11-04 04:10:54.359",
+    updatedAt: "2025-11-04 04:10:54.359",
+    usuarioId: "8cde7eca-b452-45b2-b0e5-77a46a90fe7c"
+  },
+  {
+    id: "m7",
+    nomeCompleto: "Bruno Thomas", 
+    dataNascimento: "2002-05-10",
+    createdAt: "2025-11-04 04:10:54.359",
+    updatedAt: "2025-11-04 04:10:54.359",
+    usuarioId: "8cde7eca-b452-45b2-b0e5-77a46a90fe7c"
+  },
+  {
+    id: "m8",
+    nomeCompleto: "Tobias E. Rogério", 
+    dataNascimento: "2002-05-10",
+    createdAt: "2025-11-04 04:10:54.359",
+    updatedAt: "2025-11-04 04:10:54.359",
+    usuarioId: "8cde7eca-b452-45b2-b0e5-77a46a90fe7c"
+  },
+
+];
+
+// Mapa para lookup rápido por id
+const athleteMap = atletas.reduce((acc, a) => {
+  acc[a.id] = a;
+  return acc;
+}, {});
+
+/**
+ * Retorna um atleta pelo id (string). Retorna undefined se não existir.
+ * @param {string} id
+ */
+export function getAthleteById(id) {
+  return athleteMap[id];
+}
+
+/**
+ * Retorna um array de atletas a partir de um array de ids.
+ * Mantém a ordem dos ids e ignora ids inexistentes.
+ * @param {string[]} ids
+ */
+export function getAthletesByIds(ids = []) {
+  return ids.map((id) => athleteMap[id]).filter(Boolean);
+}
+
+
+/*export const atletas = [
   {
     id: "m1",
     name: "Ana Silva",
@@ -87,38 +180,5 @@ export const atletas = [
     avgMark: "",
     bio: "Técnico responsável por planejamento."
   },
-];
+];*/
 
-// Mapa para lookup rápido por id
-const athleteMap = atletas.reduce((acc, a) => {
-  acc[a.id] = a;
-  return acc;
-}, {});
-
-/**
- * Retorna um atleta pelo id (string). Retorna undefined se não existir.
- * @param {string} id
- */
-export function getAthleteById(id) {
-  return athleteMap[id];
-}
-
-/**
- * Retorna um array de atletas a partir de um array de ids.
- * Mantém a ordem dos ids e ignora ids inexistentes.
- * @param {string[]} ids
- */
-export function getAthletesByIds(ids = []) {
-  return ids.map((id) => athleteMap[id]).filter(Boolean);
-}
-
-export const atletasMUDARTODOSDPS = [
-  {
-    id: "961006c7-b971-4928-9790-61ccba75f346",
-    nomeCompleto: "João Silva (Atleta 1)", 
-    dataNascimento: "2002-05-10",
-    createdAt: "2025-11-04 04:10:54.359",
-    updatedAt: "2025-11-04 04:10:54.359",
-    usuarioId: "8cde7eca-b452-45b2-b0e5-77a46a90fe7c"
-  }
-];

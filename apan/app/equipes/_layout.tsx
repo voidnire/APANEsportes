@@ -1,10 +1,14 @@
-import {Stack} from "expo-router";
+import {Stack, useLocalSearchParams, useRouter} from "expo-router";
 
 
 
 export default function RootLayout(){
+    const router = useRouter();
+    const params = useLocalSearchParams();
+
+
     return <Stack>  
-        <Stack.Screen name="index" options={{ title: 'Equipes' }} />
+        <Stack.Screen name="index" options={{ title: 'Equipes', }} />
        {/*} <Stack.Screen name="perfilAtleta" options={({ route }: any) => {
             const id = route?.params?.id;
             return {
@@ -12,7 +16,7 @@ export default function RootLayout(){
             };
             }}
         />*/}
-        <Stack.Screen name="equipe/[id]" options={{title: 'Equipe X'}}
+        <Stack.Screen name="equipe/[id]" options={{title: params.name ? `Equipe ${params.name}` : 'Equipe GAY',}}
         />
 
 

@@ -23,6 +23,7 @@ const MENU_ITEMS = [
 // Componente de linha do menu — estilo minimalista / clean
 const MenuRow = ({ title, subtitle, icon, onPress }) => (
   <TouchableOpacity style={styles.row} onPress={onPress} activeOpacity={0.7}>
+    
     <View style={styles.rowLeft}>
       <View style={styles.iconBox}>
         <Ionicons name={icon} size={20} style={styles.icon} />
