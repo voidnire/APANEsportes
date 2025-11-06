@@ -6,7 +6,7 @@ Este documento descreve a API RESTful do backend do projeto APAN. Ele é focado 
 
 A API está hospedada e pode ser acessada através da seguinte URL base. Todos os *endpoints* descritos abaixo são relativos a esta URL.
 
-**URL Base:** `https://backapan.onrender.com/v1` (ou a URL do seu serviço de *hosting*)
+**URL Base:** `https://backapan.zeabur.app/v1` (ou a URL do seu serviço de *hosting*)
 
 ---
 
@@ -15,7 +15,7 @@ A API está hospedada e pode ser acessada através da seguinte URL base. Todos o
 A documentação completa, interativa e detalhada de todos os *endpoints*, incluindo os *schemas* de *request* e *response*, está disponível via **Swagger**.
 
 **Acesse a documentação em:**
-**[https://backapan.onrender.com/api](https://backapan.onrender.com/api)**
+**[https://backapan.zeabur.app/api](https://backapan.zeabur.app/api)**
 
 ---
 
@@ -42,7 +42,7 @@ Para que o navegador envie os *cookies* para a API (que está em outro domínio)
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: '[https://backapan.onrender.com/v1](https://backapan.onrender.com/v1)', // Base da nossa API
+  baseURL: '[https://backapan.zeabur.app/v1](https://backapan.zeabur.app/v1)', // Base da nossa API
   withCredentials: true // <-- ISTO É OBRIGATÓRIO!
 });
 
@@ -51,7 +51,7 @@ export default apiClient;
 
 **Exemplo com Fetch:**
 ```javascript
-fetch('[https://backapan.onrender.com/v1/auth/me](https://backapan.onrender.com/v1/auth/me)', {
+fetch('[https://backapan.zeabur.app/v1/auth/me](https://backapan.zeabur.app/v1/auth/me)', {
   credentials: 'include' // <-- ISTO É OBRIGATÓRIO!
 });
 ```
