@@ -1,4 +1,4 @@
-import React, { useContext , useState} from "react";
+import React, { useContext , useState, useMemo} from "react";
 import {
   View,
   Text,
@@ -13,29 +13,45 @@ import { atletas } from "@/models/atletas";
 ///const screenWidth = Dimensions.gAet("window").width;
 
 export default function Equipe() {
-
-  const [atletass, setAtletas] = useState(atletas.sort((a,b)=> a.nomeCompleto-b.nomeCompleto));
-
   const { id } = useLocalSearchParams(); // pega ?id=...
 
   console.log("id: bosta, ", id);
-  const { theme, colorScheme } = useContext(ThemeContext);
-
-
   
+  const { theme, colorScheme } = useContext(ThemeContext);
   const styles = createStyles(theme, colorScheme);
   const router = useRouter();
-    //const params = useSearchParams(); // se você navegar com ?id= ou enviar dados
-    
-  ////const equipe = equipes.find((t) => t.id === id);
 
-  if (!atletass) {
+  //const params = useSearchParams(); // se você navegar com ?id= ou enviar dados
+    
+  const equipe = equipes.find((t) => t.id === id);
+
+  const atletasDaEquipe = useMemo(() => {
+    if (!equipe || !equipe.members) return [];
+    return atletas.filter(atleta => equipe.members.includes(atleta.id));
+  }, [equipe]);
+
+
+    console.log("equipe.members: ", atletasDaEquipe);
+
+  //const [atletass, setAtletas] = useState(atletas.sort((a,b)=> a.nomeCompleto-b.nomeCompleto));
+
+  /*if (!atletass) {
     return (
       <View style={styles.container}>
         <Text style={{ color: theme.text }}>Equipe sem atletas encontrados :/</Text>
       </View>
     );
-  }
+  }*/
+
+  if (!equipe || atletasDaEquipe.length === 0) {
+    return (
+      <View style={styles.container}>
+        <Text style={{ color: theme.text }}>
+          {equipe ? "Equipe sem atletas encontrados :/" : "Equipe não encontrada."}
+        </Text>
+      </View>
+    );
+  }
 
 
 
@@ -44,7 +60,7 @@ export default function Equipe() {
             
             <ScrollView style={styles.section}>
               <FlatList
-                      data={atletass}
+                      data={atletasDaEquipe}
                       keyExtractor={(m) => m.id}
                       renderItem={({ item }) => (
                         <TouchableOpacity 
@@ -53,7 +69,7 @@ export default function Equipe() {
 
                                        
                           <View style={styles.memberRow}>
-                                <Text style={styles.memberName}>{item.nomeCompleto}</Text>
+                                <Text style={styles.memberName}>{item.nomeCompleto} - ID: {item.id}</Text>
                                 <Text style={styles.memberRole}>{item.role}nao tem role • {item.age}  nem anos</Text>
                           </View>
 

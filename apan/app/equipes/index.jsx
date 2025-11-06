@@ -22,7 +22,13 @@ export default function Equipes() {
     const handlePress = (id) => { 
       const equipe = equipes.find((t) => t.id === id);
       console.log("EQUIPE SELECIONADA: ", equipe);
-      router.push(`/equipes/equipe/${id}`); 
+      router.push({
+        pathname:`/equipes/equipe/${id}`,
+        params:{
+          name: equipe.name
+        }
+      }
+      ); 
       
       }; 
     

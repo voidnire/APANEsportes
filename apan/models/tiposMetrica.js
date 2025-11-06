@@ -6,5 +6,18 @@ export const tiposMetrica = [
     createdAt: "2025-11-03 22:35:33.342",
     updatedAt: "2025-11-03 22:35:33.342"
   },
-  // ... outros tipos de métrica ...
+  {
+    id: "metrica1",
+    nome: "Velocidade 100m",
+    unidadeMedida: "segundos",
+    createdAt: "2025-11-03 22:35:33.342",
+    updatedAt: "2025-11-03 22:35:33.342"
+  },
+  {
+    id: "metrica2",
+    nome: "Salto em Altura",
+    unidadeMedida: "metros",
+    createdAt: "2025-11-03 22:35:33.342",
+    updatedAt: "2025-11-03 22:35:33.342"
+  }
 ];
