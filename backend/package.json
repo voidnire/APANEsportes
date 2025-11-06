@@ -8,7 +8,7 @@
     "docker:up": "docker compose -f tools/docker-compose.yml up -d",
     "docker:down": "docker compose -f tools/docker-compose.yml down",
     "swagger": "tsx src/swagger.ts",
-    "start": "node build/index.js",
+    "start": "node build/src/index.js",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch"
   },

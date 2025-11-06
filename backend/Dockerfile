@@ -62,5 +62,5 @@ CMD ["sh", "-c", "\
   else \
     npx prisma db push; \
   fi && \
-  node build/index.js \
+  node build/src/index.js \
 "]
