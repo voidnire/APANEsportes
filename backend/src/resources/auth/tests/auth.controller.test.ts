@@ -41,31 +41,33 @@ const mockLoginDTO: LoginDTO = {
 // --- Fim dos Dados de Mock ---
 
 describe("Auth Controller (Unit)", () => {
-  // (CORREÇÃO TS2322) Usa MockProxy para tipagem
   let req: MockProxy<Request>;
   let res: MockProxy<Response>;
   let mockSessionDestroy: jest.Mock<(callback: (err: unknown) => void) => void>;
+  
+  // (AJUSTE) Definimos um ID de sessão mockado
+  const mockSessionId = "mock-session-id-123";
 
   beforeEach(() => {
     jest.clearAllMocks();
 
     // Mock da função destroy da sessão
-    // (Usando 'unknown' como no seu exemplo para máxima compatibilidade)
     mockSessionDestroy = jest.fn((callback: (err: unknown) => void) => callback(null));
 
-    // (CORREÇÃO TS2322) Cria mocks tipados com jest-mock-extended
+    // Cria mocks tipados com jest-mock-extended
     req = mock<Request>();
     res = mock<Response>();
 
     // Configura comportamento do mock para suportar encadeamento
-    // (Exatamente como no seu exemplo)
     res.status.mockReturnValue(res);
     res.clearCookie.mockReturnValue(res);
     res.json.mockReturnValue(res);
     res.send.mockReturnValue(res);
 
-    // Sessão tipada corretamente (Exatamente como no seu exemplo)
+    // (AJUSTE) A sessão mockada agora inclui o 'id'
+    // para que o controller 'login' possa lê-lo e retorná-lo.
     req.session = {
+      id: mockSessionId, // <-- ID da sessão mockado
       destroy: mockSessionDestroy,
     } as unknown as Session & SessionData;
   });
@@ -79,8 +81,6 @@ describe("Auth Controller (Unit)", () => {
         password: "Password@123",
       };
 
-      // Atribui o body ao mock
-      // (jest-mock-extended permite atribuição direta)
       req.body = signUpDTO; 
       mockedAuthService.getUsuarioByEmail.mockResolvedValue(mockUser);
 
@@ -123,15 +123,25 @@ describe("Auth Controller (Unit)", () => {
       });
     });
 
-    it("deve retornar 200 e definir sessão", async () => {
+    it("deve retornar 200, definir sessão e retornar user + token", async () => {
       req.body = mockLoginDTO;
       mockedAuthService.checkCredentials.mockResolvedValue(mockUser);
 
       await authController.login(req, res);
 
+      // Verifica se a sessão foi definida
       expect(req.session!.uid).toBe(mockUser.id);
+      
+      // Verifica o status
       expect(res.status).toHaveBeenCalledWith(StatusCodes.OK);
-      expect(res.json).toHaveBeenCalledWith(sanitizedUser);
+
+      // (A CORREÇÃO)
+      // Verifica se a resposta JSON agora contém o 'user' E o 'token'
+      // (O 'token' é o req.session.id, que mockamos no beforeEach)
+      expect(res.json).toHaveBeenCalledWith({
+        user: sanitizedUser,
+        token: mockSessionId 
+      });
     });
   });
 
@@ -158,8 +168,6 @@ describe("Auth Controller (Unit)", () => {
 
     it("deve retornar 500 se destroy falhar", async () => {
       req.session!.uid = mockUser.id;
-      // (CORREÇÃO TS2345)
-      // O mockImplementationOnce funciona corretamente
       mockSessionDestroy.mockImplementationOnce((cb) =>
         cb(new Error("Erro no Redis"))
       );
