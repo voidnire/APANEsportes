@@ -14,6 +14,9 @@ const doc = {
     title: "APAN API",
     description: "Documentação da API de backend do projeto APAN (para treinadores e atletas).",
   },
+
+  // Força o swagger-autogen a gerar um spec OpenAPI 3.0
+  openapi: '3.0.0',
   
   // (CORREÇÃO)
   // Substituímos 'host', 'basePath' e 'schemes' pelo array 'servers' (Padrão OpenAPI 3.0).
