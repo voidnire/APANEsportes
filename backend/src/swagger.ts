@@ -4,9 +4,9 @@ import dotenv from "dotenv";
 // Carrega as variáveis de ambiente (HOST, PORT) do seu .env
 dotenv.config();
 
-// Define a URL de produção
-const productionUrl = "https://backapan.zeabur.app";
-// Define a URL local
+// Define as URLs base (RAIZ) da sua aplicação.
+// O '/v1' NÃO deve ser incluído aqui.
+const productionUrl = "https://backapan.zeabur.app"; 
 const localUrl = `http://${process.env.HOST || 'localhost'}:${process.env.PORT || 3001}`;
 
 const doc = {
@@ -15,22 +15,25 @@ const doc = {
     description: "Documentação da API de backend do projeto APAN (para treinadores e atletas).",
   },
   
-  // O campo 'openapi' foi REMOVIDO daqui.
-  
-  // 'servers' (Padrão OpenAPI 3.0)
-  // Agora vai funcionar, pois estamos forçando a versão 3.0 na chamada da função.
+  // (IMPORTANTE)
+  // O 'servers' permite ao Swagger UI ter um dropdown para alternar
+  // entre o ambiente de Produção (Zeabur) e Desenvolvimento (Local).
+  // As URLs aqui são a RAIZ. O swagger-autogen irá adicionar
+  // o prefixo '/v1' automaticamente ao ler seu 'index.ts'.
   servers: [
     {
-      url: `${productionUrl}/v1`,
+      url: productionUrl,
       description: 'Ambiente de Produção (Zeabur)'
     },
     {
-      url: `${localUrl}/v1`,
+      url: localUrl,
       description: 'Ambiente de Desenvolvimento (Local)'
     }
   ],
 
-  // Definições dos Schemas (DTOs) que usamos no projeto.
+  // (IMPORTANTE)
+  // Definições dos Schemas (DTOs e Modelos) que usamos no projeto.
+  // Isso popula os exemplos de "Request Body" e "Response" no Swagger.
   definitions: {
     // --- AUTH ---
     SignUpDTO: {
@@ -42,7 +45,8 @@ const doc = {
       email: "treinador@teste.com",
       password: "Password@123"
     },
-    User: { // Resposta do Login e /auth/me (sanitizado)
+    // (FIX) Renomeado para 'User' para bater com o que o 'autogen' espera
+    User: { 
       id: "uuid-user-1",
       nomeCompleto: "Treinador Teste",
       email: "treinador@teste.com",
@@ -148,6 +152,7 @@ const doc = {
       }
     }
   },
+  
   // Adiciona segurança para os endpoints protegidos
   // (Isso informa ao Swagger que usamos cookies)
   securityDefinitions: {
@@ -160,11 +165,14 @@ const doc = {
 };
 
 const outputFile = "./swagger-output.json";
-// O(s) arquivo(s) que contêm o 'app.use("/v1", ...)'
+
+// O(s) arquivo(s) de rota. Apenas o 'entrypoint' (index.ts) é necessário.
 const routes = [
-  "./src/index.ts" // O swagger-autogen vai ler este arquivo e seguir os 'imports'
+  "./src/index.ts" 
 ];
 
-// *** A CORREÇÃO CRÍTICA ESTÁ AQUI ***
-// Passamos a versão 3.0.0 como uma OPÇÃO para o GERADOR
+// (IMPORTANTE)
+// Gera o arquivo
+// Passamos a opção { openapi: '3.0.0' } para forçar a geração
+// no padrão OpenAPI 3, o que habilita o 'servers' dropdown.
 swaggerAutogen({ openapi: '3.0.0' })(outputFile, routes, doc);

@@ -7,11 +7,11 @@
   },
   "servers": [
     {
-      "url": "https://backapan.zeabur.app/v1",
+      "url": "https://backapan.zeabur.app",
       "description": "Ambiente de Produção (Zeabur)"
     },
     {
-      "url": "http://localhost:3001/v1",
+      "url": "http://localhost:3001",
       "description": "Ambiente de Desenvolvimento (Local)"
     }
   ],
