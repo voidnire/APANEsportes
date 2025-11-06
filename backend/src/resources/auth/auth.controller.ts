@@ -33,7 +33,7 @@ export const signup = async (req: Request, res: Response) => {
        schema: { $ref: '#/definitions/SignUpDTO' }
    }
    #swagger.responses[201] = { description: 'Usuário criado com sucesso.', schema: { $ref: '#/definitions/User' } }
-   #swagger.responses[400] = { description: 'E-mail já cadastrado.' }
+   #swagger.responses[400] = { description: 'Erro de validação.', schema: { $ref: '#/definitions/ErrorValidation' } }
   */
   const data = req.body as SignUpDTO;
 
@@ -51,9 +51,6 @@ export const signup = async (req: Request, res: Response) => {
     // Cria o usuário (service faz o hash da senha)
     const newUser = await authService.createUsuario(data);
 
-    // (Opcional: Logar automaticamente o usuário após o cadastro)
-    // req.session.uid = newUser.id;
-
     // Retorna o usuário criado (sem a senha)
     return res.status(StatusCodes.CREATED).json(sanitizeUser(newUser));
   } catch (err) {
@@ -70,8 +67,15 @@ export const login = async (req: Request, res: Response) => {
        in: 'body',
        schema: { $ref: '#/definitions/LoginDTO' }
    }
-   #swagger.responses[200] = { description: 'Login bem-sucedido.', schema: { $ref: '#/definitions/User' } }
-   #swagger.responses[401] = { description: 'Credenciais inválidas.' }
+   // (AJUSTE SWAGGER: O 'schema' agora retorna 'user' e 'token')
+   #swagger.responses[200] = { 
+       description: 'Login bem-sucedido.', 
+       schema: { 
+         user: { $ref: '#/definitions/User' }, 
+         token: "ajf...sess...id...234" 
+       } 
+     }
+   #swagger.responses[401] = { description: 'Credenciais inválidas.', schema: { $ref: '#/definitions/ErrorAuth' } }
   */
   const data = req.body as LoginDTO;
 
@@ -87,10 +91,16 @@ export const login = async (req: Request, res: Response) => {
 
     // Sucesso: Armazena o ID do usuário na sessão (Redis)
     req.session.uid = user.id;
-    // (Opcional: você tinha userTypeId no seu exemplo, mas nosso schema não tem)
-    // req.session.userTypeId = user.tipo; 
 
-    return res.status(StatusCodes.OK).json(sanitizeUser(user));
+    // (AJUSTE REACT NATIVE)
+    // Retornamos o usuário E o ID da sessão (como 'token').
+    // O React (Web) continuará usando o cookie que foi enviado.
+    // O React Native usará o 'token' (req.session.id) para o header.
+    return res.status(StatusCodes.OK).json({
+      user: sanitizeUser(user),
+      token: req.session.id
+    });
+
   } catch (err) {
     DefaultError(res, err);
   }
@@ -101,12 +111,15 @@ export const logout = async (req: Request, res: Response) => {
   /*
    #swagger.summary = 'Encerra a sessão do treinador logado.'
    #swagger.tags = ['Autenticação']
-   #swagger.security = [{ "session": [] }] 
+   // (AJUSTE SWAGGER: Aceita 'session' (cookie) ou 'bearer' (header))
+   #swagger.security = [{ "session": [] }, { "bearer": [] }] 
    #swagger.responses[200] = { description: 'Logout bem-sucedido.' }
    #swagger.responses[401] = { description: 'Não autenticado.' }
   */
   try {
-    // isAuth já garante que a sessão existe, mas checamos por segurança
+    // O 'isAuth' (que vamos ajustar) garante que a sessão
+    // foi carregada no 'req.session',
+    // vindo do cookie ou do header 'bearer'.
     if (!req.session || !req.session.uid) {
       return res
         .status(StatusCodes.UNAUTHORIZED)
@@ -121,8 +134,7 @@ export const logout = async (req: Request, res: Response) => {
           .json({ message: "Erro ao encerrar sessão" });
       }
 
-      // Limpa o cookie no navegador do cliente
-      // O nome 'connect.sid' é o padrão, ajuste se você mudou
+      // Limpa o cookie no navegador do cliente (para o React Web)
       res.clearCookie("connect.sid"); 
       return res
         .status(StatusCodes.OK)
@@ -138,20 +150,20 @@ export const me = async (req: Request, res: Response) => {
   /*
    #swagger.summary = 'Retorna os dados do treinador atualmente logado.'
    #swagger.tags = ['Autenticação']
-   #swagger.security = [{ "session": [] }]
+   // (AJUSTE SWAGGER: Aceita 'session' (cookie) ou 'bearer' (header))
+   #swagger.security = [{ "session": [] }, { "bearer": [] }]
    #swagger.responses[200] = { description: 'Dados do usuário.', schema: { $ref: '#/definitions/User' } }
    #swagger.responses[401] = { description: 'Não autenticado.' }
    #swagger.responses[404] = { description: 'Usuário da sessão não encontrado.' }
   */
   try {
-    // O middleware isAuth já rodou, então req.session.uid está disponível
+    // O middleware isAuth (que vamos ajustar) garante que
+    // req.session.uid exista.
     const userId = req.session.uid!;
 
     const user = await authService.getUsuarioById(userId);
 
     if (!user) {
-      // Isso pode acontecer se o usuário foi deletado
-      // mas a sessão ainda existe
       return res
         .status(StatusCodes.NOT_FOUND)
         .json({ message: "Usuário não encontrado" });

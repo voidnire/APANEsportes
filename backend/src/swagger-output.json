@@ -41,7 +41,19 @@
             }
           },
           "400": {
-            "description": "E-mail já cadastrado."
+            "description": "Erro de validação.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorValidation"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorValidation"
+                }
+              }
+            }
           }
         },
         "requestBody": {
@@ -82,18 +94,54 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "ajf...sess...id...234"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
                 }
               },
               "application/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "ajf...sess...id...234"
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
                 }
               }
             }
           },
           "401": {
-            "description": "Credenciais inválidas."
+            "description": "Credenciais inválidas.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorAuth"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorAuth"
+                }
+              }
+            }
           }
         }
       }
@@ -105,6 +153,15 @@
         ],
         "summary": "Encerra a sessão do treinador logado.",
         "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Logout bem-sucedido."
@@ -116,6 +173,9 @@
         "security": [
           {
             "session": []
+          },
+          {
+            "bearer": []
           }
         ]
       }
@@ -125,8 +185,17 @@
         "tags": [
           "Autenticação"
         ],
-        "summary": "Retorna os dados do treinador atualmente logado.",
+        "summary": "Retorna os dados do treinador  nte logado.",
         "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Dados do usuário.",
@@ -153,6 +222,9 @@
         "security": [
           {
             "session": []
+          },
+          {
+            "bearer": []
           }
         ]
       }
@@ -165,6 +237,13 @@
         "summary": "Cria um novo atleta para o treinador logado.",
         "description": "",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "body",
             "in": "body",
@@ -190,6 +269,15 @@
         ],
         "summary": "Lista todos os atletas do treinador logado.",
         "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Lista de atletas."
@@ -218,6 +306,13 @@
               "type": "string"
             },
             "description": "ID do Atleta"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -245,6 +340,13 @@
             "name": "id",
             "in": "path",
             "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
             "schema": {
               "type": "string"
             }
@@ -285,6 +387,13 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -318,6 +427,13 @@
               "type": "string"
             },
             "description": "ID do Atleta"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -377,6 +493,13 @@
               "type": "string"
             },
             "description": "ID da Classificação"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -394,6 +517,28 @@
         ]
       }
     },
+    "/v1/atletassessionId": {
+      "get": {
+        "tags": [
+          "Atletas"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/v1/avaliacoes/": {
       "post": {
         "tags": [
@@ -402,6 +547,13 @@
         "summary": "Registra uma nova avaliação de desempenho para um atleta.",
         "description": "",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "body",
             "in": "body",
@@ -434,6 +586,13 @@
         "summary": "Lista o histórico de avaliações de um atleta, com filtros.",
         "description": "Busca o histórico de um atleta. O ?atletaId=uuid é obrigatório nos query params.",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "atletaId",
             "in": "query",
@@ -497,6 +656,28 @@
         ]
       }
     },
+    "/v1/avaliacoessessionId": {
+      "get": {
+        "tags": [
+          "Avaliações"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/v1/dados-auxiliares/classificacoes": {
       "get": {
         "tags": [
@@ -504,6 +685,15 @@
         ],
         "summary": "Lista todas as Classificações Paralímpicas (do seed).",
         "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Lista de classificações (ex: T11, F40)."
@@ -523,6 +713,15 @@
         ],
         "summary": "Lista todas as Modalidades esportivas (do seed).",
         "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Lista de modalidades (ex: 100m Rasos, Salto em Distância)."
@@ -551,6 +750,13 @@
               "type": "string"
             },
             "description": "ID da Modalidade"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -566,6 +772,28 @@
             "session": []
           }
         ]
+      }
+    },
+    "/v1/dados-auxiliaressessionId": {
+      "get": {
+        "tags": [
+          "Dados Auxiliares"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
       }
     }
   },
