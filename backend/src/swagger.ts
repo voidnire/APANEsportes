@@ -14,14 +14,11 @@ const doc = {
     title: "APAN API",
     description: "Documentação da API de backend do projeto APAN (para treinadores e atletas).",
   },
-
-  // Força o swagger-autogen a gerar um spec OpenAPI 3.0
-  openapi: '3.0.0',
   
-  // (CORREÇÃO)
-  // Substituímos 'host', 'basePath' e 'schemes' pelo array 'servers' (Padrão OpenAPI 3.0).
-  // Isso permite ao Swagger UI mostrar um dropdown para selecionar
-  // o ambiente de 'Produção' (Zeabur) ou 'Desenvolvimento' (Localhost).
+  // O campo 'openapi' foi REMOVIDO daqui.
+  
+  // 'servers' (Padrão OpenAPI 3.0)
+  // Agora vai funcionar, pois estamos forçando a versão 3.0 na chamada da função.
   servers: [
     {
       url: `${productionUrl}/v1`,
@@ -168,5 +165,6 @@ const routes = [
   "./src/index.ts" // O swagger-autogen vai ler este arquivo e seguir os 'imports'
 ];
 
-// Gera o arquivo
-swaggerAutogen()(outputFile, routes, doc);
+// *** A CORREÇÃO CRÍTICA ESTÁ AQUI ***
+// Passamos a versão 3.0.0 como uma OPÇÃO para o GERADOR
+swaggerAutogen({ openapi: '3.0.0' })(outputFile, routes, doc);

@@ -1,5 +1,4 @@
 {
-  "swagger": "2.0",
   "openapi": "3.0.0",
   "info": {
     "title": "APAN API",
@@ -24,24 +23,39 @@
         ],
         "summary": "Cria uma nova conta de treinador no sistema.",
         "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/SignUpDTO"
-            }
-          }
-        ],
+        "parameters": [],
         "responses": {
           "201": {
             "description": "Usuário criado com sucesso.",
-            "schema": {
-              "$ref": "#/definitions/User"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
             }
           },
           "400": {
             "description": "E-mail já cadastrado."
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -58,15 +72,24 @@
             "name": "body",
             "in": "body",
             "schema": {
-              "$ref": "#/definitions/LoginDTO"
+              "$ref": "#/components/schemas/LoginDTO"
             }
           }
         ],
         "responses": {
           "200": {
             "description": "Login bem-sucedido.",
-            "schema": {
-              "$ref": "#/definitions/User"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
             }
           },
           "401": {
@@ -107,8 +130,17 @@
         "responses": {
           "200": {
             "description": "Dados do usuário.",
-            "schema": {
-              "$ref": "#/definitions/User"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
             }
           },
           "401": {
@@ -137,7 +169,7 @@
             "name": "body",
             "in": "body",
             "schema": {
-              "$ref": "#/definitions/CreateAtletaDTO"
+              "$ref": "#/components/schemas/CreateAtletaDTO"
             }
           }
         ],
@@ -182,7 +214,9 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string",
+            "schema": {
+              "type": "string"
+            },
             "description": "ID do Atleta"
           }
         ],
@@ -211,13 +245,15 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "body",
             "in": "body",
             "schema": {
-              "$ref": "#/definitions/UpdateAtletaDTO"
+              "$ref": "#/components/schemas/UpdateAtletaDTO"
             }
           }
         ],
@@ -246,7 +282,9 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -276,15 +314,10 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string",
-            "description": "ID do Atleta"
-          },
-          {
-            "name": "body",
-            "in": "body",
             "schema": {
-              "$ref": "#/definitions/AssociateClassificacaoDTO"
-            }
+              "type": "string"
+            },
+            "description": "ID do Atleta"
           }
         ],
         "responses": {
@@ -299,7 +332,24 @@
           {
             "session": []
           }
-        ]
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "in": {
+                    "example": "any"
+                  },
+                  "schema": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/v1/atletas/{id}/classificacoes/{classificacaoId}": {
@@ -314,14 +364,18 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string",
+            "schema": {
+              "type": "string"
+            },
             "description": "ID do Atleta"
           },
           {
             "name": "classificacaoId",
             "in": "path",
             "required": true,
-            "type": "string",
+            "schema": {
+              "type": "string"
+            },
             "description": "ID da Classificação"
           }
         ],
@@ -352,7 +406,7 @@
             "name": "body",
             "in": "body",
             "schema": {
-              "$ref": "#/definitions/CreateAvaliacaoDTO"
+              "$ref": "#/components/schemas/CreateAvaliacaoDTO"
             }
           }
         ],
@@ -384,14 +438,18 @@
             "name": "atletaId",
             "in": "query",
             "required": true,
-            "type": "string",
-            "description": "ID do Atleta (obrigatório)"
+            "description": "ID do Atleta (obrigatório)",
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "modalidadeId",
             "in": "query",
-            "type": "string",
-            "description": "Filtrar por ID da modalidade"
+            "description": "Filtrar por ID da modalidade",
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "tipo",
@@ -401,21 +459,27 @@
               "POS_TREINO"
             ],
             "description": "Filtrar por tipo de sessão",
-            "type": "string"
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "dataInicio",
             "in": "query",
-            "type": "string",
             "format": "date",
-            "description": "Data inicial (YYYY-MM-DD)"
+            "description": "Data inicial (YYYY-MM-DD)",
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "dataFim",
             "in": "query",
-            "type": "string",
             "format": "date",
-            "description": "Data final (YYYY-MM-DD)"
+            "description": "Data final (YYYY-MM-DD)",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -483,7 +547,9 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string",
+            "schema": {
+              "type": "string"
+            },
             "description": "ID da Modalidade"
           }
         ],
@@ -520,6 +586,9 @@
             "type": "string",
             "example": "Password@123"
           }
+        },
+        "xml": {
+          "name": "SignUpDTO"
         }
       },
       "LoginDTO": {
@@ -533,6 +602,9 @@
             "type": "string",
             "example": "Password@123"
           }
+        },
+        "xml": {
+          "name": "LoginDTO"
         }
       },
       "User": {
@@ -558,6 +630,9 @@
             "type": "string",
             "example": "2025-11-04T10:00:00.000Z"
           }
+        },
+        "xml": {
+          "name": "User"
         }
       },
       "CreateAtletaDTO": {
@@ -571,6 +646,9 @@
             "type": "string",
             "example": "2000-01-10"
           }
+        },
+        "xml": {
+          "name": "CreateAtletaDTO"
         }
       },
       "UpdateAtletaDTO": {
@@ -584,6 +662,9 @@
             "type": "string",
             "example": "2000-01-10"
           }
+        },
+        "xml": {
+          "name": "UpdateAtletaDTO"
         }
       },
       "AssociateClassificacaoDTO": {
@@ -593,6 +674,9 @@
             "type": "string",
             "example": "uuid-classificacao-t11"
           }
+        },
+        "xml": {
+          "name": "AssociateClassificacaoDTO"
         }
       },
       "AtletaDetalhado": {
@@ -642,6 +726,9 @@
               }
             }
           }
+        },
+        "xml": {
+          "name": "AtletaDetalhado"
         }
       },
       "ResultadoMetricaDTO": {
@@ -655,6 +742,9 @@
             "type": "number",
             "example": 12.5
           }
+        },
+        "xml": {
+          "name": "ResultadoMetricaDTO"
         }
       },
       "CreateAvaliacaoDTO": {
@@ -683,9 +773,15 @@
           "resultados": {
             "type": "array",
             "items": {
-              "$ref": "#/definitions/ResultadoMetricaDTO"
+              "xml": {
+                "name": "resultadometricadto"
+              },
+              "$ref": "#/components/schemas/ResultadoMetricaDTO"
             }
           }
+        },
+        "xml": {
+          "name": "CreateAvaliacaoDTO"
         }
       },
       "RegistroAvaliacaoCompleto": {
@@ -777,6 +873,9 @@
               }
             }
           }
+        },
+        "xml": {
+          "name": "RegistroAvaliacaoCompleto"
         }
       },
       "Classificacao": {
@@ -794,6 +893,9 @@
             "type": "string",
             "example": "Deficiência visual total"
           }
+        },
+        "xml": {
+          "name": "Classificacao"
         }
       },
       "Modalidade": {
@@ -811,6 +913,9 @@
             "type": "string",
             "example": "Corrida"
           }
+        },
+        "xml": {
+          "name": "Modalidade"
         }
       },
       "TipoMetrica": {
@@ -828,6 +933,9 @@
             "type": "string",
             "example": "s"
           }
+        },
+        "xml": {
+          "name": "TipoMetrica"
         }
       },
       "ErrorAuth": {
@@ -837,6 +945,9 @@
             "type": "string",
             "example": "E-mail ou senha inválidos."
           }
+        },
+        "xml": {
+          "name": "ErrorAuth"
         }
       },
       "ErrorValidation": {
@@ -851,6 +962,9 @@
               }
             }
           }
+        },
+        "xml": {
+          "name": "ErrorValidation"
         }
       }
     },
