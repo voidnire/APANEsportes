@@ -1,11 +1,11 @@
 {
   "swagger": "2.0",
+  "openapi": "3.0.0",
   "info": {
     "title": "APAN API",
     "description": "Documentação da API de backend do projeto APAN (para treinadores e atletas).",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
   "servers": [
     {
       "url": "https://backapan.zeabur.app/v1",
@@ -16,17 +16,6 @@
       "description": "Ambiente de Desenvolvimento (Local)"
     }
   ],
-  "basePath": "/",
-  "schemes": [
-    "http"
-  ],
-  "securityDefinitions": {
-    "cookieAuth": {
-      "type": "apiKey",
-      "in": "cookie",
-      "name": "connect.sid"
-    }
-  },
   "paths": {
     "/v1/auth/signup": {
       "post": {
@@ -514,353 +503,362 @@
       }
     }
   },
-  "definitions": {
-    "SignUpDTO": {
-      "type": "object",
-      "properties": {
-        "nomeCompleto": {
-          "type": "string",
-          "example": "Treinador Teste"
-        },
-        "email": {
-          "type": "string",
-          "example": "treinador@teste.com"
-        },
-        "password": {
-          "type": "string",
-          "example": "Password@123"
+  "components": {
+    "schemas": {
+      "SignUpDTO": {
+        "type": "object",
+        "properties": {
+          "nomeCompleto": {
+            "type": "string",
+            "example": "Treinador Teste"
+          },
+          "email": {
+            "type": "string",
+            "example": "treinador@teste.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "Password@123"
+          }
         }
-      }
-    },
-    "LoginDTO": {
-      "type": "object",
-      "properties": {
-        "email": {
-          "type": "string",
-          "example": "treinador@teste.com"
-        },
-        "password": {
-          "type": "string",
-          "example": "Password@123"
+      },
+      "LoginDTO": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "treinador@teste.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "Password@123"
+          }
         }
-      }
-    },
-    "User": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "example": "uuid-user-1"
-        },
-        "nomeCompleto": {
-          "type": "string",
-          "example": "Treinador Teste"
-        },
-        "email": {
-          "type": "string",
-          "example": "treinador@teste.com"
-        },
-        "createdAt": {
-          "type": "string",
-          "example": "2025-11-04T10:00:00.000Z"
-        },
-        "updatedAt": {
-          "type": "string",
-          "example": "2025-11-04T10:00:00.000Z"
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "uuid-user-1"
+          },
+          "nomeCompleto": {
+            "type": "string",
+            "example": "Treinador Teste"
+          },
+          "email": {
+            "type": "string",
+            "example": "treinador@teste.com"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2025-11-04T10:00:00.000Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2025-11-04T10:00:00.000Z"
+          }
         }
-      }
-    },
-    "CreateAtletaDTO": {
-      "type": "object",
-      "properties": {
-        "nomeCompleto": {
-          "type": "string",
-          "example": "João Silva"
-        },
-        "dataNascimento": {
-          "type": "string",
-          "example": "2000-01-10"
+      },
+      "CreateAtletaDTO": {
+        "type": "object",
+        "properties": {
+          "nomeCompleto": {
+            "type": "string",
+            "example": "João Silva"
+          },
+          "dataNascimento": {
+            "type": "string",
+            "example": "2000-01-10"
+          }
         }
-      }
-    },
-    "UpdateAtletaDTO": {
-      "type": "object",
-      "properties": {
-        "nomeCompleto": {
-          "type": "string",
-          "example": "João Silva Atualizado"
-        },
-        "dataNascimento": {
-          "type": "string",
-          "example": "2000-01-10"
+      },
+      "UpdateAtletaDTO": {
+        "type": "object",
+        "properties": {
+          "nomeCompleto": {
+            "type": "string",
+            "example": "João Silva Atualizado"
+          },
+          "dataNascimento": {
+            "type": "string",
+            "example": "2000-01-10"
+          }
         }
-      }
-    },
-    "AssociateClassificacaoDTO": {
-      "type": "object",
-      "properties": {
-        "classificacaoId": {
-          "type": "string",
-          "example": "uuid-classificacao-t11"
+      },
+      "AssociateClassificacaoDTO": {
+        "type": "object",
+        "properties": {
+          "classificacaoId": {
+            "type": "string",
+            "example": "uuid-classificacao-t11"
+          }
         }
-      }
-    },
-    "AtletaDetalhado": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "example": "uuid-atleta-1"
-        },
-        "nomeCompleto": {
-          "type": "string",
-          "example": "João Silva"
-        },
-        "dataNascimento": {
-          "type": "string",
-          "example": "2000-01-10T00:00:00.000Z"
-        },
-        "usuarioId": {
-          "type": "string",
-          "example": "uuid-user-1"
-        },
-        "createdAt": {
-          "type": "string",
-          "example": "2025-11-04T10:00:00.000Z"
-        },
-        "updatedAt": {
-          "type": "string",
-          "example": "2025-11-04T10:00:00.000Z"
-        },
-        "classificacoes": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string",
-                "example": "uuid-class-1"
-              },
-              "codigo": {
-                "type": "string",
-                "example": "T11"
-              },
-              "descricao": {
-                "type": "string",
-                "example": "Deficiência visual total"
+      },
+      "AtletaDetalhado": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "uuid-atleta-1"
+          },
+          "nomeCompleto": {
+            "type": "string",
+            "example": "João Silva"
+          },
+          "dataNascimento": {
+            "type": "string",
+            "example": "2000-01-10T00:00:00.000Z"
+          },
+          "usuarioId": {
+            "type": "string",
+            "example": "uuid-user-1"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2025-11-04T10:00:00.000Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2025-11-04T10:00:00.000Z"
+          },
+          "classificacoes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "uuid-class-1"
+                },
+                "codigo": {
+                  "type": "string",
+                  "example": "T11"
+                },
+                "descricao": {
+                  "type": "string",
+                  "example": "Deficiência visual total"
+                }
               }
             }
           }
         }
-      }
-    },
-    "ResultadoMetricaDTO": {
-      "type": "object",
-      "properties": {
-        "tipoMetricaId": {
-          "type": "string",
-          "example": "uuid-metrica-tempo"
-        },
-        "valor": {
-          "type": "number",
-          "example": 12.5
-        }
-      }
-    },
-    "CreateAvaliacaoDTO": {
-      "type": "object",
-      "properties": {
-        "atletaId": {
-          "type": "string",
-          "example": "uuid-atleta-1"
-        },
-        "modalidadeId": {
-          "type": "string",
-          "example": "uuid-modalidade-100m"
-        },
-        "tipo": {
-          "type": "string",
-          "example": "PRE_TREINO"
-        },
-        "observacoes": {
-          "type": "string",
-          "example": "Pista molhada"
-        },
-        "dataHora": {
-          "type": "string",
-          "example": "2025-11-04T10:00:00.000Z"
-        },
-        "resultados": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ResultadoMetricaDTO"
+      },
+      "ResultadoMetricaDTO": {
+        "type": "object",
+        "properties": {
+          "tipoMetricaId": {
+            "type": "string",
+            "example": "uuid-metrica-tempo"
+          },
+          "valor": {
+            "type": "number",
+            "example": 12.5
           }
         }
-      }
-    },
-    "RegistroAvaliacaoCompleto": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "example": "uuid-registro-1"
-        },
-        "atletaId": {
-          "type": "string",
-          "example": "uuid-atleta-1"
-        },
-        "modalidadeId": {
-          "type": "string",
-          "example": "uuid-modalidade-100m"
-        },
-        "tipo": {
-          "type": "string",
-          "example": "PRE_TREINO"
-        },
-        "observacoes": {
-          "type": "string",
-          "example": "Pista molhada"
-        },
-        "dataHora": {
-          "type": "string",
-          "example": "2025-11-04T10:00:00.000Z"
-        },
-        "createdAt": {
-          "type": "string",
-          "example": "2025-11-04T10:00:00.000Z"
-        },
-        "updatedAt": {
-          "type": "string",
-          "example": "2025-11-04T10:00:00.000Z"
-        },
-        "modalidade": {
-          "type": "object",
-          "properties": {
-            "nome": {
-              "type": "string",
-              "example": "100m Rasos"
-            },
-            "categoria": {
-              "type": "string",
-              "example": "Corrida"
+      },
+      "CreateAvaliacaoDTO": {
+        "type": "object",
+        "properties": {
+          "atletaId": {
+            "type": "string",
+            "example": "uuid-atleta-1"
+          },
+          "modalidadeId": {
+            "type": "string",
+            "example": "uuid-modalidade-100m"
+          },
+          "tipo": {
+            "type": "string",
+            "example": "PRE_TREINO"
+          },
+          "observacoes": {
+            "type": "string",
+            "example": "Pista molhada"
+          },
+          "dataHora": {
+            "type": "string",
+            "example": "2025-11-04T10:00:00.000Z"
+          },
+          "resultados": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/ResultadoMetricaDTO"
             }
           }
-        },
-        "resultados": {
-          "type": "array",
-          "items": {
+        }
+      },
+      "RegistroAvaliacaoCompleto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "uuid-registro-1"
+          },
+          "atletaId": {
+            "type": "string",
+            "example": "uuid-atleta-1"
+          },
+          "modalidadeId": {
+            "type": "string",
+            "example": "uuid-modalidade-100m"
+          },
+          "tipo": {
+            "type": "string",
+            "example": "PRE_TREINO"
+          },
+          "observacoes": {
+            "type": "string",
+            "example": "Pista molhada"
+          },
+          "dataHora": {
+            "type": "string",
+            "example": "2025-11-04T10:00:00.000Z"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2025-11-04T10:00:00.000Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2025-11-04T10:00:00.000Z"
+          },
+          "modalidade": {
             "type": "object",
             "properties": {
-              "id": {
+              "nome": {
                 "type": "string",
-                "example": "uuid-resultado-1"
+                "example": "100m Rasos"
               },
-              "tipoMetricaId": {
+              "categoria": {
                 "type": "string",
-                "example": "uuid-metrica-tempo"
-              },
-              "valor": {
-                "type": "number",
-                "example": 12.5
-              },
-              "createdAt": {
-                "type": "string",
-                "example": "2025-11-04T10:00:00.000Z"
-              },
-              "updatedAt": {
-                "type": "string",
-                "example": "2025-11-04T10:00:00.000Z"
-              },
-              "tipoMetrica": {
-                "type": "object",
-                "properties": {
-                  "nome": {
-                    "type": "string",
-                    "example": "Tempo"
-                  },
-                  "unidadeMedida": {
-                    "type": "string",
-                    "example": "s"
+                "example": "Corrida"
+              }
+            }
+          },
+          "resultados": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "uuid-resultado-1"
+                },
+                "tipoMetricaId": {
+                  "type": "string",
+                  "example": "uuid-metrica-tempo"
+                },
+                "valor": {
+                  "type": "number",
+                  "example": 12.5
+                },
+                "createdAt": {
+                  "type": "string",
+                  "example": "2025-11-04T10:00:00.000Z"
+                },
+                "updatedAt": {
+                  "type": "string",
+                  "example": "2025-11-04T10:00:00.000Z"
+                },
+                "tipoMetrica": {
+                  "type": "object",
+                  "properties": {
+                    "nome": {
+                      "type": "string",
+                      "example": "Tempo"
+                    },
+                    "unidadeMedida": {
+                      "type": "string",
+                      "example": "s"
+                    }
                   }
                 }
               }
             }
           }
         }
-      }
-    },
-    "Classificacao": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "example": "uuid-class-1"
-        },
-        "codigo": {
-          "type": "string",
-          "example": "T11"
-        },
-        "descricao": {
-          "type": "string",
-          "example": "Deficiência visual total"
+      },
+      "Classificacao": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "uuid-class-1"
+          },
+          "codigo": {
+            "type": "string",
+            "example": "T11"
+          },
+          "descricao": {
+            "type": "string",
+            "example": "Deficiência visual total"
+          }
         }
-      }
-    },
-    "Modalidade": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "example": "uuid-modalidade-100m"
-        },
-        "nome": {
-          "type": "string",
-          "example": "100m Rasos"
-        },
-        "categoria": {
-          "type": "string",
-          "example": "Corrida"
+      },
+      "Modalidade": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "uuid-modalidade-100m"
+          },
+          "nome": {
+            "type": "string",
+            "example": "100m Rasos"
+          },
+          "categoria": {
+            "type": "string",
+            "example": "Corrida"
+          }
         }
-      }
-    },
-    "TipoMetrica": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "example": "uuid-metrica-tempo"
-        },
-        "nome": {
-          "type": "string",
-          "example": "Tempo"
-        },
-        "unidadeMedida": {
-          "type": "string",
-          "example": "s"
+      },
+      "TipoMetrica": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "uuid-metrica-tempo"
+          },
+          "nome": {
+            "type": "string",
+            "example": "Tempo"
+          },
+          "unidadeMedida": {
+            "type": "string",
+            "example": "s"
+          }
         }
-      }
-    },
-    "ErrorAuth": {
-      "type": "object",
-      "properties": {
-        "message": {
-          "type": "string",
-          "example": "E-mail ou senha inválidos."
+      },
+      "ErrorAuth": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "E-mail ou senha inválidos."
+          }
         }
-      }
-    },
-    "ErrorValidation": {
-      "type": "object",
-      "properties": {
-        "fieldErrors": {
-          "type": "object",
-          "properties": {
-            "email": {
-              "type": "string",
-              "example": "E-mail já cadastrado."
+      },
+      "ErrorValidation": {
+        "type": "object",
+        "properties": {
+          "fieldErrors": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "example": "E-mail já cadastrado."
+              }
             }
           }
         }
+      }
+    },
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "connect.sid"
       }
     }
   }
