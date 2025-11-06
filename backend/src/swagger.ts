@@ -4,18 +4,32 @@ import dotenv from "dotenv";
 // Carrega as variáveis de ambiente (HOST, PORT) do seu .env
 dotenv.config();
 
+// Define a URL de produção
+const productionUrl = "https://backapan.zeabur.app";
+// Define a URL local
+const localUrl = `http://${process.env.HOST || 'localhost'}:${process.env.PORT || 3001}`;
+
 const doc = {
   info: {
     title: "APAN API",
     description: "Documentação da API de backend do projeto APAN (para treinadores e atletas).",
   },
-  // Define o host base. O Swagger UI usará isso para os "Try it out".
-  // (Puxado do seu .env, ex: localhost:3001)
-  host: `${process.env.HOST || 'localhost'}:${process.env.PORT || 3001}`,
-  // Define o prefixo base para todas as rotas (nosso v1Router)
-  basePath: "/v1",
-  schemes: ['http', 'https'],
   
+  // (CORREÇÃO)
+  // Substituímos 'host', 'basePath' e 'schemes' pelo array 'servers' (Padrão OpenAPI 3.0).
+  // Isso permite ao Swagger UI mostrar um dropdown para selecionar
+  // o ambiente de 'Produção' (Zeabur) ou 'Desenvolvimento' (Localhost).
+  servers: [
+    {
+      url: `${productionUrl}/v1`,
+      description: 'Ambiente de Produção (Zeabur)'
+    },
+    {
+      url: `${localUrl}/v1`,
+      description: 'Ambiente de Desenvolvimento (Local)'
+    }
+  ],
+
   // Definições dos Schemas (DTOs) que usamos no projeto.
   definitions: {
     // --- AUTH ---
@@ -28,7 +42,7 @@ const doc = {
       email: "treinador@teste.com",
       password: "Password@123"
     },
-    SanitizedUser: { // Resposta do Login e /auth/me
+    User: { // Resposta do Login e /auth/me (sanitizado)
       id: "uuid-user-1",
       nomeCompleto: "Treinador Teste",
       email: "treinador@teste.com",
@@ -146,13 +160,9 @@ const doc = {
 };
 
 const outputFile = "./swagger-output.json";
-
-// (A CORREÇÃO)
-// Só precisamos apontar para o arquivo de entrada (entrypoint) da sua API.
-// O swagger-autogen vai ler este arquivo e seguir os 'imports'
-// para encontrar o 'v1Router' e todas as outras rotas.
+// O(s) arquivo(s) que contêm o 'app.use("/v1", ...)'
 const routes = [
-  "./src/index.ts" 
+  "./src/index.ts" // O swagger-autogen vai ler este arquivo e seguir os 'imports'
 ];
 
 // Gera o arquivo

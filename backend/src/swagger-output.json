@@ -5,11 +5,20 @@
     "description": "Documentação da API de backend do projeto APAN (para treinadores e atletas).",
     "version": "1.0.0"
   },
-  "host": "localhost:3001",
-  "basePath": "/v1",
+  "host": "localhost:3000",
+  "servers": [
+    {
+      "url": "https://backapan.zeabur.app/v1",
+      "description": "Ambiente de Produção (Zeabur)"
+    },
+    {
+      "url": "http://localhost:3001/v1",
+      "description": "Ambiente de Desenvolvimento (Local)"
+    }
+  ],
+  "basePath": "/",
   "schemes": [
-    "http",
-    "https"
+    "http"
   ],
   "securityDefinitions": {
     "cookieAuth": {
@@ -536,7 +545,7 @@
         }
       }
     },
-    "SanitizedUser": {
+    "User": {
       "type": "object",
       "properties": {
         "id": {
