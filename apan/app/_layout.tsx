@@ -50,8 +50,8 @@ export default function RootLayout() {
         }, 
         }} />
 
-        <Tabs.Screen name ="equipes" options={{ tabBarLabel:"Equipes", //href ="null" vai esconde, tabBarBadge:3,
-          headerShown:false,title:"Equipes",
+        <Tabs.Screen name ="atletas" options={{ tabBarLabel:"Atletas", //href ="null" vai esconde, tabBarBadge:3,
+          headerShown:false,title:"Atletas",
           tabBarIcon: ({color,size})=>{
           return <MaterialIcons name="people" size={size} color={color} />
         }, 

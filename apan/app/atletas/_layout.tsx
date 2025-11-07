@@ -6,7 +6,7 @@ export default function RootLayout(){
 
 
     return <Stack>  
-        <Stack.Screen name="index" options={{ title: 'Equipes', }} />
+        <Stack.Screen name="index" options={{ title: 'Atletas', }} />
        {/*} <Stack.Screen name="perfilAtleta" options={({ route }: any) => {
             const nome = route?.params?.name;
             return {
@@ -14,10 +14,10 @@ export default function RootLayout(){
             };
             }}
         />*/}
-        <Stack.Screen name="equipe/[id]" options={({ route }: any) => {
+        <Stack.Screen name="atleta/[id]" options={({ route }: any) => {
             const nome = route?.params?.name;
             return {
-                title: nome ? `Equipe ${nome}` : "Equipe",
+                title: nome ? `${nome}` : "Atleta",
             };
             }}
         />
