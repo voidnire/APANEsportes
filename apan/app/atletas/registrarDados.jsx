@@ -8,12 +8,11 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
-  Platform,
+  //Platform,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { ThemeContext } from "@/context/ThemeContext";
 import { atletas } from "@/models/atletas"; // adiciona o novo atleta neste array (modifica o módulo)
-import { Picker } from "@react-native-picker/picker"; // opcional, npm i @react-native-picker/picker
 
 export default function RegistrarDados() {
   const { theme } = useContext(ThemeContext);
@@ -22,9 +21,9 @@ export default function RegistrarDados() {
 
   const [nomeCompleto, setNomeCompleto] = useState("");
   const [dataNascimento, setDataNascimento] = useState("");
-  const [genero, setGenero] = useState("masculino");
+  /*const [genero, setGenero] = useState("masculino");
   const [modalidade, setModalidade] = useState("");
-  const [observacoes, setObservacoes] = useState("");
+  const [observacoes, setObservacoes] = useState("");*/
 
   const validar = () => {
     if (!nomeCompleto.trim()) {
@@ -42,9 +41,9 @@ export default function RegistrarDados() {
       id: String(Date.now()),
       nomeCompleto: nomeCompleto.trim(),
       dataNascimento: dataNascimento.trim() || "2000-01-01",
-      genero,
+      /*genero,
       modalidade: modalidade.trim(),
-      observacoes: observacoes.trim(),
+      observacoes: observacoes.trim(),*/
     };
 
     try {

@@ -3,55 +3,26 @@ import {
   View,
   Text,
   StyleSheet,
-  Pressable,
   ScrollView,
-  Image,
   Dimensions,
 } from "react-native";
-import { Link, useRouter, useSearchParams } from "expo-router";
+//import { useRouter } from "expo-router";
 import { ThemeContext } from "@/context/ThemeContext";
 
-import {Icon} from "@/assets/images/splash-icon.png"
+//import {Icon} from "@/assets/images/splash-icon.png"
 
 const screenWidth = Dimensions.get("window").width;
 
 export default function AthleteProfileScreen() {
   const { theme, colorScheme } = useContext(ThemeContext);
   const styles = createStyles(theme, colorScheme);
-  const router = useRouter();
-  //const params = useSearchParams(); // se você navegar com ?id= ou enviar dados
-  // Mock — substitua pelo seu dado real vindo da navegação
-  const athlete = {
-    id: /*params.id ||*/ "1",
-    name: "Maria Dado Mockado da Silva",
-    age: "17",
-    modality: "Corrida",
-    disability: "Amputação de membro superior",
-    avatar:Icon,
 
-    bestMark: "3,45 m",
-    avgMark: "3,21 m",
-  };
-
-  const handleEdit = () => {
-    // navegar para tela de edição; ajuste a rota conforme seu app
-    router.push({
-      pathname: "/editAthlete",
-      params: { id: athlete.id },
-    });
-  };
-
+  
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       {/* Header */}
       <View style={styles.header}>
-        <Link href="/" asChild>
-          <Pressable style={styles.backButton}>
-            <Text style={styles.backArrow}>←</Text>
-          </Pressable>
-        </Link>
-        <Text style={styles.headerTitle}>TELA DE CONFIGS</Text>
-        <View style={{ width: 36 }} />
+            <Text style={styles.backArrow}>To do ....</Text>
       </View>
 
     </ScrollView>
