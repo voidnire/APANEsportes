@@ -1,366 +1,203 @@
-import React, { useContext, useState, useRef } from "react";
+// app/atletas/registrarDados.jsx
+import React, { useContext, useState } from "react";
 import {
-  Text,
   View,
+  Text,
   TextInput,
-  Pressable,
   StyleSheet,
+  TouchableOpacity,
   ScrollView,
+  Alert,
   Platform,
 } from "react-native";
+import { useRouter } from "expo-router";
 import { ThemeContext } from "@/context/ThemeContext";
-import { Picker } from "@react-native-picker/picker";
-import { Link, router } from "expo-router";
-import { ArrowLeft } from "lucide-react-native"; // npm i lucide-react-native
+import { atletas } from "@/models/atletas"; // adiciona o novo atleta neste array (modifica o módulo)
+import { Picker } from "@react-native-picker/picker"; // opcional, npm i @react-native-picker/picker
 
-export default function RegistrarDadosScreen() {
-  const { colorScheme, theme } = useContext(ThemeContext);
-  const styles = createStyles(theme, colorScheme);
+export default function RegistrarDados() {
+  const { theme } = useContext(ThemeContext);
+  const styles = createStyles(theme);
+  const router = useRouter();
 
-  const [atleta, setAtleta] = useState("");
-  const [prePos, setPrePos] = useState("Pré");
-  const [aba, setAba] = useState("Corrida");
-  const [tempo, setTempo] = useState("");
-  const [distancia, setDistancia] = useState("");
-  const [velocidade, setVelocidade] = useState("");
-  const [freqCard, setFreqCard] = useState("");
+  const [nomeCompleto, setNomeCompleto] = useState("");
+  const [dataNascimento, setDataNascimento] = useState("");
+  const [genero, setGenero] = useState("masculino");
+  const [modalidade, setModalidade] = useState("");
   const [observacoes, setObservacoes] = useState("");
 
-  const atletas = [
-    { id: "a1", nome: "Atleta 1" },
-    { id: "a2", nome: "Atleta 2" },
-    { id: "a3", nome: "Atleta 3" },
-  ];
-
-  const pickerRef = useRef(null);
-
-  function abrirPicker() {
-    if (pickerRef.current && Platform.OS === "android") {
-      pickerRef.current.focus?.();
+  const validar = () => {
+    if (!nomeCompleto.trim()) {
+      Alert.alert("Erro", "Informe o nome completo do atleta.");
+      return false;
     }
-  }
+    // opcional: validar data no formato YYYY-MM-DD
+    return true;
+  };
 
-  function handleSalvar() {
-    const payload = {
-      atleta,
-      prePos,
-      aba,
-      tempo,
-      distancia,
-      velocidade,
-      freqCard,
-      observacoes,
-      createdAt: new Date().toISOString(),
+  const handleSalvar = () => {
+    if (!validar()) return;
+
+    const novoAtleta = {
+      id: String(Date.now()),
+      nomeCompleto: nomeCompleto.trim(),
+      dataNascimento: dataNascimento.trim() || "2000-01-01",
+      genero,
+      modalidade: modalidade.trim(),
+      observacoes: observacoes.trim(),
     };
-    console.log("Salvar registro:", payload);
-  }
 
-  function handleImportar() {
-    console.log("Importar do My Jump Lab (implementar)");
-  }
+    try {
+      // adiciona no array do módulo — dependendo de como a lista é gerenciada, pode ser necessário disparar um refresh.
+      atletas.push(novoAtleta);
+      // feedback simples e volta para a lista
+      Alert.alert("Sucesso", "Atleta cadastrado.", [
+        {
+          text: "OK",
+          onPress: () => router.back(),
+        },
+      ]);
+    } catch (err) {
+      console.error("Erro ao salvar atleta:", err);
+      Alert.alert("Erro", "Não foi possível salvar o atleta. Veja o console.");
+    }
+  };
 
   return (
-    <ScrollView
-      style={[styles.container]}
-      contentContainerStyle={styles.contentContainer}
-      keyboardShouldPersistTaps="handled"
-    >
-      {/* Botão de voltar */}
-      <Pressable onPress={() => router.back()} style={styles.backButton}>
-        <ArrowLeft color={theme.text} size={22} />
-        <Text style={styles.backText}>Voltar</Text>
-      </Pressable>
+    <View style={styles.container}>
+      <Text style={styles.header}>Registrar novo atleta</Text>
 
-      <Text style={styles.label}>Escolher Atleta</Text>
+      <ScrollView
+        style={styles.form}
+        contentContainerStyle={{ paddingBottom: 40 }}
+        keyboardShouldPersistTaps="handled"
+      >
+        <Text style={styles.label}>Nome completo</Text>
+        <TextInput
+          value={nomeCompleto}
+          onChangeText={setNomeCompleto}
+          placeholder="Ex: João da Silva"
+          placeholderTextColor="#999"
+          style={styles.input}
+          returnKeyType="next"
+        />
 
-      <View style={styles.pickerWrapper}>
-        <Picker
-          ref={pickerRef}
-          selectedValue={atleta}
-          onValueChange={(itemValue) => setAtleta(itemValue)}
-          style={styles.picker}
-          dropdownIconColor={theme.text}
-        >
-          <Picker.Item label="Selecione..." value="" />
-          {atletas.map((a) => (
-            <Picker.Item key={a.id} label={a.nome} value={a.id} />
-          ))}
-        </Picker>
-      </View>
+        <Text style={styles.label}>Data de Nascimento</Text>
+        <TextInput
+          value={dataNascimento}
+          onChangeText={setDataNascimento}
+          placeholder="YYYY-MM-DD (opcional)"
+          placeholderTextColor="#999"
+          style={styles.input}
+        />
 
-      <View style={styles.rowBetween}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Text style={styles.label}>Pré/Pós:</Text>
-          <View style={styles.toggleGroup}>
-            {["Pré", "Pós"].map((t) => (
-              <Pressable
-                key={t}
-                onPress={() => setPrePos(t)}
-                style={[
-                  styles.toggleButton,
-                  prePos === t && styles.toggleButtonActive,
-                ]}
-              >
-                <Text
-                  style={[
-                    styles.toggleText,
-                    prePos === t && styles.toggleTextActive,
-                  ]}
-                >
-                  {t}
-                </Text>
-              </Pressable>
-            ))}
-          </View>
+        {/**
+        <Text style={styles.label}>Gênero</Text>
+        <View style={styles.pickerWrapper}>
+          <Picker
+            selectedValue={genero}
+            onValueChange={(v) => setGenero(v)}
+            style={Platform.OS === "ios" ? { height: 140 } : {}}
+          >
+            <Picker.Item label="Masculino" value="masculino" />
+            <Picker.Item label="Feminino" value="feminino" />
+            <Picker.Item label="Outro / Não informar" value="outro" />
+          </Picker>
         </View>
 
-        <Pressable style={styles.smallGhostButton} onPress={abrirPicker}>
-          <Text style={styles.smallGhostText}>Abrir lista</Text>
-        </Pressable>
-      </View>
-
-      <View style={styles.tabs}>
-        {["Corrida", "Salto V", "Salto H", "Lançamento"].map((t) => (
-          <Pressable
-            key={t}
-            onPress={() => setAba(t)}
-            style={[styles.tabButton, aba === t && styles.tabButtonActive]}
-          >
-            <Text style={[styles.tabText, aba === t && styles.tabTextActive]}>
-              {t}
-            </Text>
-          </Pressable>
-        ))}
-      </View>
-
-      <View style={styles.field}>
-        <Text style={styles.fieldLabel}>Tempo (s)</Text>
+        <Text style={styles.label}>Modalidade / Esporte</Text>
         <TextInput
-          value={tempo}
-          onChangeText={setTempo}
-          placeholder="Value"
-          placeholderTextColor={theme.muted}
-          keyboardType="numeric"
+          value={modalidade}
+          onChangeText={setModalidade}
+          placeholder="Ex: Atletismo - Salto"
+          placeholderTextColor="#999"
           style={styles.input}
         />
-      </View>
 
-      <View style={styles.field}>
-        <Text style={styles.fieldLabel}>Distância (m)</Text>
-        <TextInput
-          value={distancia}
-          onChangeText={setDistancia}
-          placeholder="Value"
-          placeholderTextColor={theme.muted}
-          keyboardType="numeric"
-          style={styles.input}
-        />
-      </View>
-
-      <View style={styles.field}>
-        <Text style={styles.fieldLabel}>Velocidade (m/s)</Text>
-        <TextInput
-          value={velocidade}
-          onChangeText={setVelocidade}
-          placeholder="Value"
-          placeholderTextColor={theme.muted}
-          keyboardType="numeric"
-          style={styles.input}
-        />
-      </View>
-
-      <View style={styles.field}>
-        <Text style={styles.fieldLabel}>Frequência cardíaca (bpm)</Text>
-        <TextInput
-          value={freqCard}
-          onChangeText={setFreqCard}
-          placeholder="Value"
-          placeholderTextColor={theme.muted}
-          keyboardType="numeric"
-          style={styles.input}
-        />
-      </View>
-
-      <View style={[styles.field, { marginTop: 6 }]}>
-        <Text style={styles.fieldLabel}>Observações</Text>
+        <Text style={styles.label}>Observações</Text>
         <TextInput
           value={observacoes}
           onChangeText={setObservacoes}
-          placeholder="Escreva aqui detalhes do treino..."
-          placeholderTextColor={theme.muted}
-          style={[styles.input, styles.textArea]}
+          placeholder="Observações (opcional)"
+          placeholderTextColor="#999"
+          style={[styles.input, { height: 90, textAlignVertical: "top" }]}
           multiline
-          numberOfLines={4}
         />
-      </View>
+        */}
 
-      <Pressable
-        style={[styles.actionButton, styles.importButton]}
-        onPress={handleImportar}
-      >
-        <Text style={styles.actionText}>Importar do My Jump Lab</Text>
-      </Pressable>
+        <View style={styles.actions}>
+          <TouchableOpacity
+            style={[styles.button, { backgroundColor: "#ccc" }]}
+            onPress={() => router.back()}
+          >
+            <Text style={[styles.buttonText, { color: "#222" }]}>Cancelar</Text>
+          </TouchableOpacity>
 
-      <Pressable
-        style={[styles.actionButton, styles.saveButton]}
-        onPress={handleSalvar}
-      >
-        <Text style={styles.actionText}>Salvar Registro</Text>
-      </Pressable>
-
-      <View style={{ height: 40 }} />
-    </ScrollView>
+          <TouchableOpacity style={styles.button} onPress={handleSalvar}>
+            <Text style={styles.buttonText}>Salvar</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
-function createStyles(theme, colorScheme) {
-  return StyleSheet.create({
+const createStyles = (theme) =>
+  StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: theme.background,
+      paddingTop: 12,
+      paddingHorizontal: 16,
     },
-    contentContainer: {
-      padding: 18,
-      alignItems: "stretch",
-    },
-    backButton: {
-      flexDirection: "row",
-      alignItems: "center",
-      marginBottom: 14,
-    },
-    backText: {
+    header: {
+      fontSize: 20,
+      fontWeight: "700",
       color: theme.text,
-      marginLeft: 6,
-      fontSize: 16,
-      fontWeight: "600",
+      marginBottom: 8,
+      alignSelf: "center",
+    },
+    form: {
+      flex: 1,
+      marginTop: 8,
     },
     label: {
       color: theme.text,
-      fontWeight: "600",
+      fontSize: 13,
       marginBottom: 6,
-      fontSize: 16,
-    },
-    pickerWrapper: {
-      borderWidth: 1,
-      borderColor: theme.border || "#ccc",
-      borderRadius: 8,
-      overflow: "hidden",
-      backgroundColor: theme.card || (colorScheme === "dark" ? "#111" : "#fff"),
-      marginBottom: 12,
-    },
-    picker: {
-      height: 48,
-      color: theme.text,
-    },
-    rowBetween: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
-      marginBottom: 12,
-    },
-    toggleGroup: {
-      flexDirection: "row",
-      marginLeft: 8,
-    },
-    toggleButton: {
-      paddingVertical: 6,
-      paddingHorizontal: 12,
-      borderRadius: 20,
-      borderWidth: 1,
-      borderColor: theme.border || "#ccc",
-      marginRight: 6,
-      backgroundColor: "transparent",
-    },
-    toggleButtonActive: {
-      backgroundColor: theme.primary || "#2f95dc",
-      borderColor: theme.primary || "#2f95dc",
-    },
-    toggleText: {
-      color: theme.text,
-      fontWeight: "600",
-    },
-    toggleTextActive: {
-      color: theme.onPrimary || "#fff",
-    },
-    smallGhostButton: {
-      paddingVertical: 6,
-      paddingHorizontal: 10,
-      borderRadius: 8,
-      borderWidth: 1,
-      borderColor: theme.border || "#ccc",
-      backgroundColor: "transparent",
-    },
-    smallGhostText: {
-      color: theme.text,
-      fontSize: 12,
-    },
-    tabs: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      marginBottom: 14,
-    },
-    tabButton: {
-      flex: 1,
-      paddingVertical: 10,
-      marginHorizontal: 4,
-      borderRadius: 8,
-      borderWidth: 1,
-      borderColor: theme.border || "#ccc",
-      backgroundColor: "transparent",
-      alignItems: "center",
-    },
-    tabButtonActive: {
-      backgroundColor: theme.primary || "#2f95dc",
-      borderColor: theme.primary || "#2f95dc",
-    },
-    tabText: {
-      color: theme.text,
-      fontWeight: "600",
-      fontSize: 12,
-    },
-    tabTextActive: {
-      color: theme.onPrimary || "#fff",
-    },
-    field: {
-      marginBottom: 12,
-    },
-    fieldLabel: {
-      color: theme.text,
-      marginBottom: 6,
-      fontWeight: "600",
-    },
-    input: {
-      borderWidth: 1,
-      borderColor: theme.border || "#ccc",
-      borderRadius: 8,
-      paddingHorizontal: 12,
-      paddingVertical: 10,
-      color: theme.text,
-      backgroundColor: theme.card || (colorScheme === "dark" ? "#111" : "#fff"),
-    },
-    textArea: {
-      minHeight: 90,
-      textAlignVertical: "top",
-    },
-    actionButton: {
-      height: 48,
-      borderRadius: 12,
-      justifyContent: "center",
-      alignItems: "center",
       marginTop: 12,
     },
-    importButton: {
-      backgroundColor: theme.card || "#444",
+    input: {
+      backgroundColor: "#fff",
+      paddingHorizontal: 12,
+      paddingVertical: 10,
+      borderRadius: 8,
       borderWidth: 1,
-      borderColor: theme.border || "#ccc",
+      borderColor: "#e6e6e6",
+      color: "#000",
     },
-    saveButton: {
-      backgroundColor: theme.primary || "red",
-      marginBottom: 8,
+    pickerWrapper: {
+      backgroundColor: "#fff",
+      borderRadius: 8,
+      borderWidth: 1,
+      borderColor: "#e6e6e6",
+      overflow: "hidden",
     },
-    actionText: {
-      color: theme.onPrimary || "#fff",
+    actions: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      marginTop: 20,
+    },
+    button: {
+      flex: 1,
+      marginHorizontal: 6,
+      backgroundColor: "#007AFF",
+      paddingVertical: 12,
+      alignItems: "center",
+      borderRadius: 8,
+    },
+    buttonText: {
+      color: "#fff",
       fontWeight: "700",
     },
   });
-}
