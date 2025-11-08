@@ -6,7 +6,7 @@ export default function RootLayout(){
 
 
     return <Stack>  
-        <Stack.Screen name="index" options={{ title: 'Atletas', }} />
+        <Stack.Screen name="index" options={{ title: 'Atletas',headerShown:false  }} />
        {/*} <Stack.Screen name="perfilAtleta" options={({ route }: any) => {
             const nome = route?.params?.name;
             return {

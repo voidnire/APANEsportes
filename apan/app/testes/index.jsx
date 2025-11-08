@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useContext} from "react";
 import {
   SafeAreaView,
   View,
@@ -9,6 +9,7 @@ import {
   Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons"; // expo/vector-icons or react-native-vector-icons
+import { ThemeContext } from "@/context/ThemeContext";
 
 // Lista de itens conforme a imagem (texto em PT-BR)
 const MENU_ITEMS = [
@@ -20,29 +21,34 @@ const MENU_ITEMS = [
   { id: "6", title: "Mobilidade", subtitle: "My ROM", icon: "body" },
 ];
 
-// Componente de linha do menu — estilo minimalista / clean
-const MenuRow = ({ title, subtitle, icon, onPress }) => (
-  <TouchableOpacity style={styles.row} onPress={onPress} activeOpacity={0.7}>
-    
-    <View style={styles.rowLeft}>
-      <View style={styles.iconBox}>
-        <Ionicons name={icon} size={20} style={styles.icon} />
-      </View>
-      <View style={styles.texts}>
-        <Text numberOfLines={1} style={styles.title}>
-          {title}
-        </Text>
-        <Text numberOfLines={1} style={styles.subtitle}>
-          {subtitle}
-        </Text>
-      </View>
-    </View>
 
-    <Ionicons name="chevron-forward" size={20} color="#C4C4C6" />
-  </TouchableOpacity>
-);
 
 export default function HomeScreenClean() {
+  const { theme } = useContext(ThemeContext);
+  const styles = createStyles(theme);
+  
+  // Componente de linha do menu — estilo minimalista / clean
+  const MenuRow = ({ title, subtitle, icon, onPress }) => (
+    <TouchableOpacity style={styles.row} onPress={onPress} activeOpacity={0.7}>
+      
+      <View style={styles.rowLeft}>
+        <View style={styles.iconBox}>
+          <Ionicons name={icon} size={20} style={styles.icon} />
+        </View>
+        <View style={styles.texts}>
+          <Text numberOfLines={1} style={styles.title}>
+            {title}
+          </Text>
+          <Text numberOfLines={1} style={styles.subtitle}>
+            {subtitle}
+          </Text>
+        </View>
+      </View>
+
+      <Ionicons name="chevron-forward" size={20} color="#C4C4C6" />
+    </TouchableOpacity>
+  );
+  
   return (
     <SafeAreaView style={styles.safe}>
       {/* Cabeçalho 
@@ -79,10 +85,11 @@ export default function HomeScreenClean() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (theme)  => 
+StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: theme.background,
     paddingHorizontal: 20,
     paddingTop: 18,
   },
@@ -96,7 +103,6 @@ const styles = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: 12,
-    backgroundColor: "#F4F8FB",
     justifyContent: "center",
     alignItems: "center",
     marginRight: 8,
@@ -135,13 +141,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingVertical: 12,
     paddingHorizontal: 12,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: theme.cardBackground,
     borderRadius: 10,
     // borda sutil
     borderWidth: 1,
-    borderColor: "#F0F0F3",
+    borderColor: theme.cardBorder,
     // sombra leve (iOS)
-    shadowColor: "#000",
+    shadowColor: theme.cardShadow,
     shadowOpacity: 0.03,
     shadowOffset: { width: 0, height: 1 },
     shadowRadius: 4,
@@ -156,7 +162,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 9,
-    backgroundColor: "#FAFBFF",
+    backgroundColor: theme.cardBackground,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 12,
@@ -170,11 +176,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 15,
     fontWeight: "700",
-    color: "#0F1724",
+    color: theme.text,
   },
   subtitle: {
     fontSize: 12,
-    color: "#8E8E93",
+    color:theme.subtitle,
     marginTop: 3,
   },
 

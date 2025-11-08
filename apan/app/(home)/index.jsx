@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   StyleSheet,
   View,
@@ -10,9 +9,17 @@ import {
 } from 'react-native';
 import APANLOGO from '@/assets/images/APAN.png';
 import {Link} from 'expo-router';
+import { ThemeContext } from "@/context/ThemeContext";
+import React, { useContext, useState } from "react";
 
 // Uma função de componente reutilizável para os cartões de menu
-const MenuCard = ({ iconName, iconColor, iconBgColor, title, subtitle, onPress }) => (
+
+
+const HomeScreen = () => {
+  const { theme } = useContext(ThemeContext);
+  const styles = createStyles(theme);
+  
+  const MenuCard = ({ iconName, iconColor, iconBgColor, title, subtitle, onPress }) => (
   <TouchableOpacity style={styles.card} onPress={onPress}>
     <View style={[styles.iconContainer, { backgroundColor: iconBgColor }]}>
       <Image
@@ -28,7 +35,6 @@ const MenuCard = ({ iconName, iconColor, iconBgColor, title, subtitle, onPress }
   </TouchableOpacity>
 );
 
-const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
@@ -86,10 +92,11 @@ const HomeScreen = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (theme)  => 
+  StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: theme.background,
   },
   container: {
     flexGrow: 1,
@@ -113,12 +120,12 @@ const styles = StyleSheet.create({
   welcomeTitle: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#1C1C1E',
+    color: theme.text,
     marginBottom: 8,
   },
   welcomeSubtitle: {
     fontSize: 16,
-    color: '#8A8A8E',
+    color: theme.subtitle,
     lineHeight: 22,
   },
   menuContainer: {
@@ -128,12 +135,12 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: theme.cardBackground,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
     // Sombra sutil
-    shadowColor: '#000',
+    shadowColor: theme.cardShadow,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -141,7 +148,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 3,
-    borderColor: '#EFEFEF',
+    borderColor: theme.carbBorder,
     borderWidth: 1,
   },
   iconContainer: {
@@ -158,7 +165,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 17,
     fontWeight: 'bold',
-    color: '#1C1C1E',
+    color:theme.text,
   },
   cardSubtitle: {
     fontSize: 14,
@@ -167,7 +174,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   quickStartButton: {
-    backgroundColor: '#00A3E0', // Azul/Ciano do botão
+    backgroundColor: theme.buttonBackground, // Azul/Ciano do botão
     paddingVertical: 18,
     paddingHorizontal: 32,
     borderRadius: 12,
@@ -178,7 +185,7 @@ const styles = StyleSheet.create({
     marginBottom: 10, // Margem inferior
   },
   quickStartButtonText: {
-    color: '#FFFFFF',
+    color: theme.text,
     fontSize: 16,
     fontWeight: 'bold',
   },

@@ -282,10 +282,10 @@ function createStyles(theme, colorScheme) {
     filtersContainer: {
       marginBottom: 20,
       padding: 16,
-      backgroundColor: theme.card || (colorScheme === "dark" ? "#111" : "#fff"),
+      backgroundColor: theme.cardBackground || (colorScheme === "dark" ? "#111" : "#fff"),
       borderRadius: 12,
       borderWidth: 1,
-      borderColor: theme.border || "#ddd",
+      borderColor: theme.cardBorder || "#ddd",
     },
     filterRow: {
       flexDirection: "row",
@@ -294,7 +294,7 @@ function createStyles(theme, colorScheme) {
       marginBottom: 16,
       paddingBottom: 16,
       borderBottomWidth: 1,
-      borderBottomColor: theme.border || "#eee",
+      borderBottomColor: theme.cardBorder || "#dfff",
     },
     "filterRow:last-child": { // (pseudo-seletor) Aplicar manualmente no último
       marginBottom: 0,

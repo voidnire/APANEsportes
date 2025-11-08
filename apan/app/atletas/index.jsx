@@ -59,7 +59,7 @@ export default function Atletas() {
           keyExtractor={(t) => String(t.id)}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => handlePress(item.id)} activeOpacity={0.7}>
-              <View style={styles.equipeBtt}>
+              <View style={styles.atletaBtt}>
                 <Text style={styles.equipeTitle}>{item.nomeCompleto}</Text>
                 <Text style={styles.equipeSub}>{item.dataNascimento}</Text>
               </View>
@@ -102,15 +102,15 @@ const createStyles = (theme) =>
     equipeTitle: {
       fontSize: 16,
       fontWeight: "700",
-      color: "#000",
+      color: theme.text,
     },
     equipeSub: {
-      color: "#888",
+      color: theme.subtitle,
       marginTop: 4,
       fontSize: 12,
     },
-    equipeBtt: {
-      backgroundColor: "white",
+    atletaBtt: {
+      backgroundColor: theme.cardBackground,
       paddingVertical: 12,
       paddingHorizontal: 14,
       borderRadius: 10,
@@ -125,7 +125,7 @@ const createStyles = (theme) =>
       right: 20,
     },
     addBtt: {
-      backgroundColor: "blue",
+      backgroundColor: theme.buttonBackground,
       width: 56,
       height: 56,
       borderRadius: 28,

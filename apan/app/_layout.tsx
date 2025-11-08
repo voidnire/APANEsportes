@@ -1,9 +1,9 @@
 import { Tabs } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
-import {ThemeProvider} from "../context/ThemeContext";
+import {ThemeProvider,ThemeContext} from "../context/ThemeContext";
 import { useColorScheme } from '@/hooks/use-color-scheme';
-
+import { Colors } from '@/constants/Colors'; 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 
@@ -13,18 +13,19 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+  const currentTheme = Colors[colorScheme ?? 'light'];
 
   return (
     <ThemeProvider>
-      <Tabs screenOptions={{tabBarActiveTintColor:"teal"}} >
-        {/* <Stack.Screen name="login" options={{ title: 'Login' }} />
-        <Stack.Screen name="index" options={{ title: 'Home' }} />
-                <Stack.Screen name="perfilAtleta" options={{ title: 'Home' }} />
+      <Tabs screenOptions={{tabBarActiveTintColor:"teal",
+        tabBarStyle: {
+            backgroundColor: currentTheme.background, // Cor de fundo da barra de abas
+        },
 
-        <Stack.Screen name="registrarDados" options={{ title: 'Home' }} />
 
-        <Stack.Screen name="configuracoes" options={{ title: 'Home' }} />
-        <Stack.Screen name="desempenho" options={{ title: 'Home' }} />*/}
+
+      }} >
+
           <Tabs.Screen name ="(home)" 
           options={{ tabBarLabel:"Home", //href ="null" vai esconde, tabBarBadge:3,
           headerShown:false,
