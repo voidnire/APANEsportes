@@ -11,9 +11,8 @@ import APANLOGO from '@/assets/images/APAN.png';
 import {Link} from 'expo-router';
 import { ThemeContext } from "@/context/ThemeContext";
 import React, { useContext, useState } from "react";
-
-// Uma função de componente reutilizável para os cartões de menu
-
+import ThemedText from "@/components/ThemedText"
+import Spacer from "@/components/Spacer"
 
 const HomeScreen = () => {
   const { theme } = useContext(ThemeContext);
@@ -29,8 +28,8 @@ const HomeScreen = () => {
       />
     </View>
     <View style={styles.cardTextContainer}>
-      <Text style={styles.cardTitle}>{title}</Text>
-      <Text style={styles.cardSubtitle}>{subtitle}</Text>
+      <ThemedText style={styles.cardTitle} title={true}>{title}</ThemedText>
+      <ThemedText style={styles.cardSubtitle}>{subtitle}</ThemedText>
     </View>
   </TouchableOpacity>
 );
@@ -42,16 +41,16 @@ const HomeScreen = () => {
         <View style={styles.header}>
           <Image source={APANLOGO}    
           style={{width: 50, height: 50}}/>
-          <Text style={styles.headerSubtitle}>Monitoramento de Atletas</Text>
+          <ThemedText style={styles.headerSubtitle}>Monitoramento de Atletas</ThemedText>
         </View>
 
         {/* Título de Boas-vindas */}
-        <View style={styles.welcomeSection}>
-          <Text style={styles.welcomeTitle}>Bem vindo, [nome]</Text>
-         {/* <Text style={styles.welcomeSubtitle}>
-            Professional para-athlete performance monitoring
-          </Text>*/}
-        </View>
+        <ThemedText style={styles.welcomeTitle} title={true}>Bem vindo, [nome]</ThemedText>
+        <Spacer height={30}/>
+
+        {/*<ThemeCard>
+          <Text style={{color:theme.text}}>Oie</Text>
+        </ThemeCard>*/}
 
         {/* Opções do Menu */}
         <View style={styles.menuContainer}>
@@ -114,13 +113,9 @@ const createStyles = (theme)  =>
     fontSize: 14,
     color: '#8A8A8E',
   },
-  welcomeSection: {
-    marginBottom: 30,
-  },
   welcomeTitle: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: theme.text,
     marginBottom: 8,
   },
   welcomeSubtitle: {
@@ -165,7 +160,6 @@ const createStyles = (theme)  =>
   cardTitle: {
     fontSize: 17,
     fontWeight: 'bold',
-    color:theme.text,
   },
   cardSubtitle: {
     fontSize: 14,

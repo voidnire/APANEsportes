@@ -18,15 +18,13 @@ export default function RootLayout() {
   return (
     <ThemeProvider>
       <Tabs screenOptions={{tabBarActiveTintColor:"teal",
-        tabBarStyle: {
-            backgroundColor: currentTheme.background, // Cor de fundo da barra de abas
-        },
+      tabBarStyle: {
+        backgroundColor: currentTheme.background, // Cor de fundo da barra de abas
+        },}} >
 
+      <Tabs.Screen name = "(auth)" options={{headerShown:false}}/>
 
-
-      }} >
-
-          <Tabs.Screen name ="(home)" 
+      <Tabs.Screen name ="(home)" 
           options={{ tabBarLabel:"Home", //href ="null" vai esconde, tabBarBadge:3,
           headerShown:false,
           title:"Home",
