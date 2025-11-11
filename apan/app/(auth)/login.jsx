@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react";
 import {Link} from 'expo-router'
-import {StyleSheet, Pressable} from 'react-native'
+import {StyleSheet, Keyboard
+    , TouchableWithoutFeedback
+} from 'react-native'
 
 import ThemedText from "@/components/ThemedText"
 import Spacer from "@/components/Spacer"
@@ -9,40 +11,68 @@ import ThemedButton from "@/components/ThemedButton"
 
 import { ThemeContext } from "@/context/ThemeContext";
 
+import ThemedTextInput from "@/components/ThemedTextInput"
+
 const Login = () => {
+    const [email,setEmail] = useState('')
+    const [senha,setSenha] = useState('')
+
     // PADRÃO ❕❕❕❕
     const { theme } = useContext(ThemeContext); // PADRÃO ❕❕❕❕
     const styles = createStyles(theme); // PADRÃO ❕❕❕❕
 
     const handleSubmit = () =>{
-        console.log('Login form submitted')
+        console.log('Login form submitted',email,senha)
     }
 
     return (
-        <ThemedView style= {styles.container}>
-            <Spacer/>
-            <ThemedText title={true} style={styles.title}>
-                Entre na sua conta
-            </ThemedText>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 
-            <ThemedButton onPress={handleSubmit}>
-                <ThemedText>
-                    Login
+            <ThemedView style= {styles.container}>
+                <Spacer/>
+                <ThemedText title={true} style={styles.title}>
+                    Entre na sua conta
                 </ThemedText>
-            </ThemedButton>
-            
 
-            <Spacer height={100}/>
+                <ThemedTextInput 
+                    style={{ width:'80%', 
+                        marginBottom:20,
+                    }}
+                    placeholder="Email"
+                    keyboardType="email-address"
+                    onChangeText={setEmail}
+                    value={email}
+                />
 
-            <Link href='/register'> 
-                <ThemedText style={{textAlign: 'center'}}>
-                    Cadastre-se!
-                </ThemedText>
-             </Link>
+                <ThemedTextInput 
+                    style={{ width:'80%', 
+                        marginBottom:20,
+                    }}
+                    placeholder="Senha"
+                    onChangeText={setSenha}
+                    value={senha}
+                    secureTextEntry
+                />
+                
 
+                <ThemedButton onPress={handleSubmit}>
+                    <ThemedText>
+                        Login
+                    </ThemedText>
+                </ThemedButton>
+                
 
+                <Spacer height={100}/>
 
-        </ThemedView>
+                <Link href='/register'> 
+                    <ThemedText style={{textAlign: 'center'}}>
+                        Cadastre-se!
+                    </ThemedText>
+                </Link>
+
+            </ThemedView>
+        </TouchableWithoutFeedback>
+
     )
 }
 
