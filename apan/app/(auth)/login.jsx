@@ -12,16 +12,20 @@ import ThemedButton from "@/components/ThemedButton"
 import { ThemeContext } from "@/context/ThemeContext";
 
 import ThemedTextInput from "@/components/ThemedTextInput"
+import { useUser } from "@/hooks/useUser";
 
 const Login = () => {
     const [email,setEmail] = useState('')
     const [senha,setSenha] = useState('')
+
+    const {user} = useUser
 
     // PADRÃO ❕❕❕❕
     const { theme } = useContext(ThemeContext); // PADRÃO ❕❕❕❕
     const styles = createStyles(theme); // PADRÃO ❕❕❕❕
 
     const handleSubmit = () =>{
+        console.log("current user:", user)
         console.log('Login form submitted',email,senha)
     }
 
