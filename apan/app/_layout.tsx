@@ -13,6 +13,9 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   const theme = Colors[colorScheme ?? 'light'];
 
+  
+
+
   return (
     <UserProvider>
       <StatusBar /> 

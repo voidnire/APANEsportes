@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import {Link} from 'expo-router'
 import {StyleSheet, Keyboard
-    , TouchableWithoutFeedback
+    , TouchableWithoutFeedback, Alert
 } from 'react-native'
 
 import ThemedText from "@/components/ThemedText"
@@ -18,16 +18,35 @@ const Login = () => {
     const [email,setEmail] = useState('')
     const [senha,setSenha] = useState('')
 
-    const {user} = useUser
-
     // PADRÃO ❕❕❕❕
     const { theme } = useContext(ThemeContext); // PADRÃO ❕❕❕❕
     const styles = createStyles(theme); // PADRÃO ❕❕❕❕
 
-    const handleSubmit = () =>{
-        console.log("current user:", user)
-        console.log('Login form submitted',email,senha)
-    }
+    
+
+   
+    const {login,loading} = useUser
+    
+        const handleSubmit = async () =>{
+            try{
+                if (!email || !senha) {
+                    Alert.alert('Atenção', 'Por favor, preencha email e senha');
+                    return;
+                }
+                console.log('Login form submitted: ',email,senha)
+
+                
+                const result = await login(email,senha)
+                if (result.success) {
+                    // Navegação automática pelo AppNavigator
+                    console.log('Login realizado:', result.user);
+                }
+
+    
+            }catch (error){
+    
+            }
+        }
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
