@@ -5,8 +5,8 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/APAN.png",
-    "scheme": "apan", // apan://
-    "userInterfaceStyle": "automatic", //ALTERAR TEMA
+    "scheme": "apan", 
+    "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true

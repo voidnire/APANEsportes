@@ -8,17 +8,44 @@ import {
   Image,
 } from 'react-native';
 import APANLOGO from '@/assets/images/APAN.png';
-import {Link} from 'expo-router';
-import { ThemeContext } from "@/context/ThemeContext";
-import React, { useContext, useState } from "react";
+// import {Link} from 'expo-router'; // (Não usado neste arquivo)
+// 1. AJUSTE: Imports corretos de Contexto, Tipos e Hooks
+import { ThemeContext, ThemeContextType } from "@/context/ThemeContext";
+import React, { useContext } from "react"; // (useState removido, não usado)
 import ThemedText from "@/components/ThemedText"
 import Spacer from "@/components/Spacer"
+import { useUser } from '@/hooks/useUser'; // 2. AJUSTE: Importar o useUser
+import { Colors } from '@/constants/Colors'; // 3. AJUSTE: Importar Colors para tipagem
 
-const Index = () => {
-  const { theme } = useContext(ThemeContext);
-  const styles = createStyles(theme);
+// 4. AJUSTE: Tipo do 'theme' (nosso padrão)
+type Theme = typeof Colors.light | typeof Colors.dark;
+
+// 5. AJUSTE: Interface para o componente local
+interface MenuCardProps {
+  iconName: string;
+  iconColor: string;
+  iconBgColor: string;
+  title: string;
+  subtitle: string;
+  onPress: () => void;
+}
+
+const HomeScreen = () => {
+  // 6. AJUSTE: Consumo correto do ThemeContext (com checagem de null)
+  const themeContext = useContext<ThemeContextType | null>(ThemeContext);
+  if (!themeContext) {
+    throw new Error('HomeScreen must be used within a ThemeProvider');
+  }
+  const { theme } = themeContext;
   
-  const MenuCard = ({ iconName, iconColor, iconBgColor, title, subtitle, onPress }) => (
+  // 7. AJUSTE: Tipagem correta para 'createStyles'
+  const styles = createStyles(theme);
+
+  // 8. AJUSTE: Consumir o 'user' do hook
+  const { user } = useUser();
+  
+  // 9. AJUSTE: Tipagem das props
+  const MenuCard = ({ iconName, iconColor, iconBgColor, title, subtitle, onPress }: MenuCardProps) => (
   <TouchableOpacity style={styles.card} onPress={onPress}>
     <View style={[styles.iconContainer, { backgroundColor: iconBgColor }]}>
       <Image
@@ -44,13 +71,11 @@ const Index = () => {
           <ThemedText style={styles.headerSubtitle}>Monitoramento de Atletas</ThemedText>
         </View>
 
-        {/* Título de Boas-vindas */}
-        <ThemedText style={styles.welcomeTitle} title={true}>Bem vindo, [nome]</ThemedText>
+        {/* 10. AJUSTE: Título de Boas-vindas conectado ao 'user' */}
+        <ThemedText style={styles.welcomeTitle} title={true}>
+          Bem vindo, {user ? user.nomeCompleto : '...'}
+        </ThemedText>
         <Spacer height={30}/>
-
-        {/*<ThemeCard>
-          <Text style={{color:theme.text}}>Oie</Text>
-        </ThemeCard>*/}
 
         {/* Opções do Menu */}
         <View style={styles.menuContainer}>
@@ -91,7 +116,8 @@ const Index = () => {
   );
 };
 
-const createStyles = (theme)  => 
+// 11. AJUSTE: Tipagem do 'theme'
+const createStyles = (theme: Theme)  => 
   StyleSheet.create({
   safeArea: {
     flex: 1,
@@ -134,7 +160,6 @@ const createStyles = (theme)  =>
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
-    // Sombra sutil
     shadowColor: theme.cardShadow,
     shadowOffset: {
       width: 0,
@@ -143,7 +168,8 @@ const createStyles = (theme)  =>
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 3,
-    borderColor: theme.carbBorder,
+    // 12. AJUSTE: Correção do Typo
+    borderColor: theme.cardBorder, 
     borderWidth: 1,
   },
   iconContainer: {
@@ -155,7 +181,7 @@ const createStyles = (theme)  =>
     marginRight: 16,
   },
   cardTextContainer: {
-    flex: 1, // Garante que o texto quebre a linha se for muito longo
+    flex: 1,
   },
   cardTitle: {
     fontSize: 17,
@@ -168,15 +194,15 @@ const createStyles = (theme)  =>
     lineHeight: 18,
   },
   quickStartButton: {
-    backgroundColor: theme.buttonBackground, // Azul/Ciano do botão
+    backgroundColor: theme.buttonBackground,
     paddingVertical: 18,
     paddingHorizontal: 32,
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 'auto', // Empurra o botão para baixo se houver espaço
-    paddingTop: 18, // Adicionado para garantir padding superior
-    marginBottom: 10, // Margem inferior
+    marginTop: 'auto',
+    paddingTop: 18,
+    marginBottom: 10,
   },
   quickStartButtonText: {
     color: theme.text,
@@ -185,4 +211,4 @@ const createStyles = (theme)  =>
   },
 });
 
-export default Index;
+export default HomeScreen;

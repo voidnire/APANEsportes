@@ -6,7 +6,7 @@ export interface LoginData {
 }
 
 export interface SignUpData {
-  nomeCompleto:string;
+  nomeCompleto: string;
   email: string;
   password: string;
 }
@@ -14,10 +14,9 @@ export interface SignUpData {
 export interface User {
   id: string;
   email: string;
-  name: string;
-  createdAt:Date;
-  updatedAt:Date;
-  // outros campos que sua API retorna
+  nomeCompleto: string; 
+  createdAt: string;    
+  updatedAt: string;  
 }
 
 class AuthService {
@@ -25,20 +24,17 @@ class AuthService {
     try {
       const response = await apiClient.post('/auth/login', loginData);
       
-      // O cookie httpOnly é automaticamente armazenado pelo navegador
-      // e enviado nas próximas requisições graças ao withCredentials: true
-      
-      return response.data.user; // ajuste conforme a resposta da sua API
+      return response.data; 
     } catch (error) {
       throw error;
     }
   }
 
-    async signup(signupData: SignUpData): Promise<User> {
+  async signup(signupData: SignUpData): Promise<User> {
     try {
       const response = await apiClient.post('/auth/signup', signupData);
       
-      return response.data.user; // ajuste conforme a resposta da sua API
+      return response.data;
     } catch (error) {
       throw error;
     }
@@ -53,6 +49,7 @@ class AuthService {
     }
   }
 
+  // Esta função já estava correta e batia com o Swagger
   async getCurrentUser(): Promise<User> {
     try {
       const response = await apiClient.get('/auth/me');
@@ -62,7 +59,7 @@ class AuthService {
     }
   }
 
-  // Verifica se o usuário está autenticado
+  // Esta função usa a anterior, então já está correta
   async checkAuth(): Promise<boolean> {
     try {
       await this.getCurrentUser();

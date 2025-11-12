@@ -1,8 +1,7 @@
-import {Stack, useLocalSearchParams, useRouter} from "expo-router";
+import {Stack} from "expo-router";
 
 export default function RootLayout(){
-    const router = useRouter();
-    const params = useLocalSearchParams();
+
 
 
     return <Stack>  

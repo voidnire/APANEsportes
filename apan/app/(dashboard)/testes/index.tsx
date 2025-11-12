@@ -1,4 +1,4 @@
-import React,{useContext} from "react";
+import React, { useContext } from "react";
 import {
   SafeAreaView,
   View,
@@ -6,12 +6,18 @@ import {
   StyleSheet,
   TouchableOpacity,
   FlatList,
-  Image,
+  // Image, // (Não usado)
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons"; // expo/vector-icons or react-native-vector-icons
-import { ThemeContext } from "@/context/ThemeContext";
+import { Ionicons } from "@expo/vector-icons";
 
-// Lista de itens conforme a imagem (texto em PT-BR)
+// 1. AJUSTE: Imports corretos de Contexto e Tipos
+import { ThemeContext, ThemeContextType } from "@/context/ThemeContext";
+import { Colors } from "@/constants/Colors";
+
+// 2. AJUSTE: Tipo do 'theme' (nosso padrão)
+type Theme = typeof Colors.light | typeof Colors.dark;
+
+// Lista de itens do menu (OK ser estático, pois é um menu)
 const MENU_ITEMS = [
   { id: "1", title: "Saltar", subtitle: "My Jump 3", icon: "barbell" },
   { id: "2", title: "Treino baseado em velocidade", subtitle: "My Lift", icon: "speedometer" },
@@ -21,14 +27,28 @@ const MENU_ITEMS = [
   { id: "6", title: "Mobilidade", subtitle: "My ROM", icon: "body" },
 ];
 
-
+// 3. AJUSTE: Interface para o componente local
+// (usando keyof para segurança do tipo de ícone)
+interface MenuRowProps {
+  title: string;
+  subtitle: string;
+  icon: keyof typeof Ionicons.glyphMap; // Tipo mais seguro
+  onPress: () => void;
+}
 
 export default function HomeScreenClean() {
-  const { theme } = useContext(ThemeContext);
+  // 4. AJUSTE: Consumo correto do ThemeContext (com checagem de null)
+  const themeContext = useContext<ThemeContextType | null>(ThemeContext);
+  if (!themeContext) {
+    throw new Error('HomeScreenClean must be used within a ThemeProvider');
+  }
+  const { theme } = themeContext;
+  
+  // 5. AJUSTE: Tipagem correta para 'createStyles'
   const styles = createStyles(theme);
   
-  // Componente de linha do menu — estilo minimalista / clean
-  const MenuRow = ({ title, subtitle, icon, onPress }) => (
+  // 6. AJUSTE: Tipagem das props
+  const MenuRow = ({ title, subtitle, icon, onPress }: MenuRowProps) => (
     <TouchableOpacity style={styles.row} onPress={onPress} activeOpacity={0.7}>
       
       <View style={styles.rowLeft}>
@@ -45,26 +65,16 @@ export default function HomeScreenClean() {
         </View>
       </View>
 
-      <Ionicons name="chevron-forward" size={20} color="#C4C4C6" />
+      {/* 7. AJUSTE: Cor do ícone vinda do tema */}
+      <Ionicons name="chevron-forward" size={20} color={theme.icon} />
     </TouchableOpacity>
   );
   
   return (
     <SafeAreaView style={styles.safe}>
-      {/* Cabeçalho 
-      <View style={styles.header}>
-        {// substitua por Image se quiser usar logo }
-        <View style={styles.logoBox}>
-          <Text style={styles.logoText}>APAN</Text>
-        </View>
-        <View>
-          <Text style={styles.headerTitle}>Monitoramento de Atletas</Text>
-          <Text style={styles.headerSubtitle}>Painel principal</Text>
-        </View>
-      </View>*/}
+      {/* (Cabeçalho comentado) */}
 
       <View style={styles.section}>
-        {/*<Text style={styles.sectionTitle}>Treinos e Ferramentas</Text>*/}
         <FlatList
           data={MENU_ITEMS}
           keyExtractor={(item) => item.id}
@@ -72,7 +82,7 @@ export default function HomeScreenClean() {
             <MenuRow
               title={item.title}
               subtitle={item.subtitle}
-              icon={item.icon}
+              icon={item.icon as keyof typeof Ionicons.glyphMap} // Cast
               onPress={() => console.log("Abrir", item.title)}
             />
           )}
@@ -85,7 +95,8 @@ export default function HomeScreenClean() {
   );
 }
 
-const createStyles = (theme)  => 
+// 8. AJUSTE: Tipagem do 'theme' e correção de cores hard-coded
+const createStyles = (theme: Theme)  => 
 StyleSheet.create({
   safe: {
     flex: 1,
@@ -93,6 +104,7 @@ StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 18,
   },
+  // (Estilos de Header mantidos, caso sejam usados no futuro)
   header: {
     flexDirection: "row",
     alignItems: "center",
@@ -109,32 +121,33 @@ StyleSheet.create({
   },
   logoText: {
     fontWeight: "700",
-    color: "#007AFF",
+    color: theme.buttonBackground, // Corrigido
     fontSize: 16,
   },
   headerTitle: {
     fontSize: 16,
     fontWeight: "700",
-    color: "#111114",
+    color: theme.text, // Corrigido
   },
   headerSubtitle: {
-    color: "#8E8E93",
+    color: theme.subtitle, // Corrigido
     fontSize: 12,
     marginTop: 2,
   },
-
   section: {
     flex: 1,
     marginTop: 1,
-    padding:24
+    // (Padding movido para 'safe' no seu original,
+    // mas o FlatList parece precisar dele.
+    // O seu `padding: 24` estava aqui, mantido.)
+    padding: 24
   },
   sectionTitle: {
     fontSize: 13,
     fontWeight: "600",
-    color: "#333",
+    color: theme.text, // Corrigido
     marginBottom: 8,
   },
-
   row: {
     flexDirection: "row",
     alignItems: "center",
@@ -143,15 +156,12 @@ StyleSheet.create({
     paddingHorizontal: 12,
     backgroundColor: theme.cardBackground,
     borderRadius: 10,
-    // borda sutil
     borderWidth: 1,
     borderColor: theme.cardBorder,
-    // sombra leve (iOS)
     shadowColor: theme.cardShadow,
     shadowOpacity: 0.03,
     shadowOffset: { width: 0, height: 1 },
     shadowRadius: 4,
-    // elevação Android
     elevation: 1,
   },
   rowLeft: {
@@ -168,7 +178,8 @@ StyleSheet.create({
     marginRight: 12,
   },
   icon: {
-    color: "#2B7CD3",
+    // 9. AJUSTE: Cor do ícone vinda do tema
+    color: theme.buttonBackground, 
   },
   texts: {
     maxWidth: "78%",
@@ -183,20 +194,19 @@ StyleSheet.create({
     color:theme.subtitle,
     marginTop: 3,
   },
-
   separator: {
     height: 10,
   },
-
+  // (Estilos de 'primaryButton' não usados, mantidos)
   primaryButton: {
-    backgroundColor: "#007AFF",
+    backgroundColor: theme.buttonBackground, // Corrigido
     paddingVertical: 14,
     borderRadius: 12,
     alignItems: "center",
     marginVertical: 18,
   },
   primaryButtonText: {
-    color: "#fff",
+    color: theme.text, // Corrigido
     fontWeight: "700",
     fontSize: 15,
   },
