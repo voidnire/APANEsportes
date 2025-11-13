@@ -1,6 +1,6 @@
 // 1. Import React (necessário para JSX)
 import React, { useContext, useState } from 'react';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import {
   StyleSheet,
   Keyboard,
@@ -27,20 +27,24 @@ const Login = () => {
   const [email, setEmail] = useState<string>('');
   const [senha, setSenha] = useState<string>('');
 
+  const [error,setError] = useState<string | null>(null);
+
+  const router = useRouter()
   // PADRÃO ❕❕❕❕
   // 3. Checagem de contexto nulo (ESSENCIAL)
   const themeContext = useContext<ThemeContextType | null>(ThemeContext);
   if (!themeContext) {
     throw new Error('Login must be used within a ThemeProvider');
   }
-  const { theme } = themeContext;
-  // PADRÃO ❕❕❕❕
+  const { theme } = themeContext; // PADRÃO ❕❕❕❕
   const styles = createStyles(theme); // PADRÃO ❕❕❕❕
 
   // 4. Chamada CORRETA do hook (com parênteses)
   const { login, loading } = useUser();
 
   const handleSubmit = async () => {
+    setError(null)
+
     try {
       if (!email || !senha) {
         Alert.alert('Atenção', 'Por favor, preencha email e senha');
@@ -54,11 +58,17 @@ const Login = () => {
       if (result.success) {
         // A navegação acontece automaticamente pelo _layout
         console.log('Login realizado:', result.user);
+        router.push({
+          pathname: '/', // Caminho completo
+          // Passamos o nome para o layout (como o layout esperava)
+
+        });
       }
       // O 'catch' de erros já é tratado dentro do 'login' no UserContext
-    } catch (error: any) {
+    } catch (err: any) {
       // Este catch é só para erros inesperados
-      Alert.alert('Erro Inesperado', error.message || 'Ocorreu um problema.');
+      setError(err.message)
+      //Alert.alert('Erro Inesperado', err.message || 'Ocorreu um problema.');
     }
   };
 
@@ -95,6 +105,10 @@ const Login = () => {
           </ThemedText>
         </ThemedButton>
 
+        <Spacer/>
+
+        {error && <ThemedText style={styles.error}>{error}</ThemedText>}
+
         <Spacer height={100} />
 
         <Link href="/register">
@@ -102,6 +116,10 @@ const Login = () => {
             Cadastre-se!
           </ThemedText>
         </Link>
+
+        <Spacer/>
+
+
       </ThemedView>
     </TouchableWithoutFeedback>
   );
@@ -130,4 +148,13 @@ const createStyles = (theme: Theme) =>
     pressed: {
       opacity: 0.8,
     },
+    error:{
+      color:Colors.warning.color,
+      padding:10,
+      backgroundColor:'#f5c1c8',
+      borderColor:Colors.warning.color,
+      borderWidth:1,
+      borderRadius:6,
+      marginHorizontal:10,
+    }
   });

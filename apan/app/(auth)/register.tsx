@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Link } from 'expo-router';
+import { Link,useRouter } from 'expo-router';
 import {
   StyleSheet,
   TouchableWithoutFeedback,
@@ -25,6 +25,8 @@ const Register = () => {
   const [email, setEmail] = useState<string>('');
   const [senha, setSenha] = useState<string>('');
   const [nomeCompleto, setNomeCompleto] = useState<string>('');
+
+  const router = useRouter();
 
   // PADRÃO ❕❕❕❕
   // 2. Checagem de contexto nulo (ESSENCIAL)
@@ -53,7 +55,10 @@ const Register = () => {
 
       if (result && result.success) {
         Alert.alert('Sucesso', 'Conta criada com sucesso!');
-        // Navegação automática pelo AppNavigator
+        router.push({
+            pathname: '/', // Caminho completo
+            // Passamos o nome para o layout (como o layout esperava)
+        });
       }
       // O 'else if' não é necessário, pois o 'register' no
       // UserContext já exibe o Alert de erro.
@@ -110,6 +115,8 @@ const Register = () => {
             Entre na sua conta
           </ThemedText>
         </Link>
+
+
       </ThemedView>
     </TouchableWithoutFeedback>
   );

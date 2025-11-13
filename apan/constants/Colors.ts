@@ -7,6 +7,10 @@ const tintColorLight = '#0a7ea4';
 const tintColorDark = '#fff';
 
 export const Colors = {
+  warning:{
+    color:"red",
+    borderColor:"red"
+  },
   light: {
     text: '#11181C',
     title: '#11181C',

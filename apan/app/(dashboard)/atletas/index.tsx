@@ -61,7 +61,7 @@ export default function Atletas() {
   // 7. AJUSTE: 'handlePress' recebe o objeto AtletaResumido
   const handlePress = (atleta: AtletaResumido) => {
     router.push({
-      pathname: `/dashboard/atletas/atleta/${atleta.id}`, // Caminho completo
+      pathname: `dashboard/atletas/atleta/${atleta.id}`, // Caminho completo
       // Passamos o nome para o layout (como o layout esperava)
       params: { 
         name: atleta.nomeCompleto,

@@ -14,7 +14,7 @@ import ThemedText from '@/components/ThemedText';
 import Spacer from '@/components/Spacer';
 import { Colors } from '@/constants/Colors';
 import { useUser } from '@/hooks/useUser';
-
+  
 type Theme = typeof Colors.light | typeof Colors.dark;
 
 interface MenuCardProps {

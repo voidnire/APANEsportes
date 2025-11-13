@@ -11,6 +11,12 @@ import {
 // 1. AJUSTE: Imports corretos de Contexto e Tipos
 import { ThemeContext, ThemeContextType } from '@/context/ThemeContext';
 import { Colors } from '@/constants/Colors';
+import { useUser } from '@/hooks/useUser';
+import Spacer from '@/components/Spacer';
+import ThemedButton from '@/components/ThemedButton';
+
+import ThemedText from '@/components/ThemedText'
+import { useRouter } from 'expo-router';
 
 type Theme = typeof Colors.light | typeof Colors.dark;
 
@@ -24,8 +30,21 @@ export default function SettingsScreen() { // Renomeado para ser mais claro
   }
   const { theme } = themeContext; // colorScheme não é usado aqui
 
+  const { logout, user } = useUser();
+
+  const router = useRouter()
   // 3. AJUSTE: Passando SÓ o 'theme' (como em todos os outros arquivos)
   const styles = createStyles(theme);
+
+  const handleLogout = async () => {  
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Erro ao fazer logout:", error);
+    }finally{
+      router.replace('/login')
+    }
+  }
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
@@ -34,6 +53,15 @@ export default function SettingsScreen() { // Renomeado para ser mais claro
         <Text style={styles.backArrow}>To do ....</Text>
       </View>
       
+      <Spacer/>
+
+      <ThemedText>
+        {user?.email}
+      </ThemedText>
+
+      <ThemedButton onPress={handleLogout}>
+        <ThemedText>Sair</ThemedText>
+      </ThemedButton>
       {/* (O resto dos estilos (avatar, infoCard, etc.)
           agora funcionam com o tema, mas estão
           comentados no JSX pois não estão em uso) */}

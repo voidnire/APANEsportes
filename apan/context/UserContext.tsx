@@ -25,6 +25,7 @@ interface UserProviderProps {
 export function UserProvider({ children }: UserProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setAuthChecked] = useState(false)
 
   useEffect(() => {
     checkAuth();
@@ -49,6 +50,7 @@ export function UserProvider({ children }: UserProviderProps) {
       setUser(null);
       setAuthToken(null); // Limpa token inválido
     } finally {
+      setAuthChecked(true)
       setLoading(false);
     }
   }
@@ -127,8 +129,12 @@ export function UserProvider({ children }: UserProviderProps) {
     }
   }
 
+  useEffect(()=>{
+    checkAuth()
+  },[isAuthenticated])
+  // antigo = isAuthenticated: !!user
   return (
-    <UserContext.Provider value={{ user, login, register, logout, loading, isAuthenticated: !!user }}>
+    <UserContext.Provider value={{ user, login, register, logout, loading, isAuthenticated }}> 
       {children}
     </UserContext.Provider>
   );

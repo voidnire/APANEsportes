@@ -1,5 +1,6 @@
 import {Stack} from "expo-router";
 import { useUser } from "@/hooks/useUser";
+import GuestOnly from "@/components/auth/GuestOnly";
 
 export default function Layout(){
 
@@ -7,9 +8,9 @@ export default function Layout(){
     console.log(user)
 
     return (
-        <>
+        <GuestOnly>
             <Stack
                 screenOptions={{ headerShown:false, animation:"none"}}/>
-        </>
+        </GuestOnly>
     )
 }

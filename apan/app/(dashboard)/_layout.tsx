@@ -2,7 +2,7 @@ import { Tabs } from 'expo-router';
 import 'react-native-reanimated';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import React, { useContext } from 'react'; // 1. Importar o 'useContext'
-
+import UserOnly from '@/components/auth/UserOnly';
 // 2. Importar o Contexto e o Tipo (em vez de 'Colors' e 'useColorScheme')
 import { ThemeContext, ThemeContextType } from "@/context/ThemeContext";
 
@@ -19,7 +19,9 @@ const DashboardLayout = () => {
     const { theme } = themeContext;
 
     return (
-        // 4. Aplicar o tema na barra de abas
+
+        <UserOnly>
+        {/* 4. Aplicar o tema na barra de abas*/}
         <Tabs
             screenOptions={{
                 tabBarActiveTintColor: theme.tint,      // Cor do ícone ativo
@@ -85,6 +87,7 @@ const DashboardLayout = () => {
                 }} 
             />
         </Tabs>
+        </UserOnly>
     );
 }
 
