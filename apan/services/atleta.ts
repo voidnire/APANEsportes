@@ -1,7 +1,9 @@
 // (Arquivo: services/atletaService.ts)
 import apiClient from './index';
 // Importamos os tipos que definimos
-import { AtletaDetalhado, AtletaResumido, RegistroAvaliacaoCompleto } from '../models/atletas';
+import { AtletaDetalhado, AtletaResumido, RegistroAvaliacaoCompleto
+  , Classificacao
+ } from '../models/atletas';
 
 
 // 1. Interface para os dados de criação (baseado no Swagger)
@@ -70,6 +72,17 @@ class AtletaService {
       throw error;
     }
   }
+
+  async createAtletaClassicacao(data: CreateAtletaDto): Promise<AtletaResumido> {
+    try {
+      const response = await apiClient.post<AtletaResumido>('/atletas', data);
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao criar atleta:", error);
+      throw error;
+    }
+  }
+  
 }
 
 export default new AtletaService();

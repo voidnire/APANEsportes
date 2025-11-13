@@ -1,10 +1,10 @@
 // (Arquivo: dashboard/atletas/registrarDados.tsx)
-import React, { useContext, useState,useEffect } from "react";
+import React, { useContext, useState } from "react";
 import {
   StyleSheet,
   Alert,
   ScrollView,
-  Keyboard,ActivityIndicator,
+  Keyboard,
   TouchableWithoutFeedback, Platform, View
 } from "react-native";
 import { useRouter } from "expo-router";
@@ -18,18 +18,15 @@ import ThemedTextInput from "@/components/ThemedTextInput";
 import ThemedButton from "@/components/ThemedButton";
 
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { Picker } from "@react-native-picker/picker";
 
-import { Classificacao } from "@/models/atletas";
-import DadosAuxiliaresService from "@/services/dadosAuxiliares";
 
 type Theme = typeof Colors.light | typeof Colors.dark;
 
-export default function RegistrarDados() {
+export default function EditarAtleta() {
   // 2. AJUSTE: Consumo correto do contexto
   const themeContext = useContext<ThemeContextType | null>(ThemeContext);
   if (!themeContext) {
-    throw new Error('RegistrarDados must be used within a ThemeProvider');
+    throw new Error('EditarAtleta must be used within a ThemeProvider');
   }
   const { theme } = themeContext;
   const styles = createStyles(theme);
@@ -42,9 +39,6 @@ export default function RegistrarDados() {
 
   const [mostrarPicker, setMostrarPicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-
-
-  
 
   const onChangeData = (event: any, selectedDate?: Date) => {
     setSelectedDate(selectedDate)
@@ -101,39 +95,6 @@ export default function RegistrarDados() {
     }
   };
 
-  // Novos states para classificações (deficiências)
-  const [classificacoes, setClassificacoes] = useState<Classificacao[]>([]);
-  const [classificacoesLoading, setClassificacoesLoading] = useState(false);
-  const [selectedClassificationId, setSelectedClassificationId] = useState<number | string | null>(null);
-
-
-  useEffect(() => {
-    // busca as classificações do backend ao montar
-    const fetchClassificacoes = async () => {
-      try {
-        setClassificacoesLoading(true);
-        const classificacoesData = await DadosAuxiliaresService.getClassificacoes();
-        setClassificacoes(classificacoesData);
-        }
-      catch (err) {
-        console.error("Erro ao buscar classificações:", err);
-        setClassificacoes([]);
-      } finally {
-        setClassificacoesLoading(false);
-      }
-    };
-    fetchClassificacoes();
-  }, []);
-
-
-  const listaClassificacoes = classificacoes.map((c) => (
-    <Picker.Item
-      key={String(c.id)}
-      label={c.descricao ? `${c.descricao} (${c.codigo ?? ""})` : String(c.codigo ?? c.id)}
-      value={c.id}
-    />
-  ));
-
   return (
     // 5. AJUSTE: UI reescrita com componentes temáticos
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -154,6 +115,8 @@ export default function RegistrarDados() {
           autoCapitalize="words"
         />
 
+      
+
       <View style={styles.input}>
           <ThemedButton style={styles.dateButton} onPress={() => setMostrarPicker(true)}>
             <ThemedText>
@@ -171,40 +134,6 @@ export default function RegistrarDados() {
             />
           )}
       </View>
-
-      {/* Dropdown para Classificação (deficiência) */}
-      <View style={styles.input}>
-          <ThemedText style={{ marginBottom: 8 }}>Classificação (deficiência)</ThemedText>
-          {classificacoesLoading ? (
-            <View style={{ paddingVertical: 12, alignItems: "center" }}>
-              <ActivityIndicator size="small" color={theme.text} />
-            </View>
-        ) : (
-          <View style={[styles.pickerWrapper, styles.dateButton]}>
-              <Picker
-                selectedValue={selectedClassificationId}
-                onValueChange={(itemValue) => setSelectedClassificationId(itemValue)}
-                mode={Platform.OS === "android" ? "dropdown" : "dialog"} 
-                style={styles.picker} // aplica altura fixa
-                itemStyle={styles.pickerItem}
-              >
-                <Picker.Item label="Nenhuma (selecionar...)" style={{color: theme.text}} value={null} />
-                    {listaClassificacoes}
-                
-                  
-                {/*classificacoes.map((c) => (
-                  <Picker.Item
-                    key={String(c.id)}
-                    label={c.descricao ? `${c.descricao} (${c.codigo ?? ""})` : String(c.codigo ?? c.id)}
-                    value={c.id}
-                  /> 
-                ))*/}
-              </Picker>
-            </View>
-        )}
-      </View>    
-        
-
 
 
 
@@ -271,24 +200,5 @@ const createStyles = (theme: Theme) =>
     },
     dateButton:{
       backgroundColor: theme.cardBackground,
-    },
-    pickerWrapper:{
-      borderRadius: 8,
-      borderWidth: 1,
-      overflow: "hidden",
-      // largura controlada pelo seu layout (usa width: '100%')
-      // altura fixa para evitar "esticar" a tela
-      height: 44,            // <--- reduz a altura do componente
-      justifyContent: "center",
-    },
-    picker: {
-      height: 44,            // <--- define altura interna do Picker
-      width: "100%",
-      color: theme.text,
-    },
-    pickerItem: {
-      height: 44,            // iOS: altura dos itens (opcional)
-    },
-
-
+    }
   });
