@@ -61,7 +61,7 @@ export default function Atletas() {
   // 7. AJUSTE: 'handlePress' recebe o objeto AtletaResumido
   const handlePress = (atleta: AtletaResumido) => {
     router.push({
-      pathname: `dashboard/atletas/atleta/${atleta.id}`, // Caminho completo
+      pathname: `/(dashboard)/atletas/atleta/${atleta.id}`, // Caminho completo
       // Passamos o nome para o layout (como o layout esperava)
       params: { 
         name: atleta.nomeCompleto,
@@ -90,7 +90,7 @@ export default function Atletas() {
               <View style={styles.atletaBtt}>
                 <Text style={styles.equipeTitle}>{item.nomeCompleto}</Text>
                 {/* O campo dataNascimento existe no AtletaResumido */}
-                <Text style={styles.equipeSub}>{item.dataNascimento}</Text>
+                <Text style={styles.equipeSub}>{new Date(item.dataNascimento).toLocaleDateString('pt-BR')}</Text>
               </View>
             </TouchableOpacity>
           )}
@@ -108,7 +108,7 @@ export default function Atletas() {
         <TouchableOpacity
           style={styles.addBtt}
           // 9. AJUSTE: Caminho completo para a rota
-          onPress={() => router.push("/dashboard/atletas/registrarDados")}
+          onPress={() => router.push("/(dashboard)/atletas/registrarDados")}
         >
           <Ionicons name="add" size={26} color={theme.background} />
         </TouchableOpacity>

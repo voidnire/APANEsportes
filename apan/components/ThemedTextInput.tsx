@@ -20,6 +20,7 @@ const ThemedTextInput = ({ style, ...props }: TextInputProps) => {
         },
         style, 
       ]}
+      placeholderTextColor={theme.subtitle}
       {...props} 
     />
   );

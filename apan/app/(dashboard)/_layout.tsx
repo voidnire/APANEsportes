@@ -53,17 +53,7 @@ const DashboardLayout = () => {
                     ), 
                 }} 
             />
-            
-            <Tabs.Screen 
-                name="desempenho" 
-                options={{ 
-                    tabBarLabel: "Desempenho",
-                    title: "Desempenho",
-                    tabBarIcon: ({ color, size }) => (
-                        <MaterialIcons name="area-chart" size={size} color={color} />
-                    ), 
-                }} 
-            />
+    
             
             <Tabs.Screen 
                 name="atletas" 

@@ -8,7 +8,7 @@ import {
   Dimensions,
   ActivityIndicator, // 1. Importado para o loading
 } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 
 // 2. AJUSTE: Importando os tipos REAIS da API e o SERVIÇO
 import { ThemeContext, ThemeContextType } from '@/context/ThemeContext';
@@ -32,6 +32,8 @@ export default function PerfilAtleta() {
   }
   const { theme } = themeContext;
   const styles = createStyles(theme);
+
+  const router = useRouter()
 
   // 3. AJUSTE: States para os dados vindos da API
   const [atleta, setAtleta] = useState<AtletaDetalhado | null>(null);
@@ -91,6 +93,12 @@ export default function PerfilAtleta() {
   const handleEdit = () => {
     if (!atleta) return;
     console.log('Editar atleta:', atleta.id);
+  };
+
+  const handleDesempenho = () => {
+    if (!atleta) return;
+    router.push(`/(dashboard)/atletas/atleta/${atleta.id}/desempenho`);
+    console.log('Ver desempenho do atleta:', atleta.id);
   };
 
   // --- RENDERIZAÇÃO ---
@@ -169,6 +177,11 @@ export default function PerfilAtleta() {
       {/* Edit button */}
       <Pressable style={styles.editButton} onPress={handleEdit}>
         <Text style={styles.editButtonText}>Editar</Text>
+      </Pressable>
+
+      {/* Ver desempenho tela */}
+      <Pressable style={styles.editButton} onPress={handleDesempenho}>
+        <Text style={styles.editButtonText}>Desempenho</Text>
       </Pressable>
 
       <View style={{ height: 40 }} />

@@ -7,7 +7,8 @@ import {
   ScrollView,
   Switch,
   Dimensions,
-  ActivityIndicator, // 1. Importado para o loading
+  ActivityIndicator,
+  Alert, // 1. Importado para o loading
 } from "react-native";
 // 2. Imports de Contexto, Tipos e Serviços (nosso padrão)
 import { ThemeContext, ThemeContextType } from "@/context/ThemeContext";
@@ -17,43 +18,84 @@ import { RegistroAvaliacaoCompleto } from "@/models/atletas";
 // import { Link } from "expo-router"; // (Não usado no seu original)
 import { LineChart, BarChart, PieChart } from "react-native-chart-kit";
 
+import {useRouter, useLocalSearchParams } from "expo-router";
+import ThemedText from "@/components/ThemedText";
+
 type Theme = typeof Colors.light | typeof Colors.dark;
 const screenWidth = Dimensions.get("window").width;
 
 export default function DesempenhoScreen() {
-  // 3. AJUSTE: Consumo correto do ThemeContext
+  const { id } = useLocalSearchParams() as { id: string };
+  console.log("ID recebido do atleta:", id);
+
+
   const themeContext = useContext<ThemeContextType | null>(ThemeContext);
   if (!themeContext) {
     throw new Error('DesempenhoScreen must be used within a ThemeProvider');
   }
   const { theme } = themeContext;
 
-  // 4. AJUSTE: Estilos "traduzidos" para o nosso tema
   const styles = createStyles(theme);
-
   // Estados para os filtros
   const [prePos, setPrePos] = useState("Pós");
   const [comparar, setComparar] = useState(true);
 
-  // 5. AJUSTE: States para dados da API
   const [avaliacoes, setAvaliacoes] = useState<RegistroAvaliacaoCompleto[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // 6. AJUSTE: Buscar dados da API
+  const router = useRouter();
+
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+
+  // Buscar dados da API
   useEffect(() => {
     const loadData = async () => {
       try {
         setLoading(true);
-        const data = await AtletaService.getAllAvaliacoes();
+        setErrorMessage(null); 
+        const data = await AtletaService.getAvaliacoesByAtletaId(id);
         setAvaliacoes(data);
-      } catch (error) {
+
+      } catch (error:any) {
         console.error("Erro ao carregar avaliações:", error);
+        
+
+        const status = error?.response?.status;
+        let mensagem = "Não foi possível carregar as avaliações.";
+
+        if (status === 400) {
+          mensagem = "Requisição inválida. Verifique os dados enviados. PROVALVEMENTE O UUID DO ATLETA";
+        } else if (status === 401) {
+          mensagem = "Sessão expirada. Faça login novamente.";
+        } else if (status === 404) {
+          mensagem = "Nenhuma avaliação encontrada.";
+        } else if (status === 500) {
+          mensagem = "Erro interno no servidor. Tente novamente mais tarde.";
+        }
+        
+
+        setErrorMessage(mensagem)
+        console.error("Erro ao carregar avaliações:", errorMessage);
+        /*Alert.alert("Erro", mensagem,[{
+          text: "OK", style: "default"
+        }]);
+        
+        if (router && router.replace) {
+          setTimeout(() => {
+            try {
+              router.replace('/(dashboard)/home');
+            } catch (navError) {
+              console.warn("Erro ao redirecionar:", navError);
+            }
+          }, 500);
+        }*/
       } finally {
         setLoading(false);
       }
     };
     loadData();
-  }, []);
+  }, [id]); //router  
 
   // 7. AJUSTE: Processar dados da API para os gráficos (usando useMemo)
   
@@ -184,7 +226,11 @@ export default function DesempenhoScreen() {
       {/* --- GRÁFICOS --- */}
       {loading ? (
         <ActivityIndicator size="large" color={theme.text} style={{ marginTop: 50 }} />
-      ) : (
+      ) : errorMessage ?  (
+        <ThemedText style={{ color: theme.text, fontSize: 16, marginBottom: 10, textAlign: "center" }}>
+          {errorMessage}
+        </ThemedText>) : (
+        
         <View style={styles.chartsArea}>
           {/* Gráfico 1: Evolução do Tempo de Corrida */}
           <View style={styles.chartWrapper}>

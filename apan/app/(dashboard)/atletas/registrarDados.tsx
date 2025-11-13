@@ -5,7 +5,7 @@ import {
   Alert,
   ScrollView,
   Keyboard,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback, Platform, View
 } from "react-native";
 import { useRouter } from "expo-router";
 
@@ -16,6 +16,9 @@ import AtletaService from "@/services/atleta";
 import ThemedText from "@/components/ThemedText";
 import ThemedTextInput from "@/components/ThemedTextInput";
 import ThemedButton from "@/components/ThemedButton";
+
+import DateTimePicker from "@react-native-community/datetimepicker";
+
 
 type Theme = typeof Colors.light | typeof Colors.dark;
 
@@ -34,6 +37,17 @@ export default function RegistrarDados() {
   const [dataNascimento, setDataNascimento] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const [mostrarPicker, setMostrarPicker] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+
+  const onChangeData = (event: any, selectedDate?: Date) => {
+    setSelectedDate(selectedDate)
+    if (selectedDate) {
+      setDataNascimento(formatarData(selectedDate));
+    }
+    setMostrarPicker(false);
+  };
+
   const validar = () => {
     if (!nomeCompleto.trim()) {
       Alert.alert("Erro", "Informe o nome completo do atleta.");
@@ -41,6 +55,14 @@ export default function RegistrarDados() {
     }
     // (Validação de data YYYY-MM-DD pode ser adicionada aqui)
     return true;
+  };
+
+  const formatarData = (data?: Date) => {
+    if (!data) return "";
+    const ano = data.getFullYear();
+    const mes = String(data.getMonth() + 1).padStart(2, "0");
+    const dia = String(data.getDate()).padStart(2, "0");
+    return `${ano}-${mes}-${dia}`;
   };
 
   // 4. AJUSTE: 'handleSalvar' agora chama a API
@@ -93,13 +115,29 @@ export default function RegistrarDados() {
           autoCapitalize="words"
         />
 
-        <ThemedTextInput
-          value={dataNascimento}
-          onChangeText={setDataNascimento}
-          placeholder="Data de Nascimento (YYYY-MM-DD)"
-          style={styles.input}
-          keyboardType="numeric"
-        />
+      
+
+      <View style={styles.input}>
+          <ThemedButton style={styles.dateButton} onPress={() => setMostrarPicker(true)}>
+            <ThemedText>
+              {dataNascimento ? dataNascimento : "Selecionar data de nascimento"}
+            </ThemedText>
+          </ThemedButton>
+
+          {mostrarPicker && (
+            <DateTimePicker
+              value={selectedDate || new Date()}
+              mode="date"
+              display={Platform.OS === "ios" ? "spinner" : "calendar"}
+              maximumDate={new Date()} // impede datas futuras
+              onChange={onChangeData}
+            />
+          )}
+      </View>
+
+
+
+
 
         <ThemedButton 
           onPress={handleSalvar} 
@@ -159,5 +197,8 @@ const createStyles = (theme: Theme) =>
     },
     cancelButtonText: {
       color: theme.subtitle, // Cor de texto diferente
+    },
+    dateButton:{
+      backgroundColor: theme.cardBackground,
     }
   });

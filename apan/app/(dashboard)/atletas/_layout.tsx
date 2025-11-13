@@ -13,15 +13,18 @@ export default function RootLayout(){
             };
             }}
         />*/}
-        <Stack.Screen name="atleta/[id]" options={({ route }: any) => {
+        <Stack.Screen name="atleta/[id]/index" options={({ route }: any) => {
             const nome = route?.params?.name;
             return {
                 title: nome ? `${nome}` : "Atleta",
+                headerShown: false,
             };
             }}
         />
 
+        <Stack.Screen name="atleta/[id]/desempenho" options={{headerShown: false}}/>
 
-        <Stack.Screen name="registrarDados" options={{ title: 'Registrar Dados' }} />
+
+        <Stack.Screen name="registrarDados" options={{ title: 'Registrar Dados', headerShown:false }} />
     </Stack>
 }
