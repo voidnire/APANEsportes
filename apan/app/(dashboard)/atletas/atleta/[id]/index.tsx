@@ -1,14 +1,15 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   Pressable,
-  Dimensions,
-  ActivityIndicator, // 1. Importado para o loading
+  Dimensions,Alert,
+  ActivityIndicator,
+  Keyboard, // 1. Importado para o loading
 } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter, useFocusEffect } from 'expo-router';
 
 // 2. AJUSTE: Importando os tipos REAIS da API e o SERVIÇO
 import { ThemeContext, ThemeContextType } from '@/context/ThemeContext';
@@ -40,10 +41,8 @@ export default function PerfilAtleta() {
   const [avaliacoes, setAvaliacoes] = useState<RegistroAvaliacaoCompleto[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // 4. AJUSTE: Buscar dados da API ao carregar a tela
-  useEffect(() => {
-    if (id) {
-      const fetchData = async () => {
+  
+  const fetchData = async () => {
         try {
           setLoading(true);
           // Chamada 1: Busca os dados básicos do atleta
@@ -58,10 +57,25 @@ export default function PerfilAtleta() {
         } finally {
           setLoading(false);
         }
-      };
+  };
+
+  useEffect(() => {
+    if (id) {
+      
       fetchData();
     }
   }, [id]);
+
+  useFocusEffect(
+    // O useCallback é crucial para evitar loops infinitos
+    useCallback(() => {
+      // Esta função será executada toda vez que a tela entrar em foco
+      fetchData(); 
+      // Opcional: retorna uma função de limpeza (cleanup)
+    }, [id])
+  );
+
+
 
   // 5. AJUSTE: Funções auxiliares para processar os dados da API
   const getDisabilities = () => {
@@ -92,14 +106,55 @@ export default function PerfilAtleta() {
 
   const handleEdit = () => {
     if (!atleta) return;
+    router.push(`/(dashboard)/atletas/atleta/${atleta.id}/editarAtleta`);
     console.log('Editar atleta:', atleta.id);
   };
+
+  const handleDelete = () => {
+    if (!atleta) return;
+    // Aqui você chamaria o serviço para deletar o atleta
+    console.log('Excluir atleta:', atleta.id);
+    Alert.alert("EXCLUIR ATLETA?", 
+      "Tem certeza que deseja excluir o atleta permanentemente? Esta ação não pode ser desfeita.",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel"
+        },
+        {
+          text: "Excluir",
+          style: "destructive",
+          onPress: async () => {
+            Keyboard.dismiss();
+            setLoading(true);
+            try {
+              await AtletaService.deleteAtleta(atleta.id);
+              console.log("Atleta excluído com sucesso");
+              Alert.alert("Sucesso", "Atleta excluído.", [
+                {
+                  text: "OK",
+                  onPress: () => router.back(), // Volta para a lista
+                },
+              ]);
+            } catch (error) {
+              console.error("Erro ao excluir atleta:", error);
+              Alert.alert("Erro", "Não foi possível excluir o atleta. Tente novamente mais tarde.");
+            }finally {
+                setLoading(false);
+              }
+          }
+        }
+      ]
+    );
+  }
+
 
   const handleDesempenho = () => {
     if (!atleta) return;
     router.push(`/(dashboard)/atletas/atleta/${atleta.id}/desempenho`);
     console.log('Ver desempenho do atleta:', atleta.id);
   };
+
 
   // --- RENDERIZAÇÃO ---
 
@@ -177,6 +232,11 @@ export default function PerfilAtleta() {
       {/* Edit button */}
       <Pressable style={styles.editButton} onPress={handleEdit}>
         <Text style={styles.editButtonText}>Editar</Text>
+      </Pressable>
+
+      {/* Excluir button */}
+      <Pressable style={styles.editButton} onPress={handleDelete}>
+        <Text style={styles.editButtonText}>Excluir</Text>
       </Pressable>
 
       {/* Ver desempenho tela */}

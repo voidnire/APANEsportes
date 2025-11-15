@@ -1,5 +1,5 @@
 // (Arquivo: dashboard/atletas/registrarDados.tsx)
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect, useCallback } from "react";
 import {
   StyleSheet,
   Alert,
@@ -12,12 +12,14 @@ import { useRouter } from "expo-router";
 // 1. AJUSTE: Imports corretos
 import { ThemeContext, ThemeContextType } from "@/context/ThemeContext";
 import { Colors } from "@/constants/Colors";
-import AtletaService from "@/services/atleta";
+import AtletaService, { EditAtletaDto } from "@/services/atleta";
 import ThemedText from "@/components/ThemedText";
 import ThemedTextInput from "@/components/ThemedTextInput";
 import ThemedButton from "@/components/ThemedButton";
 
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
+import { useLocalSearchParams } from 'expo-router';
+import { AtletaDetalhado } from "@/models/atletas";
 
 
 type Theme = typeof Colors.light | typeof Colors.dark;
@@ -33,20 +35,74 @@ export default function EditarAtleta() {
   const router = useRouter();
 
   // 3. AJUSTE: States para o formulário
+  const [atleta, setAtleta] = useState<AtletaDetalhado | null>(null);
+
   const [nomeCompleto, setNomeCompleto] = useState("");
   const [dataNascimento, setDataNascimento] = useState("");
+
+  const [nomeCompletoEditado, setnomeCompletoEditado] = useState("");
+  const [dataNascimentoEditada, setDataNascimentoEditada] = useState("");
+
   const [loading, setLoading] = useState(false);
 
   const [mostrarPicker, setMostrarPicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
 
-  const onChangeData = (event: any, selectedDate?: Date) => {
-    setSelectedDate(selectedDate)
-    if (selectedDate) {
-      setDataNascimento(formatarData(selectedDate));
+
+  const { id } = useLocalSearchParams() as { id: string }; 
+
+  useEffect(() => {
+    if (id) {
+      const fetchData = async () => {
+        try {
+          setLoading(true);
+          // Busca os dados básicos do atleta
+          const atletaData = await AtletaService.getAtletaById(id);
+          setAtleta(atletaData);
+          setNomeCompleto(atletaData.nomeCompleto);
+          setDataNascimento(atletaData.dataNascimento);
+        } catch (err) {
+          console.error('Erro ao carregar dados do perfil', err);
+          Alert.alert("Erro", "Não foi possível carregar os dados do atleta.");
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchData();
     }
-    setMostrarPicker(false);
-  };
+  }, [id]);
+
+  
+
+
+  const onChangeData = useCallback((event: DateTimePickerEvent, date?: Date) => {
+    const { type } = event;
+
+    // Fecha o picker no Android e Web após qualquer ação (cancelar ou selecionar)
+    if (Platform.OS === 'android' || Platform.OS === 'web') {
+        setMostrarPicker(false);
+    }
+    
+    // O tipo 'set' indica que o usuário clicou em OK/Confirmar (Android/Web) ou rolou no iOS 
+    // Para iOS no modo 'spinner', 'set' ocorre a cada mudança de rolagem.
+    if (type === 'set') {
+        if (date !== undefined) {
+            // Guarda o objeto Date selecionado
+            
+            setSelectedDate(date); 
+            console.log("DATA SELECIONADA:", date)
+            // Atualiza o estado que será enviado para a API (YYYY-MM-DD)
+            setDataNascimentoEditada(date.toISOString().split('T')[0]); 
+            console.log("DATANASCIMENTO EDIT:", dataNascimentoEditada)
+        }
+    } else {
+        // Se o tipo for 'dismissed' (Cancelado no Android/Web), ou se for iOS e o tipo não for 'set'
+        // Apenas fecha o picker. O estado de dataNascimento não é alterado.
+      
+            setMostrarPicker(false);
+        
+    }
+  }, []); // Dependências vazias, pois usa o useCallback
 
   const validar = () => {
     if (!nomeCompleto.trim()) {
@@ -65,21 +121,30 @@ export default function EditarAtleta() {
     return `${ano}-${mes}-${dia}`;
   };
 
+
+
+
   // 4. AJUSTE: 'handleSalvar' agora chama a API
   const handleSalvar = async () => {
     if (!validar() || loading) return;
+
+    if (!id) {
+        Alert.alert("Erro", "ID do atleta não encontrado.");
+        return;
+    }
 
     Keyboard.dismiss();
     setLoading(true);
 
     try {
+      const dto: EditAtletaDto = {
+        nomeCompleto: nomeCompletoEditado? nomeCompletoEditado.trim() : nomeCompleto.trim(),
+        dataNascimento: dataNascimentoEditada ? dataNascimentoEditada.trim() :  dataNascimento.trim(), // Já está no formato YYYY-MM-DD
+      };
       // Chama o serviço com os dados do DTO
-      await AtletaService.createAtleta({
-        nomeCompleto: nomeCompleto.trim(),
-        dataNascimento: dataNascimento.trim() || new Date().toISOString().split('T')[0], // Envia data de hoje se vazio
-      });
+      await AtletaService.editAtleta(id, dto);
 
-      Alert.alert("Sucesso", "Atleta cadastrado.", [
+      Alert.alert("Sucesso", "Atleta editado.", [
         {
           text: "OK",
           onPress: () => router.back(), // Volta para a lista
@@ -95,6 +160,8 @@ export default function EditarAtleta() {
     }
   };
 
+
+
   return (
     // 5. AJUSTE: UI reescrita com componentes temáticos
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -104,11 +171,11 @@ export default function EditarAtleta() {
         keyboardShouldPersistTaps="handled"
       >
         <ThemedText title={true} style={styles.title}>
-          Registrar novo atleta
+          Editar atleta
         </ThemedText>
 
         <ThemedTextInput
-          value={nomeCompleto}
+          value={nomeCompletoEditado ? nomeCompletoEditado : nomeCompleto}
           onChangeText={setNomeCompleto}
           placeholder="Nome completo"
           style={styles.input}
@@ -120,7 +187,7 @@ export default function EditarAtleta() {
       <View style={styles.input}>
           <ThemedButton style={styles.dateButton} onPress={() => setMostrarPicker(true)}>
             <ThemedText>
-              {dataNascimento ? dataNascimento : "Selecionar data de nascimento"}
+              {dataNascimentoEditada ? new Date(dataNascimentoEditada).toLocaleDateString('pt-BR') : new Date(dataNascimento).toLocaleDateString('pt-BR')}
             </ThemedText>
           </ThemedButton>
 

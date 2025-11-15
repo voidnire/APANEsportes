@@ -12,6 +12,11 @@ export interface CreateAtletaDto {
   dataNascimento: string;
 }
 
+export interface EditAtletaDto {
+  nomeCompleto: string;
+  dataNascimento: string;
+}
+
 class AtletaService {
   
   // --- ADICIONE ESTA FUNÇÃO ---
@@ -58,6 +63,26 @@ class AtletaService {
       return response.data;
     } catch (error) {
       console.error("Erro ao criar atleta:", error);
+      throw error;
+    }
+  }
+
+  async editAtleta(id: string,data: EditAtletaDto): Promise<AtletaResumido> {
+    try {
+      const response = await apiClient.put<AtletaResumido>(`/atletas/${id}`, data);
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao editar atleta:", error);
+      throw error;
+    }
+  }
+
+  async deleteAtleta(id: string): Promise<AtletaResumido> {
+    try {
+      const response = await apiClient.delete<AtletaResumido>(`/atletas/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao excluir atleta:", error);
       throw error;
     }
   }
