@@ -52,6 +52,9 @@ export default function PerfilAtleta() {
           const avaliacoesData =
             await AtletaService.getAvaliacoesByAtletaId(id);
           setAvaliacoes(avaliacoesData);
+
+          console.log("CLASSIFICACAOES DO ATLETA:", atletaData.classificacoes);
+          
         } catch (err) {
           console.error('Erro ao carregar dados do perfil', err);
         } finally {

@@ -20,9 +20,6 @@ import ThemedButton from "@/components/ThemedButton";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
 
-import { Classificacao } from "@/models/atletas";
-import DadosAuxiliaresService from "@/services/dadosAuxiliares";
-
 type Theme = typeof Colors.light | typeof Colors.dark;
 
 export default function RegistrarDados() {
@@ -84,6 +81,7 @@ export default function RegistrarDados() {
         nomeCompleto: nomeCompleto.trim(),
         dataNascimento: dataNascimento.trim() || new Date().toISOString().split('T')[0], // Envia data de hoje se vazio
       });
+      
 
       Alert.alert("Sucesso", "Atleta cadastrado.", [
         {
@@ -100,39 +98,6 @@ export default function RegistrarDados() {
       setLoading(false);
     }
   };
-
-  // Novos states para classificações (deficiências)
-  const [classificacoes, setClassificacoes] = useState<Classificacao[]>([]);
-  const [classificacoesLoading, setClassificacoesLoading] = useState(false);
-  const [selectedClassificationId, setSelectedClassificationId] = useState<number | string | null>(null);
-
-
-  useEffect(() => {
-    // busca as classificações do backend ao montar
-    const fetchClassificacoes = async () => {
-      try {
-        setClassificacoesLoading(true);
-        const classificacoesData = await DadosAuxiliaresService.getClassificacoes();
-        setClassificacoes(classificacoesData);
-        }
-      catch (err) {
-        console.error("Erro ao buscar classificações:", err);
-        setClassificacoes([]);
-      } finally {
-        setClassificacoesLoading(false);
-      }
-    };
-    fetchClassificacoes();
-  }, []);
-
-
-  const listaClassificacoes = classificacoes.map((c) => (
-    <Picker.Item
-      key={String(c.id)}
-      label={c.descricao ? `${c.descricao} (${c.codigo ?? ""})` : String(c.codigo ?? c.id)}
-      value={c.id}
-    />
-  ));
 
   return (
     // 5. AJUSTE: UI reescrita com componentes temáticos
@@ -172,37 +137,7 @@ export default function RegistrarDados() {
           )}
       </View>
 
-      {/* Dropdown para Classificação (deficiência) */}
-      <View style={styles.input}>
-          <ThemedText style={{ marginBottom: 8 }}>Classificação (deficiência)</ThemedText>
-          {classificacoesLoading ? (
-            <View style={{ paddingVertical: 12, alignItems: "center" }}>
-              <ActivityIndicator size="small" color={theme.text} />
-            </View>
-        ) : (
-          <View style={[styles.pickerWrapper, styles.dateButton]}>
-              <Picker
-                selectedValue={selectedClassificationId}
-                onValueChange={(itemValue) => setSelectedClassificationId(itemValue)}
-                mode={Platform.OS === "android" ? "dropdown" : "dialog"} 
-                style={styles.picker} // aplica altura fixa
-                itemStyle={styles.pickerItem}
-              >
-                <Picker.Item label="Nenhuma (selecionar...)" style={{color: theme.text}} value={null} />
-                    {listaClassificacoes}
-                
-                  
-                {/*classificacoes.map((c) => (
-                  <Picker.Item
-                    key={String(c.id)}
-                    label={c.descricao ? `${c.descricao} (${c.codigo ?? ""})` : String(c.codigo ?? c.id)}
-                    value={c.id}
-                  /> 
-                ))*/}
-              </Picker>
-            </View>
-        )}
-      </View>    
+       
         
 
 

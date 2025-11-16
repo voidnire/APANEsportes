@@ -43,6 +43,7 @@ class AtletaService {
     }
   }
 
+
   // (Esta função já definimos no plano anterior)
   // (Rota GET /v1/avaliacoes/)
   async getAvaliacoesByAtletaId(atletaId: string): Promise<RegistroAvaliacaoCompleto[]> {
@@ -98,12 +99,11 @@ class AtletaService {
     }
   }
 
-  async createAtletaClassicacao(data: CreateAtletaDto): Promise<AtletaResumido> {
+  async createAtletaClassicacao(id: string,classificacaoId:string): Promise<void> {
     try {
-      const response = await apiClient.post<AtletaResumido>('/atletas', data);
-      return response.data;
+      await apiClient.post<AtletaResumido>(`/atletas/${id}/classificacoes`, classificacaoId);
     } catch (error) {
-      console.error("Erro ao criar atleta:", error);
+      console.error("Erro ao associar classificação ao atleta:", error);
       throw error;
     }
   }

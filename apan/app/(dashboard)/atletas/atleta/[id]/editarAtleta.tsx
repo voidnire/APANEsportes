@@ -3,11 +3,14 @@ import React, { useContext, useState, useEffect, useCallback } from "react";
 import {
   StyleSheet,
   Alert,
-  ScrollView,
+  ScrollView,ActivityIndicator,
   Keyboard,
   TouchableWithoutFeedback, Platform, View
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter,useLocalSearchParams } from "expo-router";
+
+import { Picker } from "@react-native-picker/picker";
+
 
 // 1. AJUSTE: Imports corretos
 import { ThemeContext, ThemeContextType } from "@/context/ThemeContext";
@@ -18,9 +21,9 @@ import ThemedTextInput from "@/components/ThemedTextInput";
 import ThemedButton from "@/components/ThemedButton";
 
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
-import { useLocalSearchParams } from 'expo-router';
-import { AtletaDetalhado } from "@/models/atletas";
+import { AtletaDetalhado, Classificacao } from "@/models/atletas";
 
+import DadosAuxiliaresService from "@/services/dadosAuxiliares";
 
 type Theme = typeof Colors.light | typeof Colors.dark;
 
@@ -72,7 +75,29 @@ export default function EditarAtleta() {
     }
   }, [id]);
 
-  
+  const [classificacoes, setClassificacoes] = useState<Classificacao[]>([]);
+  const [classificacoesLoading, setClassificacoesLoading] = useState(false);
+  const [selectedClassificationId, setSelectedClassificationId] = useState<string | null>(null);
+
+  const [classificacao, setClassificacao] = useState<Classificacao | null>(null);
+
+  useEffect(() => {
+    // busca as classificações do backend ao montar
+    const fetchClassificacoes = async () => {
+      try {
+        setClassificacoesLoading(true);
+        const classificacoesData = await DadosAuxiliaresService.getClassificacoes();
+        setClassificacoes(classificacoesData);
+        }
+      catch (err) {
+        console.error("Erro ao buscar classificações:", err);
+        setClassificacoes([]);
+      } finally {
+        setClassificacoesLoading(false);
+      }
+    };
+    fetchClassificacoes();
+  }, []);
 
 
   const onChangeData = useCallback((event: DateTimePickerEvent, date?: Date) => {
@@ -122,9 +147,6 @@ export default function EditarAtleta() {
   };
 
 
-
-
-  // 4. AJUSTE: 'handleSalvar' agora chama a API
   const handleSalvar = async () => {
     if (!validar() || loading) return;
 
@@ -137,12 +159,22 @@ export default function EditarAtleta() {
     setLoading(true);
 
     try {
-      const dto: EditAtletaDto = {
-        nomeCompleto: nomeCompletoEditado? nomeCompletoEditado.trim() : nomeCompleto.trim(),
-        dataNascimento: dataNascimentoEditada ? dataNascimentoEditada.trim() :  dataNascimento.trim(), // Já está no formato YYYY-MM-DD
-      };
+      if(dataNascimentoEditada || nomeCompletoEditado){
+        const dto: EditAtletaDto = {
+          nomeCompleto: nomeCompletoEditado? nomeCompletoEditado.trim() : nomeCompleto.trim(),
+          dataNascimento: dataNascimentoEditada ? dataNascimentoEditada.trim() :  dataNascimento.trim(), // Já está no formato YYYY-MM-DD
+        };
+        await AtletaService.editAtleta(id, dto);
+      }
+      
+      if (selectedClassificationId) {
+        console.log("CLASSIFICAÇÃO SELECIONADA:", selectedClassificationId);
+        // Chama o serviço para associar a classificação ao atleta
+        await AtletaService.createAtletaClassicacao(id,String(selectedClassificationId));
+      }
+
       // Chama o serviço com os dados do DTO
-      await AtletaService.editAtleta(id, dto);
+      
 
       Alert.alert("Sucesso", "Atleta editado.", [
         {
@@ -160,6 +192,13 @@ export default function EditarAtleta() {
     }
   };
 
+  const listaClassificacoes = classificacoes.map((c) => (
+      <Picker.Item
+        key={String(c.id)}
+        label={c.descricao ? `${c.descricao} (${c.codigo ?? ""})` : String(c.codigo ?? c.id)}
+        value={c.id}
+      />
+    ));
 
 
   return (
@@ -201,6 +240,38 @@ export default function EditarAtleta() {
             />
           )}
       </View>
+
+      {/* Dropdown para Classificação (deficiência) */}
+      <View style={styles.input}>
+          <ThemedText style={{ marginBottom: 8 }}>Classificação (deficiência)</ThemedText>
+          {classificacoesLoading ? (
+            <View style={{ paddingVertical: 12, alignItems: "center" }}>
+              <ActivityIndicator size="small" color={theme.text} />
+            </View>
+        ) : (
+          <View style={[styles.pickerWrapper, styles.dateButton]}>
+              <Picker
+                selectedValue={selectedClassificationId}
+                onValueChange={(itemValue) => setSelectedClassificationId(itemValue)}
+                mode={Platform.OS === "android" ? "dropdown" : "dialog"} 
+                style={styles.picker} // aplica altura fixa
+                itemStyle={styles.pickerItem}
+              >
+                <Picker.Item label="Nenhuma (selecionar...)" style={{color: theme.text}} value={null} />
+                    {listaClassificacoes}
+                
+                  
+                {/*classificacoes.map((c) => (
+                  <Picker.Item
+                    key={String(c.id)}
+                    label={c.descricao ? `${c.descricao} (${c.codigo ?? ""})` : String(c.codigo ?? c.id)}
+                    value={c.id}
+                  /> 
+                ))*/}
+              </Picker>
+            </View>
+        )}
+      </View>    
 
 
 
@@ -267,5 +338,22 @@ const createStyles = (theme: Theme) =>
     },
     dateButton:{
       backgroundColor: theme.cardBackground,
-    }
+    },
+    pickerWrapper:{
+      borderRadius: 8,
+      borderWidth: 1,
+      overflow: "hidden",
+      // largura controlada pelo seu layout (usa width: '100%')
+      // altura fixa para evitar "esticar" a tela
+      height: 44,            // <--- reduz a altura do componente
+      justifyContent: "center",
+    },
+    picker: {
+      height: 44,            // <--- define altura interna do Picker
+      width: "100%",
+      color: theme.text,
+    },
+    pickerItem: {
+      height: 44,            // iOS: altura dos itens (opcional)
+    },
   });
