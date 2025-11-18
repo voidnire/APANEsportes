@@ -170,7 +170,7 @@ export default function EditarAtleta() {
       if (selectedClassificationId) {
         console.log("CLASSIFICAÇÃO SELECIONADA:", selectedClassificationId);
         // Chama o serviço para associar a classificação ao atleta
-        await AtletaService.createAtletaClassicacao(id,String(selectedClassificationId));
+        await AtletaService.createAtletaClassicacao(id,{  classificacaoId: selectedClassificationId});
       }
 
       // Chama o serviço com os dados do DTO
@@ -260,14 +260,6 @@ export default function EditarAtleta() {
                 <Picker.Item label="Nenhuma (selecionar...)" style={{color: theme.text}} value={null} />
                     {listaClassificacoes}
                 
-                  
-                {/*classificacoes.map((c) => (
-                  <Picker.Item
-                    key={String(c.id)}
-                    label={c.descricao ? `${c.descricao} (${c.codigo ?? ""})` : String(c.codigo ?? c.id)}
-                    value={c.id}
-                  /> 
-                ))*/}
               </Picker>
             </View>
         )}
@@ -349,7 +341,6 @@ const createStyles = (theme: Theme) =>
       justifyContent: "center",
     },
     picker: {
-      height: 44,            // <--- define altura interna do Picker
       width: "100%",
       color: theme.text,
     },

@@ -23,6 +23,10 @@ export interface TipoMetrica {
   updatedAt: string;
 }
 
+export interface MetricaEntrada{ /// PRO FRONT
+  tipoMetricaId: string;
+  valor: number;
+}
 
 export interface AtletaDetalhado {
   id: string;

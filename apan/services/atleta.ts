@@ -12,6 +12,10 @@ export interface CreateAtletaDto {
   dataNascimento: string;
 }
 
+export interface ClassificacaoDto {
+  classificacaoId: string;
+}
+
 export interface EditAtletaDto {
   nomeCompleto: string;
   dataNascimento: string;
@@ -99,9 +103,9 @@ class AtletaService {
     }
   }
 
-  async createAtletaClassicacao(id: string,classificacaoId:string): Promise<void> {
+  async createAtletaClassicacao(id: string,classificacao:ClassificacaoDto): Promise<void> {
     try {
-      await apiClient.post<AtletaResumido>(`/atletas/${id}/classificacoes`, classificacaoId);
+      await apiClient.post<AtletaResumido>(`/atletas/${id}/classificacoes`, classificacao);
     } catch (error) {
       console.error("Erro ao associar classificação ao atleta:", error);
       throw error;

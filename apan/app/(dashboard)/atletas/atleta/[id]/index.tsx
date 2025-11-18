@@ -158,6 +158,12 @@ export default function PerfilAtleta() {
     console.log('Ver desempenho do atleta:', atleta.id);
   };
 
+  const handleTreino = () => {
+    if (!atleta) return;
+    router.push(`/(dashboard)/atletas/atleta/${atleta.id}/registrarTreino`);
+    console.log('Registrar treino do atleta:', atleta.id);
+  }
+
 
   // --- RENDERIZAÇÃO ---
 
@@ -245,6 +251,11 @@ export default function PerfilAtleta() {
       {/* Ver desempenho tela */}
       <Pressable style={styles.editButton} onPress={handleDesempenho}>
         <Text style={styles.editButtonText}>Desempenho</Text>
+      </Pressable>
+
+      {/* Registrar treino */}
+      <Pressable style={styles.editButton} onPress={handleTreino}>
+        <Text style={styles.editButtonText}>Novo Treino</Text>
       </Pressable>
 
       <View style={{ height: 40 }} />

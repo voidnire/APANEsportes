@@ -16,6 +16,7 @@ import ThemedText from "@/components/ThemedText"
 import Spacer from "@/components/Spacer"
 import { useUser } from '@/hooks/useUser'; // 2. AJUSTE: Importar o useUser
 import { Colors } from '@/constants/Colors'; // 3. AJUSTE: Importar Colors para tipagem
+import { router } from 'expo-router';
 
 // 4. AJUSTE: Tipo do 'theme' (nosso padrão)
 type Theme = typeof Colors.light | typeof Colors.dark;
@@ -44,6 +45,12 @@ const HomeScreen = () => {
   // 8. AJUSTE: Consumir o 'user' do hook
   const { user } = useUser();
   
+
+  const handleRegistro = () => {
+    console.log('Navigate to Registrar Treino');
+    router.push('/(dashboard)/testes/registrarTreino');
+  }
+
   // 9. AJUSTE: Tipagem das props
   const MenuCard = ({ iconName, iconColor, iconBgColor, title, subtitle, onPress }: MenuCardProps) => (
   <TouchableOpacity style={styles.card} onPress={onPress}>
@@ -83,9 +90,9 @@ const HomeScreen = () => {
             iconName="clipboard-list"
             iconColor="#007AFF"
             iconBgColor="#E6F2FF"
-            title="Registrar Dados"
+            title="Registrar Treino"
             subtitle="Record athlete performance metrics and test results"
-            onPress={() => console.log('Register Data pressed')}
+            onPress={handleRegistro}
           />
           <MenuCard
             iconName="chart-bar"

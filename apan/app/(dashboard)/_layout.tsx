@@ -19,9 +19,8 @@ const DashboardLayout = () => {
     const { theme } = themeContext;
 
     return (
-
+        
         <UserOnly>
-        {/* 4. Aplicar o tema na barra de abas*/}
         <Tabs
             screenOptions={{
                 tabBarActiveTintColor: theme.tint,      // Cor do ícone ativo
@@ -65,6 +64,20 @@ const DashboardLayout = () => {
                     ), 
                 }} 
             />
+
+
+            <Tabs.Screen 
+                name="desempenho" 
+                options={{ 
+                    tabBarLabel: "Desempenho",
+                    title: "Desempenho",
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialIcons name="people" size={size} color={color} />
+                    ), 
+                }} 
+            />
+
+
             
             <Tabs.Screen 
                 name="configuracoes" 

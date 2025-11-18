@@ -127,6 +127,7 @@ export default function RegistrarDados() {
           </ThemedButton>
 
           {mostrarPicker && (
+            
             <DateTimePicker
               value={selectedDate || new Date()}
               mode="date"
