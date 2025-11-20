@@ -160,7 +160,11 @@ export default function PerfilAtleta() {
 
   const handleTreino = () => {
     if (!atleta) return;
-    router.push(`/(dashboard)/atletas/atleta/${atleta.id}/registrarTreino`);
+    router.push({
+      pathname: "/(dashboard)/testes/registrarTreino",
+      params: { atletaId: atleta.id } // opcional
+    });
+
     console.log('Registrar treino do atleta:', atleta.id);
   }
 

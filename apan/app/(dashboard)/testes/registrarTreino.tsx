@@ -12,7 +12,7 @@ import {
   TextInput,
   Platform,
 } from 'react-native';
-import { useRouter, useFocusEffect } from 'expo-router';
+import { useRouter, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { Picker } from '@react-native-picker/picker';
 
 import DadosAuxiliaresService from '@/services/dadosAuxiliares';
@@ -48,6 +48,8 @@ export default function RegistrarDados() {
   const [metricas, setMetricas] = useState<TipoMetrica[]>([]);
   const [metricasEntradas, setMetricasEntradas] = useState<MetricaEntrada[]>([]);
 
+  const { atletaId } = useLocalSearchParams();
+  const atletaIdParam = atletaId ? atletaId : null;
 
   //const tabs = ['Corrida', 'Salto V', 'Salto H', 'Lançamento'];
   //const [activeTab, setActiveTab] = useState<number>(0);
@@ -129,6 +131,9 @@ const [dataHora, setDataHora] = useState<Date>(new Date());
   useEffect(() => {
     (async () => {
       await Promise.all([fetchAtletas(), fetchModalidades()]);
+      if (atletaIdParam) {
+        setSelectedAtletaId(String(atletaIdParam));
+      }
     })();
   }, []);
 
