@@ -1,4 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
+import { StatusBar } from 'react-native'; 
 import 'react-native-reanimated';
 import { Stack } from 'expo-router';
 import React, { useContext } from 'react'; // Import React e useContext
@@ -20,7 +20,7 @@ function RootLayoutNav() {
   return (
     <>
       {/* 4. AJUSTE: StatusBar agora é estilizada pelo tema do contexto */}
-      <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+      <StatusBar/>
 
       {/* 5. AJUSTE: Stack agora usa o tema DO CONTEXTO */}
       <Stack screenOptions={{

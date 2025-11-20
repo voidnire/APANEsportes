@@ -23,6 +23,7 @@ import AtletaService from '@/services/atleta';
 import { Colors } from '@/constants/Colors';
 import { AtletaResumido, MetricaEntrada, Modalidade, TipoMetrica } from '@/models/atletas';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import ThemedTextInput from '@/components/ThemedTextInput';
 
 type Theme = typeof Colors.light | typeof Colors.dark;
 const screenWidth = Dimensions.get('window').width;
@@ -48,8 +49,8 @@ export default function RegistrarDados() {
   const [metricasEntradas, setMetricasEntradas] = useState<MetricaEntrada[]>([]);
 
 
-  const tabs = ['Corrida', 'Salto V', 'Salto H', 'Lançamento'];
-  const [activeTab, setActiveTab] = useState<number>(0);
+  //const tabs = ['Corrida', 'Salto V', 'Salto H', 'Lançamento'];
+  //const [activeTab, setActiveTab] = useState<number>(0);
 
 
   const [observacoes, setObservacoes] = useState<string>('');
@@ -94,37 +95,37 @@ const [dataHora, setDataHora] = useState<Date>(new Date());
       }
     }, []);
 
+  const fetchMetricas = useCallback(
+    async (selectedModalidadeId?: string | null) => {
+      if (!selectedModalidadeId) {
+        setMetricas([]);
+        setMetricasEntradas([]);
+        return;
+      }
+      try {
+        setLoading(true);
+        const data = await DadosAuxiliaresService.getMetricas(selectedModalidadeId);
+        console.log('METRICAS: ', data);
+        setMetricas(data);
 
-    const fetchMetricas = useCallback( 
-        async (selectedModalidadeId?: string | null) => { 
-            if(!selectedModalidadeId){
-            setMetricas([]);
-            setMetricasEntradas([]);
-            return;
-        }
-        console.log("FETCH METRICAS PRA MODALIDADE ID: ", selectedModalidadeId, " modalidadE:");
-        try {
-            setLoading(true);   
-            const data = await DadosAuxiliaresService.getMetricas(selectedModalidadeId);
-            console.log("METRICAS: ", data);
-            setMetricas(data);
+        // cria entradas para todas as métricas retornadas (uma entrada por tipo)
+        const entradas: MetricaEntrada[] = data.map((m) => ({
+          tipoMetricaId: m.id,
+          valor: 0,
+        }));
+        setMetricasEntradas(entradas);
+      } catch (error: any) {
+        Alert.alert('Erro', 'Erro ao buscar métricas da modalidade. ' + error.message);
+        setMetricas([]);
+        setMetricasEntradas([]);
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
 
-            const entradas: MetricaEntrada[] = data.map((metricas) => ({
-                tipoMetricaId: metricas.id,
-                valor: 0,
-            }));
-            setMetricasEntradas(entradas);
-
-        } catch (error: any) {
-            Alert.alert("Erro", "Erro ao buscar métricas da modalidade. " + error.message);
-            setMetricas([]);
-            setMetricasEntradas([]);
-
-        } finally {
-            setLoading(false);
-        }
-    },[]);
-
+  
   useEffect(() => {
     (async () => {
       await Promise.all([fetchAtletas(), fetchModalidades()]);
@@ -166,9 +167,9 @@ const [dataHora, setDataHora] = useState<Date>(new Date());
       atletaId: selectedAtletaId,
       modalidadeId:selectedModalidadeId,
       tipo: selectedPrePos,
-      observacoes: observacoes.trim() || null,
+      observacoes: observacoes.trim() || '',
       dataHora: dataHora.toISOString(),
-      resultados:resultados
+      resultados:resultados //ResultadoMetricaDTO[]
     };
 
     return payload;
@@ -188,7 +189,8 @@ const [dataHora, setDataHora] = useState<Date>(new Date());
     Keyboard.dismiss();
     const payload = validateAndBuildPayload();
 
-    console.log("AVALIACOES METRICAS: ", payload.resultados);
+    console.log("PAYLOAD:", JSON.stringify(payload, null, 2));
+
 
     if (!payload) return;
 
@@ -205,14 +207,33 @@ const [dataHora, setDataHora] = useState<Date>(new Date());
   };
 
 
-const handleAddMetrica = () => {
+  const handleAddMetrica = () => {
     if (!metricas || metricas.length === 0) {
       Alert.alert('Nenhuma métrica', 'Não há métricas disponíveis para esta modalidade.');
       return;
     }
-    // adiciona uma nova entrada default com a primeira métrica disponível
-    setMetricasEntradas((prev) => [...prev, { tipoMetricaId: metricas[0].id, valor: 0 }]);
+
+    // Se metricasEntradas estiver vazia — simplesmente popula com todas as métricas
+    if (!metricasEntradas || metricasEntradas.length === 0) {
+      const entradas = metricas.map((m) => ({ tipoMetricaId: m.id, valor: 0 }));
+      setMetricasEntradas(entradas);
+      return;
+    }
+
+    // Caso contrário, adiciona apenas as métricas que ainda não existem na lista (evita duplicatas)
+    const existentes = new Set(metricasEntradas.map((e) => e.tipoMetricaId));
+    const aAdicionar = metricas
+      .filter((m) => !existentes.has(m.id))
+      .map((m) => ({ tipoMetricaId: m.id, valor: 0 }));
+
+    if (aAdicionar.length === 0) {
+      Alert.alert('Todas adicionadas', 'Todas as métricas já foram adicionadas.');
+      return;
+    }
+
+    setMetricasEntradas((prev) => [...prev, ...aAdicionar]);
   };
+
 
   const handleRemoveMetrica = (index: number) => {
     setMetricasEntradas((prev) => prev.filter((_, i) => i !== index));
@@ -264,7 +285,7 @@ const handleAddMetrica = () => {
           </View>
         </View>
 
-              {/*PRE POS TREINO*/}
+        {/*PRE POS TREINO*/}
         <View style={{ marginLeft: 12, width: 110 }}>
           <Text style={styles.label}>Pré/Pós</Text>
           <View style={styles.preposWrap}>
@@ -328,6 +349,16 @@ const handleAddMetrica = () => {
         )}
       </View>
 
+      {/*Observações*/}
+      <View style={{ width: '100%', marginBottom: 12 }}>
+        <Text style={styles.label}>Observações</Text>
+        <ThemedTextInput style={styles.picker}
+          placeholder="Observações adicionais..."
+          value={observacoes}
+          onChangeText={setObservacoes}
+          placeholderTextColor={theme.subtitle}/>
+      </View>
+
 
       {/* Tabs 
       <View style={styles.tabs}>
@@ -367,13 +398,13 @@ const handleAddMetrica = () => {
                   <View style={{ flex: 1 }}>
                     <Text style={styles.labelSmall}>Tipo</Text>
                     <View style={[styles.pickerWrapperSmall, styles.pickerCard]}>
-                      <Picker
+                      <Picker 
                         selectedValue={entry.tipoMetricaId}
                         onValueChange={(v) => handleChangeMetricaTipo(idx, v)}
                         mode={Platform.OS === 'android' ? 'dropdown' : 'dialog'}
                         style={styles.pickerSmall}
                       >
-                        <Picker.Item label="Selecione..." value={''} />
+                        <Picker.Item label="Selecione..." value={''} /> 
                         {metricas.map((tm) => (
                           <Picker.Item key={String(tm.id)} label={`${tm.nome} (${tm.unidadeMedida})`} value={String(tm.id)} />
                         ))}
@@ -394,7 +425,7 @@ const handleAddMetrica = () => {
                   </View>
 
                   <Pressable style={styles.removeButton} onPress={() => handleRemoveMetrica(idx)}>
-                    <Text style={{ color: '#fff', fontWeight: '700' }}>Rem</Text>
+                    <Text style={{ color: '#fff', fontWeight: '700' }}>🗑</Text>
                   </Pressable>
                 </View>
               ))}
@@ -430,7 +461,7 @@ function createStyles(theme: Theme) {
       backgroundColor: theme.background,
     },
      pickerSmall: {
-      height: 40,
+      //height: 40,
       width: '100%',
       color: theme.text,
     }, labelSmall: {

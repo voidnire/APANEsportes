@@ -6,9 +6,6 @@ import UserOnly from '@/components/auth/UserOnly';
 // 2. Importar o Contexto e o Tipo (em vez de 'Colors' e 'useColorScheme')
 import { ThemeContext, ThemeContextType } from "@/context/ThemeContext";
 
-// (Removido 'unstable_settings' pois não é padrão para este grupo)
-// (Removido 'StatusBar' pois é tratado no layout pai)
-
 const DashboardLayout = () => {
     // 3. Consumir o tema do contexto (como fizemos no layout pai)
     const themeContext = useContext<ThemeContextType | null>(ThemeContext);

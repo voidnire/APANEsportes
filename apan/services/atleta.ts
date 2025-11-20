@@ -21,6 +21,13 @@ export interface EditAtletaDto {
   dataNascimento: string;
 }
 
+interface AvaliacaoFiltros {
+  modalidadeId?: string; // Filtrar por ID da modalidade
+  tipo?: string;         // Filtrar por tipo de sessão
+  dataInicio?: string;   // Data inicial (YYYY-MM-DD)
+  dataFim?: string;      // Data final (YYYY-MM-DD)
+}
+
 class AtletaService {
   
   // --- ADICIONE ESTA FUNÇÃO ---
@@ -47,13 +54,34 @@ class AtletaService {
     }
   }
 
-
-  // (Esta função já definimos no plano anterior)
   // (Rota GET /v1/avaliacoes/)
-  async getAvaliacoesByAtletaId(atletaId: string): Promise<RegistroAvaliacaoCompleto[]> {
+  // Lista o histórico de avaliações de um atleta, com filtros opcionais
+  async getAvaliacoesByAtletaId(atletaId: string, filtros?: AvaliacaoFiltros): Promise<RegistroAvaliacaoCompleto[]> {
     try {
+
+      const params = {
+        atletaId,
+        ...filtros
+      };
+
+      const searchParams = new URLSearchParams();
+
+      for (const key in params) {
+          const value = params[key as keyof typeof params];
+          // Adiciona o par chave=valor se o valor existir (não for null, undefined ou string vazia)
+          if (value) {
+            searchParams.append(key, value);
+          }
+      }
+
+      const queryString = searchParams.toString();
+
+      console.log("");
+      console.log("Query String:", queryString); // Log para depuração
+      console.log("");
+
       const response = await apiClient.get<RegistroAvaliacaoCompleto[]>(
-        `/avaliacoes?atletaId=${atletaId}`
+        `/avaliacoes?${queryString}`
       );
       return response.data;
     } catch (error) {
@@ -61,6 +89,8 @@ class AtletaService {
       throw error;
     }
   }
+
+  
 
   async createAtleta(data: CreateAtletaDto): Promise<AtletaResumido> {
     try {
