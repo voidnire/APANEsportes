@@ -5,73 +5,118 @@ import {
   StyleSheet,
   ScrollView,
   Dimensions,
+  TouchableOpacity,
+  Platform, // Para ícone de seta de volta
 } from 'react-native';
-// import { useRouter } from "expo-router"; // (Não usado, removido)
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
-// 1. AJUSTE: Imports corretos de Contexto e Tipos
+// Imports de Contexto e Componentes
 import { ThemeContext, ThemeContextType } from '@/context/ThemeContext';
 import { Colors } from '@/constants/Colors';
 import { useUser } from '@/hooks/useUser';
 import Spacer from '@/components/Spacer';
 import ThemedButton from '@/components/ThemedButton';
-
 import ThemedText from '@/components/ThemedText'
-import { useRouter } from 'expo-router';
 
 type Theme = typeof Colors.light | typeof Colors.dark;
 
 const screenWidth = Dimensions.get('window').width;
 
-export default function SettingsScreen() { // Renomeado para ser mais claro
-  // 2. AJUSTE: Consumo correto do ThemeContext (com checagem de null)
+// 1. Componente Auxiliar para a linha de Informação
+interface InfoRowProps {
+  label: string;
+  value: string;
+  theme: Theme;
+  styles: ReturnType<typeof createStyles>; // Reutiliza os estilos
+}
+
+const InfoRow = ({ label, value, theme, styles }: InfoRowProps) => (
+  <View style={styles.infoRow}>
+    <Text style={styles.infoLabel}>{label}</Text>
+    <Text style={styles.infoValue}>{value}</Text>
+  </View>
+);
+
+// 2. Componente Principal
+export default function SettingsScreen() {
   const themeContext = useContext<ThemeContextType | null>(ThemeContext);
   if (!themeContext) {
     throw new Error('SettingsScreen must be used within a ThemeProvider');
   }
-  const { theme } = themeContext; // colorScheme não é usado aqui
+  const { theme } = themeContext;
 
   const { logout, user } = useUser();
+  const router = useRouter();
 
-  const router = useRouter()
-  // 3. AJUSTE: Passando SÓ o 'theme' (como em todos os outros arquivos)
   const styles = createStyles(theme);
 
-  const handleLogout = async () => {  
+  // 3. Função para obter as iniciais (se user existir)
+  const getInitials = (name: string | undefined): string => {
+    if (!name) return '?';
+    const parts = name.trim().split(' ');
+    if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+    return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+  };
+
+  const handleLogout = async () => {
     try {
       await logout();
+      // 4. Redirecionamento após o logout (Substitui o histórico de navegação)
+      router.replace('/'); 
     } catch (error) {
       console.error("Erro ao fazer logout:", error);
-    }finally{
-      router.replace('/login')
+      // Mesmo se houver erro no servidor, desloga localmente e redireciona
+      router.replace('/'); 
     }
-  }
+  };
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.backArrow}>To do ....</Text>
+      
+
+      
+      <Spacer height={20} />
+
+      {/* 5. Avatar e Nome */}
+      <View style={styles.avatarWrap}>
+        <View style={styles.avatarBorder}>
+          <View style={styles.avatarPlaceholder}>
+            <Text style={styles.avatarInitial}>
+              {getInitials(user?.nomeCompleto)}
+            </Text>
+          </View>
+        </View>
+        <Spacer height={10} />
+        <Text style={styles.headerTitle}>
+          {user?.nomeCompleto || 'Atleta Desconhecido'}
+        </Text>
       </View>
       
-      <Spacer/>
+      <Spacer height={20} />
 
-      <ThemedText>
-        {user?.email}
-      </ThemedText>
+      {/* 6. Informações do Perfil */}
+      <View style={styles.infoCard}>
+        <InfoRow label="Nome Completo" value={user?.nomeCompleto || 'N/A'} theme={theme} styles={styles} />
+        <InfoRow label="Email" value={user?.email || 'N/A'} theme={theme} styles={styles} />
+        {/* Adicione mais informações aqui, como função, time, etc. */}
+      </View>
 
-      <ThemedButton onPress={handleLogout}>
-        <ThemedText>Sair</ThemedText>
+      <Spacer height={20} />
+
+      {/* 7. Botão de Logout */}
+      <ThemedButton onPress={handleLogout} style={styles.logoutButton}>
+        <Text style={styles.logoutButtonText}>Sair da Conta</Text>
       </ThemedButton>
-      {/* (O resto dos estilos (avatar, infoCard, etc.)
-          agora funcionam com o tema, mas estão
-          comentados no JSX pois não estão em uso) */}
+
+      
+
     </ScrollView>
   );
 }
 
-// 4. AJUSTE: Função 'createStyles' "traduzida" para o nosso Tema
+// 8. Estilos (Função createStyles completa e revisada)
 function createStyles(theme: Theme) {
-  // "Traduzindo" os nomes das variáveis para o nosso padrão
   const cardBg = theme.cardBackground;
   const border = theme.cardBorder;
   const muted = theme.subtitle;
@@ -86,15 +131,14 @@ function createStyles(theme: Theme) {
       paddingTop: 18,
       paddingHorizontal: 18,
       paddingBottom: 40,
-      alignItems: 'center',
     },
-
     header: {
       width: '100%',
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
       marginBottom: 14,
+      paddingHorizontal: 0, // Removido o padding para o header usar a largura total
     },
     backButton: {
       width: 36,
@@ -102,19 +146,12 @@ function createStyles(theme: Theme) {
       justifyContent: 'center',
       alignItems: 'center',
     },
-    backArrow: {
-      fontSize: 20,
-      color: theme.text,
-    },
     headerTitle: {
-      fontSize: 16,
+      fontSize: 18, // Aumentado
       fontWeight: '800',
       color: theme.text,
-      letterSpacing: 1,
     },
-
-    // (O resto dos estilos foi mantido e traduzido,
-    // caso você queira usá-los como template depois)
+    // --- Avatar ---
     avatarWrap: {
       marginTop: 4,
       marginBottom: 14,
@@ -125,48 +162,48 @@ function createStyles(theme: Theme) {
       width: 110,
       height: 110,
       borderRadius: 110 / 2,
-      backgroundColor: cardBg, // Corrigido
+      backgroundColor: cardBg,
       justifyContent: 'center',
       alignItems: 'center',
       borderWidth: 6,
-      borderColor: '#6fb0ff22',
-    },
-    avatar: {
-      width: 96,
-      height: 96,
-      borderRadius: 96 / 2,
+      borderColor: theme.text, // Ajustado para ser mais consistente com o tema
     },
     avatarPlaceholder: {
       width: 96,
       height: 96,
       borderRadius: 48,
-      backgroundColor: '#eee',
+      backgroundColor: primary, // Fundo do placeholder
       justifyContent: 'center',
       alignItems: 'center',
     },
     avatarInitial: {
       fontSize: 34,
-      color: primary, // Corrigido
+      color: theme.text, // Cor da letra no avatar
       fontWeight: '800',
     },
+    // --- Card de Informação ---
     infoCard: {
       width: '100%',
       marginTop: 6,
       marginBottom: 18,
+      borderRadius: 10,
+      overflow: 'hidden', // Para que as bordas do card funcionem
+      borderWidth: 1,
+      borderColor: border,
     },
     infoRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      borderWidth: 1,
-      borderColor: border, // Corrigido
-      paddingVertical: 12,
-      paddingHorizontal: 12,
-      backgroundColor: cardBg, // Corrigido
+      paddingVertical: 14,
+      paddingHorizontal: 15,
+      backgroundColor: cardBg,
+      borderBottomWidth: StyleSheet.hairlineWidth,
+      borderBottomColor: border,
     },
     infoLabel: {
       fontSize: 14,
-      color: muted, // Corrigido
+      color: muted,
       fontWeight: '600',
     },
     infoValue: {
@@ -174,52 +211,28 @@ function createStyles(theme: Theme) {
       color: theme.text,
       fontWeight: '700',
     },
-    statsContainer: {
+    // --- Botão de Logout ---
+    logoutButton: {
       width: '100%',
-      marginTop: 14,
-      alignItems: 'center',
-    },
-    statCard: {
-      width: screenWidth - 72,
-      backgroundColor: cardBg, // Corrigido
-      borderWidth: 1,
-      borderColor: border, // Corrigido
+      backgroundColor: theme.buttonBackground,
+      paddingVertical: 14,
       borderRadius: 10,
-      paddingVertical: 18,
-      paddingHorizontal: 14,
       alignItems: 'center',
-      marginBottom: 12,
-      shadowColor: theme.cardShadow, // Corrigido
-      shadowOpacity: 0.03,
-      shadowRadius: 6,
-      elevation: 1,
+      marginTop: 30,
     },
-    statIcon: {
-      fontSize: 26,
-      marginBottom: 6,
-      color: muted, // Corrigido
-    },
-    statValue: {
-      fontSize: 22,
-      fontWeight: '800',
-      color: theme.text,
-      marginBottom: 4,
-    },
-    statLabel: {
-      fontSize: 12,
-      color: muted, // Corrigido
-    },
-    editButton: {
-      marginTop: 12,
-      backgroundColor: theme.buttonBackground, // Corrigido
-      paddingVertical: 10,
-      paddingHorizontal: 18,
-      borderRadius: 8,
-    },
-    editButtonText: {
-      color: theme.text, // Corrigido
+    logoutButtonText: {
+      color: theme.text, // Texto branco/claro no botão primário
       fontWeight: '700',
-      fontSize: 14,
+      fontSize: 16,
     },
+    // Estilos não usados (mantidos no original)
+    backArrow: {}, 
+    statsContainer: {}, 
+    statCard: {},
+    statIcon: {},
+    statValue: {},
+    statLabel: {},
+    editButton: {},
+    editButtonText: {},
   });
 }
