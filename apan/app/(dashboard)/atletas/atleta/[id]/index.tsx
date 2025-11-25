@@ -19,6 +19,7 @@ import {
 } from '@/models/atletas';
 import AtletaService from '@/services/atleta';
 import { Colors } from '@/constants/Colors';
+import Spacer from '@/components/Spacer';
 
 type Theme = typeof Colors.light | typeof Colors.dark;
 const screenWidth = Dimensions.get('window').width;
@@ -151,7 +152,6 @@ export default function PerfilAtleta() {
     );
   }
 
-
   const handleDesempenho = () => {
     if (!atleta) return;
     router.push(`/(dashboard)/atletas/atleta/${atleta.id}/desempenho`);
@@ -195,6 +195,7 @@ export default function PerfilAtleta() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       {/* Avatar */}
+      <Spacer />
       <View style={styles.avatarWrap}>
         <View style={styles.avatarBorder}>
           {/* 9. AJUSTE: 'avatar' removido (não existe na API) */}

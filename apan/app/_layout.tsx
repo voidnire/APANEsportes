@@ -19,7 +19,6 @@ function RootLayoutNav() {
 
   return (
     <>
-      {/* 4. AJUSTE: StatusBar agora é estilizada pelo tema do contexto */}
       <StatusBar/>
 
       {/* 5. AJUSTE: Stack agora usa o tema DO CONTEXTO */}

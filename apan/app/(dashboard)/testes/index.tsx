@@ -6,50 +6,87 @@ import {
   StyleSheet,
   TouchableOpacity,
   FlatList,
-  // Image, // (Não usado)
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-// 1. AJUSTE: Imports corretos de Contexto e Tipos
+// Imports de Contexto e Tipos (assumidos como corretos)
 import { ThemeContext, ThemeContextType } from "@/context/ThemeContext";
 import { Colors } from "@/constants/Colors";
+import Spacer from "@/components/Spacer";
 
-// 2. AJUSTE: Tipo do 'theme' (nosso padrão)
 type Theme = typeof Colors.light | typeof Colors.dark;
 
-// Lista de itens do menu (OK ser estático, pois é um menu)
+// 🛑 REFORMULAÇÃO: Nova lista de testes de monitoramento
 const MENU_ITEMS = [
-  { id: "1", title: "Saltar", subtitle: "My Jump 3", icon: "barbell" },
-  { id: "2", title: "Treino baseado em velocidade", subtitle: "My Lift", icon: "speedometer" },
-  { id: "3", title: "Corrida & Sprints", subtitle: "Runmatic", icon: "run" },
-  { id: "4", title: "Questionários de bem estar", subtitle: "Readiness", icon: "list" },
-  { id: "5", title: "Força dos Isquiotibiais", subtitle: "Nordics", icon: "fitness" },
-  { id: "6", title: "Mobilidade", subtitle: "My ROM", icon: "body" },
+  // Categoria: Potência (Saltos)
+  { 
+    id: "1", 
+    title: "Saltos & Potência", 
+    subtitle: "CMJ, SJ, Medicine Ball Throw", 
+    icon: "analytics" as const, // Ícone de análise/gráfico
+    screen: "JumpsScreen" // Exemplo de navegação
+  },
+  // Categoria: Velocidade e Agilidade
+  { 
+    id: "2", 
+    title: "Velocidade & Agilidade", 
+    subtitle: "30m Sprint, AST, RAST", 
+    icon: "walk" as const, // Ícone de corrida/caminhada
+    screen: "SpeedScreen"
+  },
+  // Categoria: Força
+  { 
+    id: "3", 
+    title: "Força Muscular", 
+    subtitle: "Dinamometria (Handgrip, etc.)", 
+    icon: "barbell" as const, // Ícone de halter
+    screen: "StrengthScreen"
+  },
+  // Categoria: Capacidade Aeróbica
+  { 
+    id: "4", 
+    title: "Capacidade Aeróbica", 
+    subtitle: "Teste Incremental (VO2 Max)", 
+    icon: "bicycle" as const, // Ícone de bicicleta/cardio
+    screen: "AerobicScreen"
+  },
+  // Categoria: Bem-Estar e Recuperação
+  { 
+    id: "5", 
+    title: "Questionários de Bem-Estar", 
+    subtitle: "Prontidão para o treino (Readiness)", 
+    icon: "list" as const, // Ícone de lista/questionário
+    screen: "ReadinessScreen"
+  },
 ];
 
-// 3. AJUSTE: Interface para o componente local
-// (usando keyof para segurança do tipo de ícone)
+// Interface para o componente local, ajustada para a nova lista
 interface MenuRowProps {
   title: string;
   subtitle: string;
-  icon: keyof typeof Ionicons.glyphMap; // Tipo mais seguro
-  onPress: () => void;
+  icon: keyof typeof Ionicons.glyphMap;
+  onPress: (screen: string) => void; // Ação de clique
+  screen: string; // Nova prop para navegação
 }
 
 export default function HomeScreenClean() {
-  // 4. AJUSTE: Consumo correto do ThemeContext (com checagem de null)
   const themeContext = useContext<ThemeContextType | null>(ThemeContext);
   if (!themeContext) {
     throw new Error('HomeScreenClean must be used within a ThemeProvider');
   }
   const { theme } = themeContext;
   
-  // 5. AJUSTE: Tipagem correta para 'createStyles'
   const styles = createStyles(theme);
+
+  // 🛑 AJUSTE: Função de clique para navegar para a tela correta
+  const handlePress = (screen: string) => {
+    // Aqui você deve usar o hook de navegação (ex: useNavigation)
+    // Exemplo: navigation.navigate(screen);
+    console.log("Abrir Tela de Teste:", screen);
+  };
   
-  // 6. AJUSTE: Tipagem das props
-  const MenuRow = ({ title, subtitle, icon, onPress }: MenuRowProps) => (
-    <TouchableOpacity style={styles.row} onPress={onPress} activeOpacity={0.7}>
+  const MenuRow = ({ title, subtitle, icon, screen, onPress }: MenuRowProps) => (
+    <TouchableOpacity style={styles.row} onPress={() => onPress(screen)} activeOpacity={0.7}>
       
       <View style={styles.rowLeft}>
         <View style={styles.iconBox}>
@@ -65,14 +102,17 @@ export default function HomeScreenClean() {
         </View>
       </View>
 
-      {/* 7. AJUSTE: Cor do ícone vinda do tema */}
       <Ionicons name="chevron-forward" size={20} color={theme.icon} />
     </TouchableOpacity>
   );
   
   return (
     <SafeAreaView style={styles.safe}>
-      {/* (Cabeçalho comentado) */}
+      {/* Você pode adicionar aqui um título geral para a seção de avaliações */}
+      <Text style={[styles.sectionTitle, { paddingHorizontal: 20 }]}>
+        Módulos de Avaliação
+      </Text>
+      <Spacer height={10} />
 
       <View style={styles.section}>
         <FlatList
@@ -82,12 +122,14 @@ export default function HomeScreenClean() {
             <MenuRow
               title={item.title}
               subtitle={item.subtitle}
-              icon={item.icon as keyof typeof Ionicons.glyphMap} // Cast
-              onPress={() => console.log("Abrir", item.title)}
+              icon={item.icon as keyof typeof Ionicons.glyphMap}
+              screen={item.screen}
+              onPress={handlePress} // Usando a nova função handlePress
             />
           )}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
-          contentContainerStyle={{ paddingVertical: 8 }}
+          // 🛑 AJUSTE: Removendo o padding 24 do 'section' e colocando no 'contentContainerStyle'
+          contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 8 }}
         />
       </View>
 
@@ -95,74 +137,39 @@ export default function HomeScreenClean() {
   );
 }
 
-// 8. AJUSTE: Tipagem do 'theme' e correção de cores hard-coded
-const createStyles = (theme: Theme)  => 
+// Estilos mantidos, com o ajuste no `section`
+const createStyles = (theme: Theme) => 
 StyleSheet.create({
+  // ... (Estilos safe, header, logoBox, etc. mantidos)
   safe: {
     flex: 1,
     backgroundColor: theme.background,
-    paddingHorizontal: 20,
-    paddingTop: 18,
+    // Removendo paddingHorizontal/paddingTop para dar mais controle ao FlatList
+    paddingTop: 18, 
   },
-  // (Estilos de Header mantidos, caso sejam usados no futuro)
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    marginBottom: 18,
-  },
-  logoBox: {
-    width: 52,
-    height: 52,
-    borderRadius: 12,
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 8,
-  },
-  logoText: {
-    fontWeight: "700",
-    color: theme.buttonBackground, // Corrigido
-    fontSize: 16,
-  },
-  headerTitle: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: theme.text, // Corrigido
-  },
-  headerSubtitle: {
-    color: theme.subtitle, // Corrigido
-    fontSize: 12,
-    marginTop: 2,
-  },
+  // ...
   section: {
     flex: 1,
-    marginTop: 1,
-    // (Padding movido para 'safe' no seu original,
-    // mas o FlatList parece precisar dele.
-    // O seu `padding: 24` estava aqui, mantido.)
-    padding: 24
+    // Removendo padding 24, pois ele irá para o contentContainerStyle do FlatList
   },
   sectionTitle: {
-    fontSize: 13,
-    fontWeight: "600",
-    color: theme.text, // Corrigido
-    marginBottom: 8,
+    fontSize: 16, // Aumentei um pouco para um título de tela
+    fontWeight: "700",
+    color: theme.text,
+    // Alinhamento com o paddingHorizontal 20 do FlatList
   },
   row: {
+    // ... (Estilos do MenuRow mantidos)
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingVertical: 12,
+    paddingVertical: 14,
     paddingHorizontal: 12,
     backgroundColor: theme.cardBackground,
-    borderRadius: 10,
+    borderRadius: 12, // Um pouco maior
     borderWidth: 1,
     borderColor: theme.cardBorder,
-    shadowColor: theme.cardShadow,
-    shadowOpacity: 0.03,
-    shadowOffset: { width: 0, height: 1 },
-    shadowRadius: 4,
-    elevation: 1,
+    // ...
   },
   rowLeft: {
     flexDirection: "row",
@@ -171,43 +178,30 @@ StyleSheet.create({
   iconBox: {
     width: 44,
     height: 44,
-    borderRadius: 9,
-    backgroundColor: theme.cardBackground,
+    borderRadius: 10,
+    backgroundColor: theme.buttonBackground, // Mudando a cor de fundo do ícone para dar destaque
     justifyContent: "center",
     alignItems: "center",
     marginRight: 12,
   },
   icon: {
-    // 9. AJUSTE: Cor do ícone vinda do tema
-    color: theme.buttonBackground, 
+    color: theme.background, // Cor do ícone em contraste (fundo)
   },
   texts: {
     maxWidth: "78%",
   },
   title: {
-    fontSize: 15,
+    fontSize: 16, // Um pouco maior
     fontWeight: "700",
     color: theme.text,
   },
   subtitle: {
-    fontSize: 12,
-    color:theme.subtitle,
+    fontSize: 13,
+    color: theme.subtitle,
     marginTop: 3,
   },
   separator: {
-    height: 10,
+    height: 8, // Separador um pouco menor
   },
-  // (Estilos de 'primaryButton' não usados, mantidos)
-  primaryButton: {
-    backgroundColor: theme.buttonBackground, // Corrigido
-    paddingVertical: 14,
-    borderRadius: 12,
-    alignItems: "center",
-    marginVertical: 18,
-  },
-  primaryButtonText: {
-    color: theme.text, // Corrigido
-    fontWeight: "700",
-    fontSize: 15,
-  },
+  // ... (Outros estilos)
 });

@@ -48,6 +48,7 @@ const Index = () => {
   }: MenuCardProps) => (
     <TouchableOpacity style={styles.card} onPress={onPress}>
       <View style={[styles.iconContainer, { backgroundColor: iconBgColor }]}>
+        <Spacer/>
         <Image
           source={APANLOGO}
           style={{ width: 25, height: 24, tintColor: iconColor }}

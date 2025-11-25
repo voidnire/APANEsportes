@@ -24,6 +24,7 @@ import { Colors } from '@/constants/Colors';
 import { AtletaResumido, MetricaEntrada, Modalidade, TipoMetrica } from '@/models/atletas';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import ThemedTextInput from '@/components/ThemedTextInput';
+import Spacer from '@/components/Spacer';
 
 type Theme = typeof Colors.light | typeof Colors.dark;
 const screenWidth = Dimensions.get('window').width;
@@ -269,6 +270,7 @@ const [dataHora, setDataHora] = useState<Date>(new Date());
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+      <Spacer/>
       <Text style={styles.title}>Registrar Novo Treino</Text>
 
       <View style={styles.inputRow}>

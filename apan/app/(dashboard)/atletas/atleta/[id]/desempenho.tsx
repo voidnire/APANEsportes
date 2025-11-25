@@ -18,6 +18,8 @@ import { RegistroAvaliacaoCompleto } from "@/models/atletas";
 import { LineChart } from "react-native-chart-kit";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import ThemedText from "@/components/ThemedText";
+import Spacer from "@/components/Spacer";
+import ThemedButton from "@/components/ThemedButton";
 
 type Theme = typeof Colors.light | typeof Colors.dark;
 const screenWidth = Dimensions.get("window").width;
@@ -187,9 +189,19 @@ export default function DesempenhoScreen() {
 
   const modalitiesArray = useMemo(() => Object.entries(modalitiesMap).map(([id, val]) => ({ id, ...val })), [modalitiesMap]);
 
+  const handleAvaliacao = () => {
+    router.push({
+      pathname: "/(dashboard)/testes/registrarTreino",
+      params: { atletaId: id } // opcional
+    });
+
+    console.log('Registrar treino do atleta:', id);
+  };
+
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
       {/* filtros */}
+      <Spacer/>
       <View style={styles.filtersContainer}>
         <View style={styles.filterRow}>
           <Text style={styles.filterLabel}>Período</Text>
@@ -234,6 +246,8 @@ export default function DesempenhoScreen() {
       ) : Object.keys(modalitiesMap).length === 0 ? (
         <View style={{ padding: 24, alignItems: "center" }}>
           <Text style={{ color: theme.subtitle }}>Nenhuma avaliação disponível para este atleta / filtro.</Text>
+          <Spacer/>
+          <ThemedButton onPress={handleAvaliacao}><ThemedText>Adicionar Avaliação</ThemedText></ThemedButton>
         </View>
       ) : (
         <View style={styles.chartsArea}>

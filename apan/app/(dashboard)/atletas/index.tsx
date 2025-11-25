@@ -17,6 +17,8 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { AtletaResumido } from "@/models/atletas";
 import { Colors } from "@/constants/Colors"; // Para o tipo 'Theme'
 import AtletaService from '@/services/atleta';
+import atleta from "@/services/atleta";
+import Spacer from "@/components/Spacer";
 
 type Theme = typeof Colors.light | typeof Colors.dark;
 
@@ -81,6 +83,16 @@ export default function Atletas() {
   return (
     <View style={styles.container}>
       <View style={styles.section}>
+
+        {atleta && atletass.length === 0 && !loading && (
+          <View style={[styles.section,{ alignItems: 'center', justifyContent: 'center' }]}>
+            <Text style={{ color: theme.subtitle, textAlign: 'center', marginTop: 20 }}>
+              Nenhum atleta encontrado. Adicione um novo atleta usando o botão abaixo.
+            </Text>
+          </View>
+          
+        ) }
+        <Spacer />
         <FlatList
           data={atletass}
           keyExtractor={(t) => String(t.id)}

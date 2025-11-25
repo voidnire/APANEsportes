@@ -5,6 +5,7 @@ import React, { useContext } from 'react'; // 1. Importar o 'useContext'
 import UserOnly from '@/components/auth/UserOnly';
 // 2. Importar o Contexto e o Tipo (em vez de 'Colors' e 'useColorScheme')
 import { ThemeContext, ThemeContextType } from "@/context/ThemeContext";
+import { StatusBar } from 'react-native';
 
 const DashboardLayout = () => {
     // 3. Consumir o tema do contexto (como fizemos no layout pai)
@@ -18,6 +19,7 @@ const DashboardLayout = () => {
     return (
         
         <UserOnly>
+            <StatusBar/>
         <Tabs
             screenOptions={{
                 tabBarActiveTintColor: theme.tint,      // Cor do ícone ativo

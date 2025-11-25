@@ -68,6 +68,7 @@ export function UserProvider({ children }: UserProviderProps) {
 
       // 2. Extrai o 'user' e o 'token' da resposta (como o backend envia)
       const { user, token } = response.data;
+      console.log("Resposta de login recebida:", response.data);
 
       if (!user || !token) {
         throw new Error("Resposta de login inválida do servidor.");
@@ -95,7 +96,8 @@ export function UserProvider({ children }: UserProviderProps) {
   async function register(nomeCompleto: string, email: string, senha: string): Promise<{ success: boolean; user?: User; error?: string }> {
     try {
       setLoading(true);
-      
+      console.log("Tentando registrar:", nomeCompleto, email);
+
       await apiClient.post("auth/signup", {
         nomeCompleto: nomeCompleto,
         email: email,
@@ -107,9 +109,41 @@ export function UserProvider({ children }: UserProviderProps) {
       return loginResult;
       
     } catch (error: any) {
-      const message = error.response?.data?.message || error.message || "Erro ao criar conta";
-      Alert.alert("Erro no Cadastro", message);
-      return { success: false, error: message };
+      console.log("Erro no registro:", error);
+
+      if (error.response && error.response.status === 400) {
+
+        const errorData = error.response.data;
+        console.log("Dados de erro de validação:", errorData);
+        
+        // Verifica se o objeto 'fieldErrors' existe na resposta
+        if (errorData.fieldErrors) {
+          let validationError = '';
+          
+          // Verifica se há erro no campo 'email'
+          if (errorData.fieldErrors.email) {
+            validationError = errorData.fieldErrors.email;
+          } 
+          // Se não for email, verifica se há erro no campo 'password'
+          else if (errorData.fieldErrors.password) {
+            validationError = errorData.fieldErrors.password;
+          }
+          if (validationError) {
+            // Exibe a mensagem de erro específica da API para o usuário
+            alert(`Falha na validação: ${validationError}`);
+          }else {
+            // Erro 400 genérico (pode acontecer se a API retornar 'fieldErrors' 
+            // mas sem os campos esperados 'email' ou 'password')
+            alert('Erro de validação com campos inesperados. Verifique os dados.');
+          }
+        } else {
+          // Erro 400 que não contém o objeto 'fieldErrors'
+          alert('Erro de requisição inválida. Tente novamente ou contate o suporte.');
+        }
+      
+      }
+      
+      return { success: false };
     } finally {
       setLoading(false);
     }
