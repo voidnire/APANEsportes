@@ -54,6 +54,7 @@ const HomeScreen = () => {
   // 9. AJUSTE: Tipagem das props
   const MenuCard = ({ iconName, iconColor, iconBgColor, title, subtitle, onPress }: MenuCardProps) => (
   <TouchableOpacity style={styles.card} onPress={onPress}>
+    
     <View style={[styles.iconContainer, { backgroundColor: iconBgColor }]}>
       <Image
         source={APANLOGO}
@@ -71,6 +72,7 @@ const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
+        <Spacer/>
         {/* Cabeçalho */}
         <View style={styles.header}>
           <Image source={APANLOGO}    
@@ -101,14 +103,6 @@ const HomeScreen = () => {
             title="Consultar Desempenho"
             subtitle="View and analyze athlete performance over time"
             onPress={() => console.log('Dashboard pressed')}
-          />
-          <MenuCard
-            iconName="settings-sharp"
-            iconColor="#555555"
-            iconBgColor="#F4F4F4"
-            title="Configurações"
-            subtitle="Manage sensors, profiles, and export data"
-            onPress={() => console.log('Settings pressed')}
           />
         </View>
 

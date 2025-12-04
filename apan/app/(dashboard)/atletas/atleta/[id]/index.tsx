@@ -21,6 +21,9 @@ import AtletaService from '@/services/atleta';
 import { Colors } from '@/constants/Colors';
 import Spacer from '@/components/Spacer';
 
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+
+
 type Theme = typeof Colors.light | typeof Colors.dark;
 const screenWidth = Dimensions.get('window').width;
 
@@ -243,25 +246,35 @@ export default function PerfilAtleta() {
         </View>
       </View>
 
-      {/* Edit button */}
-      <Pressable style={styles.editButton} onPress={handleEdit}>
-        <Text style={styles.editButtonText}>Editar</Text>
-      </Pressable>
+      <View style={{ width: "100%", marginTop: 20 }}>
+  
+  {/* Linha 1: Editar / Excluir */}
+  <View style={styles.rowButtons}>
+    <Pressable style={styles.actionButton} onPress={handleEdit}>
+      <Ionicons name="create-outline" size={20} color="#fff" />
+      <Text style={styles.actionButtonText}>Editar</Text>
+    </Pressable>
 
-      {/* Excluir button */}
-      <Pressable style={styles.editButton} onPress={handleDelete}>
-        <Text style={styles.editButtonText}>Excluir</Text>
-      </Pressable>
+    <Pressable style={[styles.actionButton, { backgroundColor: "red" }]} onPress={handleDelete}>
+      <Ionicons name="trash-outline" size={20} color="#fff" />
+      <Text style={styles.actionButtonText}>Excluir</Text>
+    </Pressable>
+  </View>
 
-      {/* Ver desempenho tela */}
-      <Pressable style={styles.editButton} onPress={handleDesempenho}>
-        <Text style={styles.editButtonText}>Desempenho</Text>
-      </Pressable>
+  {/* Linha 2: Desempenho / Treino */}
+  <View style={styles.rowButtons}>
+    <Pressable style={styles.actionButton} onPress={handleDesempenho}>
+      <Ionicons name="bar-chart-outline" size={20} color="#fff" />
+      <Text style={styles.actionButtonText}>Desempenho</Text>
+    </Pressable>
 
-      {/* Registrar treino */}
-      <Pressable style={styles.editButton} onPress={handleTreino}>
-        <Text style={styles.editButtonText}>Novo Treino</Text>
-      </Pressable>
+    <Pressable style={styles.actionButton} onPress={handleTreino}>
+      <Ionicons name="fitness-outline" size={20} color="#fff" />
+      <Text style={styles.actionButtonText}>Novo Treino</Text>
+    </Pressable>
+  </View>
+
+</View>
 
       <View style={{ height: 40 }} />
     </ScrollView>
@@ -296,6 +309,31 @@ function createStyles(theme: Theme) {
   const primary = theme.buttonBackground;
 
   return StyleSheet.create({
+    rowButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    marginBottom: 12,
+  },
+
+  actionButton: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: theme.buttonBackground,
+    paddingVertical: 12,
+    borderRadius: 10,
+    marginHorizontal: 6,
+    gap: 8,
+  },
+
+  actionButtonText: {
+    color: "#fff",
+    fontWeight: "700",
+    fontSize: 14,
+  },
+
     container: {
       flex: 1,
       backgroundColor: theme.background,
@@ -400,17 +438,6 @@ function createStyles(theme: Theme) {
       fontSize: 12,
       color: muted,
     },
-    editButton: {
-      marginTop: 12,
-      backgroundColor: theme.buttonBackground,
-      paddingVertical: 10,
-      paddingHorizontal: 18,
-      borderRadius: 8,
-    },
-    editButtonText: {
-      color: theme.text,
-      fontWeight: '700',
-      fontSize: 14,
-    },
+
   });
 }

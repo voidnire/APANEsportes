@@ -19,6 +19,7 @@ import ThemedButton from "@/components/ThemedButton";
 
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
+import { useAtletaMutate } from "@/hooks/useAtletaMutate";
 
 type Theme = typeof Colors.light | typeof Colors.dark;
 
@@ -40,7 +41,7 @@ export default function RegistrarDados() {
   const [mostrarPicker, setMostrarPicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
 
-
+  const {mutate, isSuccess} = useAtletaMutate(); 
   
 
   const onChangeData = (event: any, selectedDate?: Date) => {
@@ -72,32 +73,21 @@ export default function RegistrarDados() {
   const handleSalvar = async () => {
     if (!validar() || loading) return;
 
-    Keyboard.dismiss();
-    setLoading(true);
-
-    try {
-      // Chama o serviço com os dados do DTO
-      await AtletaService.createAtleta({
+    const atletaData ={
         nomeCompleto: nomeCompleto.trim(),
         dataNascimento: dataNascimento.trim() || new Date().toISOString().split('T')[0], // Envia data de hoje se vazio
-      });
-      
-
-      Alert.alert("Sucesso", "Atleta cadastrado.", [
-        {
-          text: "OK",
-          onPress: () => router.back(), // Volta para a lista
-        },
-      ]);
-
-    } catch (err: any) {
-      console.error("Erro ao salvar atleta:", err);
-      const message = err.response?.data?.message || err.message || "Não foi possível salvar o atleta.";
-      Alert.alert("Erro", message);
-    } finally {
-      setLoading(false);
     }
+
+    mutate(atletaData)
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      Alert.alert("Sucesso", "Atleta registrado com sucesso!", [
+        { text: "OK", onPress: () => router.back() },
+      ]);
+    }
+  }, [isSuccess,router]); 
 
   return (
     // 5. AJUSTE: UI reescrita com componentes temáticos

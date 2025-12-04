@@ -109,10 +109,8 @@ export default function HomeScreenClean() {
   return (
     <SafeAreaView style={styles.safe}>
       {/* Você pode adicionar aqui um título geral para a seção de avaliações */}
-      <Text style={[styles.sectionTitle, { paddingHorizontal: 20 }]}>
-        Módulos de Avaliação
-      </Text>
-      <Spacer height={10} />
+
+      <Spacer />
 
       <View style={styles.section}>
         <FlatList

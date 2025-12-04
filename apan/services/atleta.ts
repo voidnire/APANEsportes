@@ -125,6 +125,7 @@ class AtletaService {
   async getAllAvaliacoes(): Promise<RegistroAvaliacaoCompleto[]> {
     try {
       // Esta rota (sem query) retorna todas as avaliações
+      console.log("buscando todas as avaliações...");
       const response = await apiClient.get<RegistroAvaliacaoCompleto[]>('/avaliacoes');
       return response.data;
     } catch (error) {

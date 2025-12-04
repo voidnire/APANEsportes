@@ -71,7 +71,7 @@ const DashboardLayout = () => {
                     tabBarLabel: "Desempenho",
                     title: "Desempenho",
                     tabBarIcon: ({ color, size }) => (
-                        <MaterialIcons name="people" size={size} color={color} />
+                        <MaterialIcons name="area-chart" size={size} color={color} />
                     ), 
                 }} 
             />
