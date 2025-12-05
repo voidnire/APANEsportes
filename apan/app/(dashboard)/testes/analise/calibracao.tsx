@@ -14,7 +14,8 @@ import { Colors } from '@/constants/Colors';
 type Theme = typeof Colors.light | typeof Colors.dark;
 
 export default function CalibracaoScreen() {
-  const { videoUri } = useLocalSearchParams();
+  const { videoUri, atletaId } = useLocalSearchParams();
+  
   const router = useRouter();
   const themeContext = useContext<ThemeContextType | null>(ThemeContext);
   const { theme } = themeContext!;
@@ -70,6 +71,37 @@ export default function CalibracaoScreen() {
     setPoints([...points, { x: locationX, y: locationY, videoX: realCoords.x, videoY: realCoords.y }]);
   };
 
+  // --- NOVA LÓGICA DE POLLING (CHECAGEM PERIÓDICA) ---
+  const checkStatus = async (jobId: string) => {
+    const statusUrl = `https://api.runpod.ai/v2/${RUNPOD_ID}/status/${jobId}`;
+    
+    // Tenta por no máximo 5 minutos (150 tentativas de 2s)
+    for (let i = 0; i < 150; i++) {
+        try {
+            const response = await fetch(statusUrl, {
+                headers: { "Authorization": `Bearer ${RUNPOD_API_KEY}` }
+            });
+            const statusData = await response.json();
+
+            console.log(`Tentativa ${i+1}: Status ${statusData.status}`);
+
+            if (statusData.status === "COMPLETED") {
+                return statusData.output;
+            } else if (statusData.status === "FAILED") {
+                throw new Error(statusData.error || "Falha no processamento da IA");
+            }
+
+            // Se estiver IN_QUEUE ou IN_PROGRESS, espera 2 segundos e tenta de novo
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+        } catch (error) {
+            console.error("Erro no polling:", error);
+            throw error; // Repassa o erro para parar o loop
+        }
+    }
+    throw new Error("Tempo limite excedido. O vídeo é muito longo?");
+  };
+
   const handleAnalysis = async () => {
     if (points.length < 2) {
         Alert.alert("Atenção", "Marque pelo menos 2 pontos.");
@@ -80,38 +112,27 @@ export default function CalibracaoScreen() {
     setLoadingText("Enviando vídeo...");
 
     try {
-        // 1. UPLOAD PARA CLOUDINARY USANDO FETCH + FORMDATA
-        // (Isso substitui o FileSystem e resolve o problema de memória e deprecation)
+        // 1. UPLOAD PARA CLOUDINARY
         const uploadUrl = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/video/upload`;
-        
         const formData = new FormData();
         formData.append('upload_preset', UPLOAD_PRESET);
-        
-        // O React Native sabe lidar com esse objeto { uri, type, name } 
-        // e faz o streaming do arquivo sem travar o celular.
         formData.append('file', {
             uri: videoUri,
             type: 'video/mp4', 
             name: 'upload.mp4',
         } as any); 
 
-        const uploadResponse = await fetch(uploadUrl, {
-            method: 'POST',
-            body: formData,
-        });
+        const uploadResponse = await fetch(uploadUrl, { method: 'POST', body: formData });
 
         if (!uploadResponse.ok) {
-            const errorText = await uploadResponse.text();
-            console.error("Erro Cloudinary:", errorText);
-            throw new Error("Falha no upload do vídeo. Verifique sua internet.");
+            throw new Error("Falha no upload do vídeo.");
         }
 
         const cloudinaryData = await uploadResponse.json();
         const videoUrl = cloudinaryData.secure_url;
-        console.log("Vídeo hospedado em:", videoUrl);
-
-        // 2. ENVIAR PARA RUNPOD
-        setLoadingText("Processando IA...");
+        
+        // 2. INICIAR JOB NO RUNPOD (ASYNC)
+        setLoadingText("Iniciando IA...");
         
         let refPointData = null;
         if (points.length === 3) refPointData = [points[2].videoX, points[2].videoY];
@@ -128,7 +149,8 @@ export default function CalibracaoScreen() {
             }
         };
 
-        const response = await fetch(`https://api.runpod.ai/v2/${RUNPOD_ID}/runsync`, {
+        // MUDANÇA: Endpoint '/run' em vez de '/runsync'
+        const runResponse = await fetch(`https://api.runpod.ai/v2/${RUNPOD_ID}/run`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -137,16 +159,22 @@ export default function CalibracaoScreen() {
             body: JSON.stringify(payload)
         });
 
-        const data = await response.json();
-        
-        if (data.status === "FAILED") {
-            console.error("Erro RunPod:", data);
-            throw new Error(data.error || "Erro no processamento do RunPod");
-        }
+        const runData = await runResponse.json();
+        const jobId = runData.id;
+
+        if (!jobId) throw new Error("Falha ao iniciar job na IA");
+
+        // 3. POLLING DO STATUS
+        setLoadingText("Processando IA...");
+        const finalOutput = await checkStatus(jobId);
 
         router.push({
             pathname: "/(dashboard)/testes/analise/dashboard",
-            params: { resultData: JSON.stringify(data.output) }
+            params: { 
+                resultData: JSON.stringify(finalOutput),
+                videoUrl: videoUrl,
+                atletaId: atletaId 
+            }
         });
 
     } catch (err: any) {

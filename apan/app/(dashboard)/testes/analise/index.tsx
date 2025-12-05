@@ -1,7 +1,7 @@
 // (dashboard)/testes/analise/selecaoVideo.tsx
 import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, Alert, TouchableOpacity } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router'; // <--- Importe useLocalSearchParams
 import * as ImagePicker from 'expo-image-picker';
 import { Video, ResizeMode } from 'expo-av';
 import { Ionicons } from '@expo/vector-icons';
@@ -17,6 +17,9 @@ export default function SelecaoVideoScreen() {
   const { theme } = themeContext!;
   const styles = createStyles(theme);
   const router = useRouter();
+
+  // CORREÇÃO 1: Capturar o atletaId que veio da tela anterior
+  const { atletaId } = useLocalSearchParams();
 
   const [videoUri, setVideoUri] = useState<string | null>(null);
 
@@ -53,9 +56,14 @@ export default function SelecaoVideoScreen() {
 
   const handleNext = () => {
     if (!videoUri) return;
+    
+    // CORREÇÃO 2: Repassar o atletaId para a Calibração
     router.push({
       pathname: "/(dashboard)/testes/analise/calibracao",
-      params: { videoUri }
+      params: { 
+        videoUri,
+        atletaId // <--- Passando adiante!
+      }
     });
   };
 
