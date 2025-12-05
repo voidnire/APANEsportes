@@ -230,6 +230,28 @@ export default function VideoDashboardScreen() {
     );
   };
 
+  const handleCancelar = () => {
+      // Aqui você chamaria o serviço para deletar o atleta
+      console.log('Cancelar treino atual.');
+      Alert.alert("Cancelar Treino?", 
+        "Tem certeza que deseja cancelar o treino?",
+        [
+          {
+            text: "Cancelar",
+            style: "cancel"
+          },
+          {
+            text: "Sim, cancelar treino",
+            style: "destructive",
+            onPress: async () => {
+              router.dismissAll(); // apenas sai da tela
+         
+            }
+          }
+        ]
+      );
+    }
+
   // === Preparação Gráfica ===
   const runSeries = data.series?.speed_m_s || [];
   const jumpSeries = data.series?.jump_speed_m_s || [];
@@ -471,6 +493,9 @@ export default function VideoDashboardScreen() {
 
       <Spacer height={40} />
     </ScrollView>
+
+        
+
   );
 }
 
