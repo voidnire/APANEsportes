@@ -49,11 +49,7 @@ const Index = () => {
     <TouchableOpacity style={styles.card} onPress={onPress}>
       <View style={[styles.iconContainer, { backgroundColor: iconBgColor }]}>
         <Spacer/>
-        <Image
-          source={APANLOGO}
-          style={{ width: 25, height: 24, tintColor: iconColor }}
-          resizeMode="cover"
-        />
+
       </View>
       <View style={styles.cardTextContainer}>
         <ThemedText style={styles.cardTitle} title={true}>
@@ -69,7 +65,7 @@ const Index = () => {
       <ScrollView contentContainerStyle={styles.container}>
         {/* Cabeçalho */}
         <View style={styles.header}>
-          <Image source={APANLOGO} style={{ width: 50, height: 50 }} />
+          <Image source={APANLOGO} style={{ maxHeight:55, width:60 }} />
           <ThemedText style={styles.headerSubtitle}>
             Monitoramento de Atletas
           </ThemedText>

@@ -6,6 +6,7 @@ import { ThemeContext } from '@/context/ThemeContext';
 import Spacer from '@/components/Spacer';
 import ThemedButton from '@/components/ThemedButton';
 import { AnalysisResult } from '@/models/analysis'; 
+import { ThemedText } from '@/components/themed-text';
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -32,6 +33,28 @@ export default function VideoDashboardScreen() {
         </Text>
     </View>
   );
+
+  const handleCancelar = () => {
+      // Aqui você chamaria o serviço para deletar o atleta
+      console.log('Cancelar treino atual.');
+      Alert.alert("Cancelar Treino?", 
+        "Tem certeza que deseja cancelar o treino?",
+        [
+          {
+            text: "Cancelar",
+            style: "cancel"
+          },
+          {
+            text: "Sim, cancelar treino",
+            style: "destructive",
+            onPress: async () => {
+              router.dismissAll(); // apenas sai da tela
+         
+            }
+          }
+        ]
+      );
+    }
 
   // === Preparação Gráfica ===
   const runSeries = data.series?.speed_m_s || [];
@@ -130,16 +153,26 @@ export default function VideoDashboardScreen() {
         )}
       </View>
 
-      <Spacer height={20} />
       <ThemedButton 
-        title="Salvar Treino" 
+        style={styles.salvarButton}
         onPress={() => {
             Alert.alert("Sucesso", "Dados salvos no histórico do atleta.");
             router.dismissAll();
-        }} 
-      />
-      <Spacer height={40} />
+        }} >
+          <ThemedText style={styles.salvarButtonText}>Salvar Treino</ThemedText>
+        </ThemedButton>
+  
+      <Spacer height={5} />
+      <ThemedButton 
+        style={[styles.salvarButton,{backgroundColor: 'red'}]}
+        onPress={() => handleCancelar()} >
+          <ThemedText style={styles.salvarButtonText}>Cancelar</ThemedText>
+        </ThemedButton>
+
     </ScrollView>
+
+        
+
   );
 }
 
@@ -193,4 +226,22 @@ const createStyles = (theme: any) => StyleSheet.create({
   rowLabel: { color: theme.subtitle, fontSize: 14 },
   rowValue: { color: theme.text, fontSize: 14, fontWeight: '600' },
   divider: { height: 1, backgroundColor: theme.cardBorder, marginVertical: 8 },
+
+
+  salvarButton: {
+    backgroundColor: theme.buttonBackground,
+    paddingVertical: 18,
+    paddingHorizontal: 32,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 'auto',
+    paddingTop: 18,
+    marginBottom: 10,
+  },
+  salvarButtonText: {
+    color: theme.text,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
