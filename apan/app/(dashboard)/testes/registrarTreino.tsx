@@ -1,3 +1,4 @@
+//testes/registrarTreino.tsx
 import React, { useContext, useState, useEffect, useCallback } from 'react';
 import {
   View,

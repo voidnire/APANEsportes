@@ -1,3 +1,4 @@
+// (dashboard)/atletas/atleta/[id]/index.tsx
 import React, { useContext, useState, useEffect, useCallback } from 'react';
 import {
   View,

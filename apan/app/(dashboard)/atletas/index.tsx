@@ -1,4 +1,4 @@
-// screens/Atletas.tsx (ou app/(dashboard)/atletas/index.tsx conforme sua estrutura)
+// app/(dashboard)/atletas/index.tsx
 import React, { useContext } from 'react';
 import {
   View,
