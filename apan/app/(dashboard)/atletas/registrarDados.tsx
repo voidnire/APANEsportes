@@ -1,4 +1,4 @@
-// (Arquivo: dashboard/atletas/registrarDados.tsx)
+// (dashboard)/atletas/registrarDados.tsx
 import React, { useContext, useState,useEffect } from "react";
 import {
   StyleSheet,

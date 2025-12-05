@@ -1,4 +1,4 @@
-// Desempenho.tsx (versão robusta para formatos variados de `resultados`)
+// desempenho/index.tsx (versão robusta para formatos variados de `resultados`)
 import React, { useContext, useState, useEffect, useMemo, useCallback } from "react";
 import {
   View,
