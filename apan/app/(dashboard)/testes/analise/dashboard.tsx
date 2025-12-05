@@ -1,18 +1,3 @@
-import React, { useContext, useMemo } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Dimensions,
-  Alert,
-} from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { LineChart } from "react-native-chart-kit";
-import { ThemeContext } from "@/context/ThemeContext";
-import Spacer from "@/components/Spacer";
-import ThemedButton from "@/components/ThemedButton";
-import { AnalysisResult } from "@/models/analysis";
 import { ThemedText } from "@/components/themed-text";
 // (dashboard)/testes/analise/dashboard.tsx
 import React, { useContext, useMemo, useState } from "react";
@@ -37,12 +22,10 @@ const screenWidth = Dimensions.get("window").width;
 
 export default function VideoDashboardScreen() {
   const { resultData, videoUrl, atletaId, readOnly } = useLocalSearchParams();
-  const { resultData, videoUrl, atletaId, readOnly } = useLocalSearchParams();
   const { theme } = useContext(ThemeContext)!;
   const styles = createStyles(theme);
   const router = useRouter();
 
-  const [isSaving, setIsSaving] = useState(false);
 
   const [isSaving, setIsSaving] = useState(false);
 
@@ -52,18 +35,9 @@ export default function VideoDashboardScreen() {
     } catch {
       return null;
     }
-    try {
-      return typeof resultData === "string" ? JSON.parse(resultData) : null;
-    } catch {
-      return null;
-    }
   }, [resultData]);
 
-  if (!data)
-    return (
-      <View style={styles.container}>
-        <Text style={{ color: theme.text, textAlign: "center", marginTop: 50 }}>
-          Aguardando dados... ou erro ao carregar.
+ 
   const handleAutoSave = async () => {
     if (!data || !atletaId) {
       Alert.alert("Erro", "Faltam dados para salvar.");
@@ -184,12 +158,8 @@ export default function VideoDashboardScreen() {
         </Text>
       </View>
     );
-      </View>
-    );
 
-  // Mantém a lógica de gráficos igual...
   const handleCancelar = () => {
-    // Aqui você chamaria o serviço para deletar o atleta
     console.log("Cancelar treino atual.");
     Alert.alert(
       "Cancelar Treino?",
@@ -209,48 +179,7 @@ export default function VideoDashboardScreen() {
       ]
     );
   };
-    // Aqui você chamaria o serviço para deletar o atleta
-    console.log("Cancelar treino atual.");
-    Alert.alert(
-      "Cancelar Treino?",
-      "Tem certeza que deseja cancelar o treino?",
-      [
-        {
-          text: "Cancelar",
-          style: "cancel",
-        },
-        {
-          text: "Sim, cancelar treino",
-          style: "destructive",
-          onPress: async () => {
-            router.dismissAll(); // apenas sai da tela
-          },
-        },
-      ]
-    );
-  };
-
-  const handleCancelar = () => {
-      // Aqui você chamaria o serviço para deletar o atleta
-      console.log('Cancelar treino atual.');
-      Alert.alert("Cancelar Treino?", 
-        "Tem certeza que deseja cancelar o treino?",
-        [
-          {
-            text: "Cancelar",
-            style: "cancel"
-          },
-          {
-            text: "Sim, cancelar treino",
-            style: "destructive",
-            onPress: async () => {
-              router.dismissAll(); // apenas sai da tela
-         
-            }
-          }
-        ]
-      );
-    }
+ 
 
   // === Preparação Gráfica ===
   const runSeries = data.series?.speed_m_s || [];
@@ -270,10 +199,6 @@ export default function VideoDashboardScreen() {
     }
     return "";
   });
-  const chartPoints = runSeries.filter((_, i) => i % 4 === 0);
-  const chartLabels = chartPoints.map((_, i) =>
-    i % 10 === 0 ? ((i * 4) / data.fps).toFixed(1) + "s" : ""
-  );
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
@@ -292,6 +217,7 @@ export default function VideoDashboardScreen() {
           value={data.speed?.velocity_max_m_s?.toFixed(2) ?? "0.00"}
           unit="m/s"
           theme={theme}
+        />
         <KPICard
           label="Vel. Máxima"
           value={data.speed?.velocity_max_m_s?.toFixed(2) ?? "0.00"}
@@ -308,16 +234,6 @@ export default function VideoDashboardScreen() {
           unit="cm"
           theme={theme}
           highlight
-        <KPICard
-          label="Salto"
-          value={
-            data.jump?.has_jump
-              ? (data.jump.jump_height_m * 100).toFixed(1)
-              : "--"
-          }
-          unit="cm"
-          theme={theme}
-          highlight
         />
         <KPICard
           label="Cadência"
@@ -326,11 +242,6 @@ export default function VideoDashboardScreen() {
               ? data.stride.stride_cadence_hz.toFixed(1)
               : "--"
           }
-          unit="Hz"
-          theme={theme}
-        <KPICard
-          label="Cadência"
-          value={data.stride?.stride_cadence_hz?.toFixed(1) ?? "--"}
           unit="Hz"
           theme={theme}
         />
@@ -361,35 +272,11 @@ export default function VideoDashboardScreen() {
             bezier
             style={{ borderRadius: 16 }}
           />
-          <LineChart
-            data={{ labels: chartLabels, datasets: [{ data: chartPoints }] }}
-            width={screenWidth - 48}
-            height={220}
-            yAxisSuffix="m/s"
-            yAxisInterval={1}
-            chartConfig={{
-              backgroundColor: theme.cardBackground,
-              backgroundGradientFrom: theme.cardBackground,
-              backgroundGradientTo: theme.cardBackground,
-              decimalPlaces: 1,
-              color: (opacity = 1) => theme.buttonBackground,
-              labelColor: (opacity = 1) => theme.subtitle,
-              style: { borderRadius: 16 },
-              propsForDots: { r: "0" },
-            }}
-            bezier
-            style={{ borderRadius: 16 }}
-          />
         ) : (
           <Text
             style={{ color: theme.subtitle, textAlign: "center", margin: 20 }}
           >
-            Dados insuficientes para gráfico
-          </Text>
-          <Text
-            style={{ textAlign: "center", margin: 20, color: theme.subtitle }}
-          >
-            Sem dados
+            Dados insuficientes para gráfico.
           </Text>
         )}
       </View>
@@ -447,14 +334,6 @@ export default function VideoDashboardScreen() {
               theme={theme}
             />
           </>
-          <>
-            <View style={styles.divider} />
-            <Row
-              label="Voo"
-              value={`${data.jump.jump_duration_s.toFixed(2)} s`}
-              theme={theme}
-            />
-          </>
         )}
       </View>
 
@@ -481,10 +360,13 @@ export default function VideoDashboardScreen() {
       {readOnly !== "true" && (
         <>
           <ThemedButton
-            title={isSaving ? "Salvando..." : "Salvar no Histórico"}
             onPress={handleAutoSave}
             disabled={isSaving}
-          />
+          >
+            <ThemedText>
+              {isSaving ? "Salvando..." : "Salvar no Histórico"}
+            </ThemedText>
+          </ThemedButton>
           {isSaving && (
             <ActivityIndicator style={{ marginTop: 10 }} color={theme.text} />
           )}
@@ -521,25 +403,6 @@ const KPICard = ({ label, value, unit, theme, highlight }: any) => (
       <Text style={createStyles(theme).kpiUnit}>{unit}</Text>
     </View>
   </View>
-  <View
-    style={[
-      createStyles(theme).kpiCard,
-      highlight && { borderColor: theme.buttonBackground, borderWidth: 1.5 },
-    ]}
-  >
-    <Text style={createStyles(theme).kpiLabel}>{label}</Text>
-    <View style={{ flexDirection: "row", alignItems: "baseline" }}>
-      <Text
-        style={[
-          createStyles(theme).kpiValue,
-          highlight && { color: theme.buttonBackground },
-        ]}
-      >
-        {value}
-      </Text>
-      <Text style={createStyles(theme).kpiUnit}>{unit}</Text>
-    </View>
-  </View>
 );
 
 const Row = ({ label, value, theme }: any) => (
@@ -547,13 +410,8 @@ const Row = ({ label, value, theme }: any) => (
     <Text style={createStyles(theme).rowLabel}>{label}</Text>
     <Text style={createStyles(theme).rowValue}>{value}</Text>
   </View>
-  <View style={createStyles(theme).row}>
-    <Text style={createStyles(theme).rowLabel}>{label}</Text>
-    <Text style={createStyles(theme).rowValue}>{value}</Text>
-  </View>
 );
 
-// CORREÇÃO: Nome alterado de 'styles' para 'createStyles' para bater com a chamada lá em cima
 const createStyles = (theme: any) =>
   StyleSheet.create({
     container: { flex: 1, backgroundColor: theme.background },
@@ -646,80 +504,5 @@ const createStyles = (theme: any) =>
       color: theme.text,
       fontSize: 16,
       fontWeight: "bold",
-    },
-  });
-
-const createStyles = (theme: any) =>
-  StyleSheet.create({
-    container: { flex: 1, backgroundColor: theme.background },
-    content: { padding: 20 },
-    title: { fontSize: 24, fontWeight: "800", color: theme.text },
-    subtitle: { fontSize: 14, color: theme.subtitle, marginBottom: 20 },
-    kpiContainer: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      marginBottom: 20,
-    },
-    kpiCard: {
-      width: "31%",
-      backgroundColor: theme.cardBackground,
-      padding: 12,
-      borderRadius: 12,
-      alignItems: "center",
-      borderWidth: 1,
-      borderColor: theme.cardBorder,
-      shadowColor: "#000",
-      shadowOpacity: 0.05,
-      shadowRadius: 5,
-      elevation: 2,
-    },
-    kpiLabel: {
-      fontSize: 11,
-      color: theme.subtitle,
-      marginBottom: 4,
-      textAlign: "center",
-    },
-    kpiValue: { fontSize: 20, fontWeight: "bold", color: theme.text },
-    kpiUnit: { fontSize: 12, color: theme.subtitle, marginLeft: 2 },
-    chartCard: {
-      backgroundColor: theme.cardBackground,
-      borderRadius: 16,
-      padding: 12,
-      marginBottom: 20,
-      borderWidth: 1,
-      borderColor: theme.cardBorder,
-    },
-    chartTitle: {
-      fontSize: 16,
-      fontWeight: "700",
-      color: theme.text,
-      marginBottom: 16,
-      marginLeft: 8,
-    },
-    detailsCard: {
-      backgroundColor: theme.cardBackground,
-      borderRadius: 16,
-      padding: 16,
-      marginBottom: 20,
-      borderWidth: 1,
-      borderColor: theme.cardBorder,
-    },
-    sectionTitle: {
-      fontSize: 16,
-      fontWeight: "700",
-      color: theme.text,
-      marginBottom: 12,
-    },
-    row: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      marginBottom: 10,
-    },
-    rowLabel: { color: theme.subtitle, fontSize: 14 },
-    rowValue: { color: theme.text, fontSize: 14, fontWeight: "600" },
-    divider: {
-      height: 1,
-      backgroundColor: theme.cardBorder,
-      marginVertical: 8,
     },
   });
