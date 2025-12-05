@@ -1,0 +1,188 @@
+[33mcommit f45848a42964bdcaf9f2b8ee0b870f33ced8ce66[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Erin Dante <83080103+voidnire@users.noreply.github.com>
+Date:   Fri Dec 5 20:43:38 2025 +0000
+
+    ajustes visuais/layout
+
+[33mcommit 7b3a36ef49cb8ebe78cd41b961b8f0537d4f60e7[m
+Author: Jos Leandro de Melo Sousa <leandrom@motorola.com>
+Date:   Fri Dec 5 01:21:29 2025 -0400
+
+    ajustes layout
+
+[33mcommit 14d6dbfe8e6108d55bcc2c2e6b3cce41b8f66e40[m[33m ([m[1;32mbackup-main[m[33m)[m
+Author: Erin Dante <83080103+voidnire@users.noreply.github.com>
+Date:   Fri Dec 5 20:43:38 2025 +0000
+
+    ajustes visuais/layout
+
+[33mcommit 3d088f94025c4d9170d8ff9a1e490793ac518069[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: bfa8b42 eaf1faa
+Author: José Leandro de Melo Sousa <95592703+leomds@users.noreply.github.com>
+Date:   Fri Dec 5 01:23:16 2025 -0400
+
+    Merge pull request #1 from voidnire/modelo-ia
+    
+    integrando modelo ia na branch modelo-ia
+
+[33mcommit eaf1faabdecfed98172f36082f26f4a946137906[m[33m ([m[1;31morigin/modelo-ia[m[33m)[m
+Author: Jos Leandro de Melo Sousa <leandrom@motorola.com>
+Date:   Fri Dec 5 01:21:29 2025 -0400
+
+    integrando modelo ia na branch modelo-ia
+
+[33mcommit bfa8b42813ffe75a6042955c14c9aa7ad2ab3d1c[m[33m ([m[1;32mlist[m[33m)[m
+Author: Erin Dante <83080103+voidnire@users.noreply.github.com>
+Date:   Thu Dec 4 20:20:16 2025 +0000
+
+    context e configs
+
+[33mcommit f76b607f4e2892c6cff3deaec015c3730e744454[m
+Author: Erin Dante <83080103+voidnire@users.noreply.github.com>
+Date:   Tue Nov 25 21:27:12 2025 +0000
+
+    tela configs init
+
+[33mcommit fdedcd625e67449d6523c7f9a4b7d285ee4e6426[m
+Author: Erin Dante <83080103+voidnire@users.noreply.github.com>
+Date:   Tue Nov 25 21:14:48 2025 +0000
+
+    retorno de erros, ddesempenho, fixes etc
+
+[33mcommit f1cf7103c23788967dcb933ef4b06988ca81c82b[m
+Author: Erin Dante <83080103+voidnire@users.noreply.github.com>
+Date:   Thu Nov 20 23:41:46 2025 +0000
+
+    ajuste nav do treino
+
+[33mcommit 6e86de34ee5f058259d396943a50074b8831101c[m
+Author: Erin Dante <83080103+voidnire@users.noreply.github.com>
+Date:   Thu Nov 20 23:23:33 2025 +0000
+
+    desempenho e registro de treino
+
+[33mcommit c476dedcbe0746a70dc1857489ec2ce2f8b1995e[m
+Author: Erin Dante <83080103+voidnire@users.noreply.github.com>
+Date:   Tue Nov 18 20:29:14 2025 +0000
+
+    wip tela registro treino
+
+[33mcommit e18703f59fc6a0b7e233dc2c3680cc036f6efaba[m
+Author: Erin Dante <83080103+voidnire@users.noreply.github.com>
+Date:   Sun Nov 16 21:09:37 2025 +0000
+
+    atleta e classificacao
+
+[33mcommit 747d90cf6f750dd2694ce7b59f13be2d5581f429[m
+Author: Erin Dante <83080103+voidnire@users.noreply.github.com>
+Date:   Sat Nov 15 03:45:01 2025 +0000
+
+    crud atleta pronto
+
+[33mcommit 4c29fc5449d8a084bc81021295a0e84cbd1437cc[m
+Author: erin <83080103+voidnire@users.noreply.github.com>
+Date:   Fri Nov 14 16:30:02 2025 -0400
+
+    semquerer
+
+[33mcommit 69821fb3f9f402d787ce22443547ab0d50e29a2a[m
+Author: erin <83080103+voidnire@users.noreply.github.com>
+Date:   Fri Nov 14 16:29:42 2025 -0400
+
+    Created using Colab
+
+[33mcommit 46ff3d1ac54763a0bc50dcae8e9aea16452c464d[m
+Author: Erin Dante <83080103+voidnire@users.noreply.github.com>
+Date:   Thu Nov 13 18:41:13 2025 +0000
+
+    daddos aux, começo editar atleta e classificacao
+
+[33mcommit b42223998d2a4aba98481db7bb90a9dc00dd670f[m
+Author: Erin Dante <83080103+voidnire@users.noreply.github.com>
+Date:   Thu Nov 13 05:54:46 2025 +0000
+
+    atletas e desempenho rearranged
+
+[33mcommit 32de1730aa2ef3d9a2117852afe3adf3f168a5d2[m
+Author: Erin Dante <83080103+voidnire@users.noreply.github.com>
+Date:   Thu Nov 13 02:33:41 2025 +0000
+
+    fluxo de login completo
+
+[33mcommit 826064b54c602463e80c97c34c6df22a7c843806[m
+Author: Josival Salvador <josivaljunior087@gmail.com>
+Date:   Wed Nov 12 19:25:59 2025 -0400
+
+    Ajustando front para corresponder com a api
+
+[33mcommit 66c289afa999e3be2131a1a745de872521351143[m
+Author: Erin Dante <83080103+voidnire@users.noreply.github.com>
+Date:   Wed Nov 12 19:04:50 2025 +0000
+
+    tentando conexão back + proxy
+
+[33mcommit 0be496c5b605ce361cd4a9a360068e7ff3483c05[m
+Author: Erin Dante <83080103+voidnire@users.noreply.github.com>
+Date:   Tue Nov 11 00:25:14 2025 +0000
+
+    user context init
+
+[33mcommit 4266166df5665fb1d79d44517e31ca582e52c469[m
+Author: Erin Dante <83080103+voidnire@users.noreply.github.com>
+Date:   Tue Nov 11 00:07:46 2025 +0000
+
+    auth screens e +1 component
+
+[33mcommit b0df8d2143df3f29584241f7dd6238ebd105b8a1[m
+Author: Erin Dante <83080103+voidnire@users.noreply.github.com>
+Date:   Mon Nov 10 01:23:18 2025 +0000
+
+    organizando telas e auth
+
+[33mcommit 06d0d56f20235b74b90b386b4df82b3e708b09f7[m
+Author: Erin Dante <83080103+voidnire@users.noreply.github.com>
+Date:   Sat Nov 8 21:28:35 2025 +0000
+
+    começo auth, themed components
+
+[33mcommit dc3d30fdfaba7219e66103facea4fa9e1f0a46c8[m
+Author: Erin Dante <83080103+voidnire@users.noreply.github.com>
+Date:   Sat Nov 8 19:24:54 2025 +0000
+
+    cores certa por theme
+
+[33mcommit 51c6c0f45b8ef4e41d59aacf6f0823b356e44412[m
+Author: Erin Dante <83080103+voidnire@users.noreply.github.com>
+Date:   Fri Nov 7 04:49:54 2025 +0000
+
+    limpezas
+
+[33mcommit 94f3af132df7dea83f56bca29852bdf2c6898c10[m
+Author: Erin Dante <83080103+voidnire@users.noreply.github.com>
+Date:   Fri Nov 7 04:46:12 2025 +0000
+
+    tela atletas + registro
+
+[33mcommit 22075b70375fc722eadd5f1febcb8f54a32cd60b[m
+Author: Erin Dante <83080103+voidnire@users.noreply.github.com>
+Date:   Fri Nov 7 00:30:22 2025 +0000
+
+    tela de atletas gg
+
+[33mcommit 82cab1e724b81655b248911f7513419760ce1cd7[m
+Author: Erin Dante <83080103+voidnire@users.noreply.github.com>
+Date:   Thu Nov 6 22:59:00 2025 +0000
+
+    conexao intratelas e dados mockados certos
+
+[33mcommit 07e2a93e3c29acf681e60215f52db662fd9e4512[m
+Author: Josival Salvador <josivaljunior087@gmail.com>
+Date:   Thu Nov 6 14:04:23 2025 -0400
+
+    Ajustando teste do controller de auth
+
+[33mcommit 2ecbabc3b33ac9bc2bb3c86f6b315c58e709055f[m
+Author: Josival Salvador <josivaljunior087@gmail.com>
+Date:   Thu Nov 6 13:57:03 2025 -0400
+
+    Ajustando login pra ser compativel com react native

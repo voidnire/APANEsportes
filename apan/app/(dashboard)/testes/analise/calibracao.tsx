@@ -37,6 +37,7 @@ export default function CalibracaoScreen() {
 
   const RUNPOD_ID = process.env.ENV_RUNPOD_ID;
   const RUNPOD_API_KEY = process.env.ENV_RUNPOD_API_KEY;  
+  
   // ====================================================================
 
   const calculateVideoCoordinates = (screenX: number, screenY: number) => {

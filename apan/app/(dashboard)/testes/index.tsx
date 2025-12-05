@@ -16,7 +16,7 @@ const MENU_ITEMS = [
     title: "Nova Análise de Salto/Potência/Velocidade", 
     subtitle: "Grave ou envie um vídeo para análise IA", 
     icon: "videocam" as const, 
-    screen: "/(dashboard)/testes/analise/selecaoVideo" // Rota nova
+    screen: "/(dashboard)/testes/analise" // Rota nova
   },
 ];
 
