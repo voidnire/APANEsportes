@@ -44,7 +44,7 @@ const DashboardLayout = () => {
             <Tabs.Screen 
                 name="testes" 
                 options={{ 
-                    tabBarLabel: "Testes",
+                    tabBarLabel: "Treino",
                     title: "Testes",
                     tabBarIcon: ({ color, size }) => (
                         <MaterialIcons name="sports-gymnastics" size={size} color={color} />
@@ -64,7 +64,7 @@ const DashboardLayout = () => {
                 }} 
             />
 
-
+            {/* 
             <Tabs.Screen 
                 name="desempenho" 
                 options={{ 
@@ -74,8 +74,7 @@ const DashboardLayout = () => {
                         <MaterialIcons name="area-chart" size={size} color={color} />
                     ), 
                 }} 
-            />
-
+            />*/}
 
             
             <Tabs.Screen 

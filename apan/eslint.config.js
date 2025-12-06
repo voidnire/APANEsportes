@@ -6,5 +6,9 @@ module.exports = defineConfig([
   expoConfig,
   {
     ignores: ['dist/*'],
+    rules: {
+    // outras regras...
+    'import/no-unresolved': ['error', { ignore: ['^@env$'] }]
+  }
   },
 ]);

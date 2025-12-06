@@ -13,7 +13,7 @@ import { Colors } from '@/constants/Colors';
 
 import { REACT_APP_CLOUD_NAME, REACT_APP_UPLOAD_PRESET
     ,REACT_APP_RUNPOD_ID, REACT_APP_RUNPOD_API_KEY
- } from "@env";
+ } from "@env"; 
 
 type Theme = typeof Colors.light | typeof Colors.dark;
 
