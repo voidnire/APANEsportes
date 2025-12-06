@@ -1,103 +1,147 @@
-// (dashboard)/testes/index.tsx
-import React, { useContext } from "react";
-import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router"; // Importante
+// (dashboard)/testes/analise/selecaoVideo.tsx
+import React, { useContext, useState } from 'react';
+import { View, Text, StyleSheet, Dimensions, Alert, TouchableOpacity } from 'react-native';
+import { useRouter, useLocalSearchParams } from 'expo-router'; // <--- Importe useLocalSearchParams
+import * as ImagePicker from 'expo-image-picker';
+import { Video, ResizeMode } from 'expo-av';
+import { Ionicons } from '@expo/vector-icons';
 
-import { ThemeContext, ThemeContextType } from "@/context/ThemeContext";
-import { Colors } from "@/constants/Colors";
-import Spacer from "@/components/Spacer";
+import { ThemeContext, ThemeContextType } from '@/context/ThemeContext';
+import { Colors } from '@/constants/Colors';
+import Spacer from '@/components/Spacer';
 
 type Theme = typeof Colors.light | typeof Colors.dark;
 
-const MENU_ITEMS = [
-  { 
-    id: "0", 
-    title: "Nova Análise de Salto/Potência/Velocidade", 
-    subtitle: "Grave ou envie um vídeo para análise IA", 
-    icon: "videocam" as const, 
-    screen: "/(dashboard)/testes/analise" // Rota nova
-  },
-];
-
-interface MenuRowProps {
-  title: string;
-  subtitle: string;
-  icon: keyof typeof Ionicons.glyphMap;
-  onPress: (screen: string) => void;
-  screen: string;
-}
-
-export default function HomeScreenClean() {
+export default function SelecaoVideoScreen() {
   const themeContext = useContext<ThemeContextType | null>(ThemeContext);
   const { theme } = themeContext!;
   const styles = createStyles(theme);
   const router = useRouter();
 
-  const handlePress = (screen: string) => {
-    // Se for uma rota válida do expo-router (começa com /), navega
-    if (screen.startsWith('/')) {
-        router.push(screen as any);
-    } else {
-        console.log("Tela ainda não implementada:", screen);
+  // CORREÇÃO 1: Capturar o atletaId que veio da tela anterior
+  const { atletaId } = useLocalSearchParams();
+
+  const [videoUri, setVideoUri] = useState<string | null>(null);
+
+  // Função para escolher da galeria
+  const pickVideo = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+      allowsEditing: true,
+      quality: 1,
+    });
+    if (!result.canceled) setVideoUri(result.assets[0].uri);
+  };
+
+  // Função para gravar com a câmera
+  const recordVideo = async () => {
+    try {
+        const permission = await ImagePicker.requestCameraPermissionsAsync();
+        if (!permission.granted) {
+            Alert.alert("Permissão negada", "Precisamos de acesso à câmera.");
+            return;
+        }
+
+        const result = await ImagePicker.launchCameraAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+            allowsEditing: true,
+            quality: 1,
+        });
+
+        if (!result.canceled) setVideoUri(result.assets[0].uri);
+    } catch (e) {
+        Alert.alert("Erro", "Não foi possível abrir a câmera.");
     }
   };
-  
-  const MenuRow = ({ title, subtitle, icon, screen, onPress }: MenuRowProps) => (
-    <TouchableOpacity style={styles.row} onPress={() => onPress(screen)} activeOpacity={0.7}>
-      <View style={styles.rowLeft}>
-        <View style={styles.iconBox}>
-          <Ionicons name={icon} size={20} style={styles.icon} />
-        </View>
-        <View style={styles.texts}>
-          <Text numberOfLines={1} style={styles.title}>{title}</Text>
-          <Text numberOfLines={1} style={styles.subtitle}>{subtitle}</Text>
-        </View>
-      </View>
-      <Ionicons name="chevron-forward" size={20} color={theme.icon} />
-    </TouchableOpacity>
-  );
-  
+
+  const handleNext = () => {
+    if (!videoUri) return;
+    
+    // CORREÇÃO 2: Repassar o atletaId para a Calibração
+    router.push({
+      pathname: "/(dashboard)/testes/analise/calibracao",
+      params: { 
+        videoUri,
+        atletaId // <--- Passando adiante!
+      }
+    });
+  };
+
   return (
-    <SafeAreaView style={styles.safe}>
+    <View style={styles.container}>
       <Spacer />
-      <View style={styles.section}>
-        <FlatList
-          data={MENU_ITEMS}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <MenuRow
-              title={item.title}
-              subtitle={item.subtitle}
-              icon={item.icon}
-              screen={item.screen}
-              onPress={handlePress}
+      <Text style={styles.title}>Captura de Movimento</Text>
+      <Text style={styles.subtitle}>Grave ou selecione um vídeo lateral do atleta.</Text>
+      
+      <View style={styles.content}>
+        {videoUri ? (
+          <View style={styles.videoWrapper}>
+            <Video
+              style={styles.video}
+              source={{ uri: videoUri }}
+              useNativeControls
+              resizeMode={ResizeMode.CONTAIN}
+              isLooping
             />
-          )}
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
-          contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 8 }}
-        />
+            <TouchableOpacity onPress={() => setVideoUri(null)} style={styles.removeBtn}>
+                <Ionicons name="close-circle" size={28} color="#fff" />
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={styles.optionsRow}>
+             <TouchableOpacity style={styles.optionCard} onPress={recordVideo}>
+                <Ionicons name="camera" size={40} color={theme.buttonBackground} />
+                <Text style={styles.optionText}>Gravar Vídeo</Text>
+             </TouchableOpacity>
+
+             <TouchableOpacity style={styles.optionCard} onPress={pickVideo}>
+                <Ionicons name="images" size={40} color={theme.buttonBackground} />
+                <Text style={styles.optionText}>Galeria</Text>
+             </TouchableOpacity>
+          </View>
+        )}
       </View>
-    </SafeAreaView>
+
+      <View style={styles.footer}>
+        <TouchableOpacity 
+            style={[styles.button, !videoUri && styles.buttonDisabled]} 
+            onPress={handleNext}
+            disabled={!videoUri}
+        >
+            <Text style={styles.buttonText}>Avançar para Calibração</Text>
+            <Ionicons name="arrow-forward" size={20} color="#fff" style={{marginLeft: 8}} />
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 }
 
-const createStyles = (theme: Theme) => StyleSheet.create({
-  safe: { flex: 1, backgroundColor: theme.background, paddingTop: 18 },
-  section: { flex: 1 },
-  row: {
-    flexDirection: "row", alignItems: "center", justifyContent: "space-between",
-    paddingVertical: 14, paddingHorizontal: 12, backgroundColor: theme.cardBackground,
-    borderRadius: 12, borderWidth: 1, borderColor: theme.cardBorder,
-  },
-  rowLeft: { flexDirection: "row", alignItems: "center" },
-  iconBox: {
-    width: 44, height: 44, borderRadius: 10, backgroundColor: theme.buttonBackground,
-    justifyContent: "center", alignItems: "center", marginRight: 12,
-  },
-  icon: { color: theme.background },
-  texts: { maxWidth: "78%" },
-  title: { fontSize: 16, fontWeight: "700", color: theme.text },
-  subtitle: { fontSize: 13, color: theme.subtitle, marginTop: 3 },
-  separator: { height: 8 },
-});
+function createStyles(theme: Theme) {
+  return StyleSheet.create({
+    container: { flex: 1, backgroundColor: theme.background, padding: 18 },
+    title: { fontSize: 22, fontWeight: '800', color: theme.text, marginBottom: 8 },
+    subtitle: { fontSize: 14, color: theme.subtitle, marginBottom: 30 },
+    content: { flex: 1, justifyContent: 'center' },
+    
+    optionsRow: { flexDirection: 'row', justifyContent: 'space-between', gap: 16 },
+    optionCard: {
+        flex: 1, height: 140, backgroundColor: theme.cardBackground, borderRadius: 16,
+        justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: theme.cardBorder,
+        borderStyle: 'dashed'
+    },
+    optionText: { marginTop: 12, color: theme.text, fontWeight: '600' },
+
+    videoWrapper: { width: '100%', height: 250, borderRadius: 16, overflow: 'hidden', backgroundColor: '#000' },
+    video: { flex: 1 },
+    removeBtn: { position: 'absolute', top: 10, right: 10, backgroundColor: '#00000080', borderRadius: 20 },
+
+    footer: { marginBottom: 20 },
+    button: {
+        backgroundColor: theme.buttonBackground, paddingVertical: 16, borderRadius: 12,
+        flexDirection: 'row', justifyContent: 'center', alignItems: 'center',
+        shadowColor: theme.cardShadow, shadowOpacity: 0.2, shadowRadius: 4, elevation: 4
+    },
+    buttonDisabled: { backgroundColor: theme.cardBorder, opacity: 0.7 },
+    buttonText: { color: '#fff', fontWeight: '700', fontSize: 16 }
+  });
+}
