@@ -7,16 +7,17 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
-import APANLOGO from '@/assets/images/APAN.png';
+import APAN from '@/assets/images/APAN.png';
 // import {Link} from 'expo-router'; // (Não usado neste arquivo)
 // 1. AJUSTE: Imports corretos de Contexto, Tipos e Hooks
 import { ThemeContext, ThemeContextType } from "@/context/ThemeContext";
-import React, { useContext } from "react"; // (useState removido, não usado)
+import React, { ReactNode, useContext } from "react"; // (useState removido, não usado)
 import ThemedText from "@/components/ThemedText"
 import Spacer from "@/components/Spacer"
 import { useUser } from '@/hooks/useUser'; // 2. AJUSTE: Importar o useUser
 import { Colors } from '@/constants/Colors'; // 3. AJUSTE: Importar Colors para tipagem
 import { router } from 'expo-router';
+import { MaterialIcons,MaterialCommunityIcons } from '@expo/vector-icons';
 
 // 4. AJUSTE: Tipo do 'theme' (nosso padrão)
 type Theme = typeof Colors.light | typeof Colors.dark;
@@ -24,10 +25,10 @@ type Theme = typeof Colors.light | typeof Colors.dark;
 // 5. AJUSTE: Interface para o componente local
 interface MenuCardProps {
   iconName: string;
-  iconColor: string;
   iconBgColor: string;
   title: string;
   subtitle: string;
+  icon: ReactNode;
   onPress: () => void;
 }
 
@@ -51,16 +52,18 @@ const HomeScreen = () => {
     router.push('/(dashboard)/testes/registrarTreino');
   }
 
+  const handleVideo = () =>{
+    console.log('Navigate to Análise de Testes');
+    router.push('/(dashboard)/testes/analise');
+
+  }
+
   // 9. AJUSTE: Tipagem das props
-  const MenuCard = ({ iconName, iconColor, iconBgColor, title, subtitle, onPress }: MenuCardProps) => (
+  const MenuCard = ({ iconName, icon, iconBgColor, title, subtitle, onPress }: MenuCardProps) => (
   <TouchableOpacity style={styles.card} onPress={onPress}>
     
     <View style={[styles.iconContainer, { backgroundColor: iconBgColor }]}>
-      <Image
-        source={APANLOGO}
-        style={{ width: 25, height: 24, tintColor: iconColor }}
-        resizeMode="cover"
-      />
+      {icon}
     </View>
     <View style={styles.cardTextContainer}>
       <ThemedText style={styles.cardTitle} title={true}>{title}</ThemedText>
@@ -75,7 +78,7 @@ const HomeScreen = () => {
         <Spacer/>
         {/* Cabeçalho */}
         <View style={styles.header}>
-          <Image source={APANLOGO}    
+          <Image source={APAN}    
           style={{width: 50, height: 50}}/>
           <ThemedText style={styles.headerSubtitle}>Monitoramento de Atletas</ThemedText>
         </View>
@@ -88,30 +91,37 @@ const HomeScreen = () => {
 
         {/* Opções do Menu */}
         <View style={styles.menuContainer}>
-          <MenuCard
-            iconName="clipboard-list"
-            iconColor="#007AFF"
-            iconBgColor="#E6F2FF"
-            title="Registrar Treino"
-            subtitle="Record athlete performance metrics and test results"
-            onPress={handleRegistro}
-          />
-          <MenuCard
-            iconName="chart-bar"
-            iconColor="#FF6A4D"
-            iconBgColor="#FFF0ED"
-            title="Consultar Desempenho"
-            subtitle="View and analyze athlete performance over time"
-            onPress={() => console.log('Dashboard pressed')}
-          />
-        </View>
 
-        {/* Botão de Ação Rápida */}
+        {/* Opções do Menu 
+        <TouchableOpacity style={styles.card} onPress={handleRegistro}>  
+          <View style={[styles.iconContainer, { backgroundColor: "#E6F2FF" }]}>
+            <MaterialIcons name="directions-run" size={30} color="#FF6A4D" />
+          </View>
+          <View style={styles.cardTextContainer}>
+            <ThemedText style={styles.cardTitle} title={true}>Registrar Treino</ThemedText>
+            <ThemedText style={styles.cardSubtitle}>Registre manualmente as principais métricas de treino do atleta.</ThemedText>
+          </View>
+        </TouchableOpacity>*/}
+
+        <TouchableOpacity style={styles.card} onPress={handleVideo}>
+          
+          <View style={[styles.iconContainer, { backgroundColor: "#E6F2FF" }]}>
+            <MaterialCommunityIcons name="record-circle" size={27} color="#FF6A4D" />
+          </View>
+          <View style={styles.cardTextContainer}>
+            <ThemedText style={styles.cardTitle} title={true}>Análise de Salto/Potência/Velocidade</ThemedText>
+            <ThemedText style={styles.cardSubtitle}>Grave ou envie um vídeo para análise com IA.</ThemedText>
+          </View>
+        </TouchableOpacity>
+
+      </View>
+
+        {/* Botão de Ação Rápida
         <TouchableOpacity style={styles.quickStartButton}>
           <Text style={styles.quickStartButtonText}>
             Quick Start Training Session
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </ScrollView>
     </SafeAreaView>
   );

@@ -11,6 +11,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemeContext, ThemeContextType } from '@/context/ThemeContext';
 import { Colors } from '@/constants/Colors';
 
+import { REACT_APP_CLOUD_NAME, REACT_APP_UPLOAD_PRESET
+    ,REACT_APP_RUNPOD_ID, REACT_APP_RUNPOD_API_KEY
+ } from "@env";
+
 type Theme = typeof Colors.light | typeof Colors.dark;
 
 export default function CalibracaoScreen() {
@@ -32,12 +36,12 @@ export default function CalibracaoScreen() {
   // ====================================================================
   // ⚠️ CHAVES
   // ====================================================================
-  const CLOUD_NAME = process.env.ENV_CLOUD_NAME;
-  const UPLOAD_PRESET = process.env.ENV_UPLOAD_PRESET; 
+    const CLOUD_NAME = process.env.REACT_APP_CLOUD_NAME;
+    const UPLOAD_PRESET = process.env.REACT_APP_UPLOAD_PRESET;
+    const RUNPOD_ID = process.env.REACT_APP_RUNPOD_ID;
+    const RUNPOD_API_KEY = process.env.REACT_APP_RUNPOD_API_KEY;
 
-  const RUNPOD_ID = process.env.ENV_RUNPOD_ID;
-  const RUNPOD_API_KEY = process.env.ENV_RUNPOD_API_KEY;  
-  
+ 
   // ====================================================================
 
   const calculateVideoCoordinates = (screenX: number, screenY: number) => {

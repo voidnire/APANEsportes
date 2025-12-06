@@ -7,7 +7,7 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
-import APANLOGO from '@/assets/images/APAN.png';
+import APAN from '@/assets/images/APAN.png';
 import { ThemeContext, ThemeContextType } from '@/context/ThemeContext';
 import React, { useContext } from 'react';
 import ThemedText from '@/components/ThemedText';
@@ -65,7 +65,7 @@ const Index = () => {
       <ScrollView contentContainerStyle={styles.container}>
         {/* Cabeçalho */}
         <View style={styles.header}>
-          <Image source={APANLOGO} style={{ maxHeight:55, width:60 }} />
+          <Image source={APAN} style={{ maxHeight:55, width:60 }} />
           <ThemedText style={styles.headerSubtitle}>
             Monitoramento de Atletas
           </ThemedText>

@@ -110,8 +110,8 @@ export default function SettingsScreen() {
   };
 
   const MENU_ITEMS = [
-    { id: '1', title: 'Dados da Conta', screen: 'JumpsScreen' },
-    { id: '2', title: 'Tema', screen: 'StrengthScreen' },
+    { id: '1', title: 'Alterar Dados da Conta', screen: 'JumpsScreen' },
+    { id: '2', title: 'Alterar Senha', screen: 'StrengthScreen' },
   ];
 
   const handlePressMenu = (screen: string) => {

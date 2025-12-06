@@ -7,7 +7,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 // 1. AJUSTE: Todos os imports agora usam o alias @/
 import { ThemeProvider, ThemeContext, ThemeContextType } from '@/context/ThemeContext';
 import { UserProvider } from '@/context/UserContext';
-import { AtletasProvider } from '@/context/AtletasContext';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -55,11 +54,10 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <UserProvider>
-        <AtletasProvider>
         <ThemeProvider>
           {/* O componente filho agora faz o trabalho */}
           <RootLayoutNav />
-        </ThemeProvider></AtletasProvider>
+        </ThemeProvider>
       </UserProvider>
     </QueryClientProvider>
   );
