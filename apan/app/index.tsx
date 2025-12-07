@@ -6,15 +6,15 @@ import {
   SafeAreaView,
   ScrollView,
   Image,
-} from 'react-native';
-import APAN from '@/assets/images/APAN.png';
-import { ThemeContext, ThemeContextType } from '@/context/ThemeContext';
-import React, { useContext } from 'react';
-import ThemedText from '@/components/ThemedText';
-import Spacer from '@/components/Spacer';
-import { Colors } from '@/constants/Colors';
-import { useUser } from '@/hooks/useUser';
-  
+} from "react-native";
+import APAN from "@/assets/images/APAN.png";
+import { ThemeContext, ThemeContextType } from "@/context/ThemeContext";
+import React, { useContext } from "react";
+import ThemedText from "@/components/ThemedText";
+import Spacer from "@/components/Spacer";
+import { Colors } from "@/constants/Colors";
+import { useUser } from "@/hooks/useUser";
+
 type Theme = typeof Colors.light | typeof Colors.dark;
 
 interface MenuCardProps {
@@ -29,10 +29,10 @@ interface MenuCardProps {
 const Index = () => {
   const themeContext = useContext<ThemeContextType | null>(ThemeContext);
   if (!themeContext) {
-    throw new Error('Index must be used within a ThemeProvider');
+    throw new Error("Index must be used within a ThemeProvider");
   }
   const { theme } = themeContext;
-  
+
   const styles = createStyles(theme);
 
   // O 'user' aqui agora tem o tipo User com 'nomeCompleto'
@@ -48,8 +48,7 @@ const Index = () => {
   }: MenuCardProps) => (
     <TouchableOpacity style={styles.card} onPress={onPress}>
       <View style={[styles.iconContainer, { backgroundColor: iconBgColor }]}>
-        <Spacer/>
-
+        <Spacer />
       </View>
       <View style={styles.cardTextContainer}>
         <ThemedText style={styles.cardTitle} title={true}>
@@ -65,7 +64,7 @@ const Index = () => {
       <ScrollView contentContainerStyle={styles.container}>
         {/* Cabeçalho */}
         <View style={styles.header}>
-          <Image source={APAN} style={{ maxHeight:55, width:60 }} />
+          <Image source={APAN} style={{ maxHeight: 55, width: 60 }} />
           <ThemedText style={styles.headerSubtitle}>
             Monitoramento de Atletas
           </ThemedText>
@@ -73,10 +72,10 @@ const Index = () => {
 
         {/* --- AJUSTE AQUI --- */}
         <ThemedText style={styles.welcomeTitle} title={true}>
-          Bem vindo, {user ? user.nomeCompleto : '...'}
+          Bem vindo, {user ? user.nomeCompleto : "..."}
         </ThemedText>
         {/* -------------------- */}
-        
+
         <Spacer height={30} />
 
         {/* Opções do Menu */}
@@ -87,7 +86,7 @@ const Index = () => {
             iconBgColor="#E6F2FF"
             title="Registrar Dados"
             subtitle="Record athlete performance metrics and test results"
-            onPress={() => console.log('Register Data pressed')}
+            onPress={() => console.log("Register Data pressed")}
           />
           <MenuCard
             iconName="chart-bar"
@@ -95,7 +94,7 @@ const Index = () => {
             iconBgColor="#FFF0ED"
             title="Consultar Desempenho"
             subtitle="View and analyze athlete performance over time"
-            onPress={() => console.log('Dashboard pressed')}
+            onPress={() => console.log("Dashboard pressed")}
           />
           <MenuCard
             iconName="settings-sharp"
@@ -103,7 +102,7 @@ const Index = () => {
             iconBgColor="#F4F4F4"
             title="Configurações"
             subtitle="Manage sensors, profiles, and export data"
-            onPress={() => console.log('Settings pressed')}
+            onPress={() => console.log("Settings pressed")}
           />
         </View>
 
@@ -134,16 +133,16 @@ const createStyles = (theme: Theme) =>
     },
     headerTitle: {
       fontSize: 24,
-      fontWeight: 'bold',
-      color: '#007AFF', // Azul do logo
+      fontWeight: "bold",
+      color: "#007AFF", // Azul do logo
     },
     headerSubtitle: {
       fontSize: 14,
-      color: '#8A8A8E',
+      color: "#8A8A8E",
     },
     welcomeTitle: {
       fontSize: 28,
-      fontWeight: 'bold',
+      fontWeight: "bold",
       marginBottom: 8,
     },
     welcomeSubtitle: {
@@ -152,12 +151,12 @@ const createStyles = (theme: Theme) =>
       lineHeight: 22,
     },
     menuContainer: {
-      width: '100%',
+      width: "100%",
       marginBottom: 20,
     },
     card: {
-      flexDirection: 'row',
-      alignItems: 'center',
+      flexDirection: "row",
+      alignItems: "center",
       backgroundColor: theme.cardBackground,
       borderRadius: 12,
       padding: 16,
@@ -170,15 +169,15 @@ const createStyles = (theme: Theme) =>
       shadowOpacity: 0.05,
       shadowRadius: 4,
       elevation: 3,
-      borderColor: theme.cardBorder, 
+      borderColor: theme.cardBorder,
       borderWidth: 1,
     },
     iconContainer: {
       width: 48,
       height: 48,
       borderRadius: 10,
-      justifyContent: 'center',
-      alignItems: 'center',
+      justifyContent: "center",
+      alignItems: "center",
       marginRight: 16,
     },
     cardTextContainer: {
@@ -186,11 +185,11 @@ const createStyles = (theme: Theme) =>
     },
     cardTitle: {
       fontSize: 17,
-      fontWeight: 'bold',
+      fontWeight: "bold",
     },
     cardSubtitle: {
       fontSize: 14,
-      color: '#8A8A8E',
+      color: "#8A8A8E",
       marginTop: 4,
       lineHeight: 18,
     },
@@ -199,16 +198,16 @@ const createStyles = (theme: Theme) =>
       paddingVertical: 18,
       paddingHorizontal: 32,
       borderRadius: 12,
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginTop: 'auto',
+      alignItems: "center",
+      justifyContent: "center",
+      marginTop: "auto",
       paddingTop: 18,
       marginBottom: 10,
     },
     quickStartButtonText: {
       color: theme.text,
       fontSize: 16,
-      fontWeight: 'bold',
+      fontWeight: "bold",
     },
   });
 
