@@ -39,11 +39,7 @@ const HomeScreen = () => {
     throw new Error('HomeScreen must be used within a ThemeProvider');
   }
   const { theme } = themeContext;
-  
-  // 7. AJUSTE: Tipagem correta para 'createStyles'
   const styles = createStyles(theme);
-
-  // 8. AJUSTE: Consumir o 'user' do hook
   const { user } = useUser();
   
 
@@ -58,25 +54,30 @@ const HomeScreen = () => {
 
   }
 
-  // 9. AJUSTE: Tipagem das props
+  const instrucoes = [
+    'O vídeo deve mostrar somente o atleta que será analisado — não inclua outras pessoas no enquadramento.',
+    'Marque dois pontos na pista com distância conhecida (por exemplo: ponto de início e ponto de término) em metros. Sem essa referência o app não conseguirá calcular a distância corretamente.',
+    'Marque um terceiro ponto para indicar a posição do atleta no vídeo (ponto de referência para a detecção).',
+    'Garanta que a câmera esteja fixa e que toda a área entre os pontos esteja visível durante a gravação.',
+    'Se possível, use linha do chão ou marcações visíveis para facilitar a detecção e aumentar a precisão.',
+  ];
+
   const MenuCard = ({ iconName, icon, iconBgColor, title, subtitle, onPress }: MenuCardProps) => (
-  <TouchableOpacity style={styles.card} onPress={onPress}>
-    
-    <View style={[styles.iconContainer, { backgroundColor: iconBgColor }]}>
-      {icon}
-    </View>
-    <View style={styles.cardTextContainer}>
-      <ThemedText style={styles.cardTitle} title={true}>{title}</ThemedText>
-      <ThemedText style={styles.cardSubtitle}>{subtitle}</ThemedText>
-    </View>
-  </TouchableOpacity>
-);
+    <TouchableOpacity style={styles.card} onPress={onPress}>
+      <View style={[styles.iconContainer, { backgroundColor: iconBgColor }]}>
+        {icon}
+      </View>
+      <View style={styles.cardTextContainer}>
+        <ThemedText style={styles.cardTitle} title={true}>{title}</ThemedText>
+        <ThemedText style={styles.cardSubtitle}>{subtitle}</ThemedText>
+      </View>
+    </TouchableOpacity>
+  );
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
-        <Spacer/>
-        {/* Cabeçalho */}
+        <Spacer height={4}/>
         <View style={styles.header}>
           <Image source={APAN}    
           style={{width: 50, height: 50}}/>
@@ -113,6 +114,30 @@ const HomeScreen = () => {
             <ThemedText style={styles.cardSubtitle}>Grave ou envie um vídeo para análise com IA.</ThemedText>
           </View>
         </TouchableOpacity>
+        {/* Caixa de instruções */}
+        <View style={styles.instructionBox}>
+          <ThemedText style={styles.instructionTitle} title={true}>
+            Instruções rápidas de gravação
+          </ThemedText>
+
+          <ThemedText style={styles.instructionIntro}>
+            Siga estas orientações para garantir que a análise automática (IA) calcule as métricas corretamente:
+          </ThemedText>
+
+          <View style={styles.bulletsContainer}>
+            {instrucoes.map((item, idx) => (
+              <View key={idx} style={styles.bulletRow}>
+                <View style={styles.bulletNumber}>
+                  <Text style={styles.bulletNumberText}>{idx + 1}</Text>
+                </View>
+                <ThemedText style={styles.bulletText}>{item}</ThemedText>
+              </View>
+            ))}
+          </View>
+        </View>
+
+        <Spacer height={1} />
+
 
       </View>
 
@@ -220,6 +245,55 @@ const createStyles = (theme: Theme)  =>
     fontSize: 16,
     fontWeight: 'bold',
   },
+
+  // INSTRUÇÕES
+  instructionBox: {
+      backgroundColor: theme.cardBackground,
+      borderRadius: 12,
+      padding: 16,
+      borderWidth: 1,
+      borderColor: theme.cardBorder,
+      marginBottom: 16,
+    },
+    instructionTitle: {
+      fontSize: 16,
+      fontWeight: '700',
+      marginBottom: 8,
+      color: theme.title,
+    },
+    instructionIntro: {
+      fontSize: 14,
+      marginBottom: 12,
+      color: theme.subtitle,
+      lineHeight: 20,
+    },
+    bulletsContainer: {
+      marginTop: 4,
+    },
+    bulletRow: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      marginBottom: 10,
+    },
+    bulletNumber: {
+      width: 28,
+      height: 28,
+      borderRadius: 8,
+      backgroundColor: '#FF6A4D22', // leve transparência
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginRight: 10,
+    },
+    bulletNumberText: {
+      color: '#FF6A4D',
+      fontWeight: '700',
+    },
+    bulletText: {
+      flex: 1,
+      fontSize: 14,
+      color: theme.text,
+      lineHeight: 20,
+    },
 });
 
 export default HomeScreen;
