@@ -36,10 +36,11 @@ export default function CalibracaoScreen() {
   // ====================================================================
   // ⚠️ CHAVES
   // ====================================================================
-    const CLOUD_NAME = process.env.REACT_APP_CLOUD_NAME;
-    const UPLOAD_PRESET = process.env.REACT_APP_UPLOAD_PRESET;
-    const RUNPOD_ID = process.env.REACT_APP_RUNPOD_ID;
-    const RUNPOD_API_KEY = process.env.REACT_APP_RUNPOD_API_KEY;
+  const CLOUD_NAME = REACT_APP_CLOUD_NAME;
+  const UPLOAD_PRESET = REACT_APP_UPLOAD_PRESET; 
+
+  const RUNPOD_ID = REACT_APP_RUNPOD_ID;
+  const RUNPOD_API_KEY = REACT_APP_RUNPOD_API_KEY;
 
  
   // ====================================================================
@@ -173,7 +174,7 @@ export default function CalibracaoScreen() {
         const finalOutput = await checkStatus(jobId);
 
         router.push({
-            pathname: "/(dashboard)/testes/analise/dashboard",
+            pathname: "/(dashboard)/atletas/atleta/[id]/treino/analise/dashboard",
             params: { 
                 resultData: JSON.stringify(finalOutput),
                 videoUrl: videoUrl,

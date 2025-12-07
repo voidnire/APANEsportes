@@ -165,7 +165,7 @@ export default function PerfilAtleta() {
   const handleTreino = () => {
     if (!atleta) return;
     router.push({
-      pathname: "/(dashboard)/testes/registrarTreino",
+      pathname: "/(dashboard)/atletas/atleta/[id]/treino",
       params: { atletaId: atleta.id } // opcional
     });
 

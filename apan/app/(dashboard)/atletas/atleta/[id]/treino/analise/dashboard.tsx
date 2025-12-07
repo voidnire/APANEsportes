@@ -8,6 +8,7 @@ import Spacer from '@/components/Spacer';
 import ThemedButton from '@/components/ThemedButton';
 import { AnalysisResult } from '@/models/analysis'; 
 import DadosAuxiliaresService from '@/services/dadosAuxiliares'; 
+import { ThemedText } from '@/components/themed-text';
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -116,7 +117,7 @@ export default function VideoDashboardScreen() {
         await DadosAuxiliaresService.registrarTreino(payload);
 
         Alert.alert("Sucesso", "Salvo no histórico!", [
-            { text: "OK", onPress: () => router.dismissAll() }
+            { text: "OK", onPress: () => router.push("/(dashboard)/atletas") }
         ]);
 
     } catch (error: any) {
@@ -192,10 +193,12 @@ export default function VideoDashboardScreen() {
       {readOnly !== 'true' && (
         <>
             <ThemedButton 
-                title={isSaving ? "Salvando..." : "Salvar no Histórico"} 
+                style={styles.quickStartButton}
                 onPress={handleAutoSave} 
                 disabled={isSaving} 
-            />
+            >
+                <ThemedText style={styles.quickStartButtonText}>{isSaving ? "Salvando..." : "Salvar no Histórico"} </ThemedText>
+                </ThemedButton> 
             {isSaving && <ActivityIndicator style={{marginTop: 10}} color={theme.text} />}
         </>
       )}
@@ -225,6 +228,7 @@ const Row = ({ label, value, theme }: any) => (
 
 const createStyles = (theme: any) => StyleSheet.create({
   container: { flex: 1, backgroundColor: theme.background },
+  button: { paddingVertical: 6, paddingHorizontal: 12, backgroundColor: theme.cardBackground },
   content: { padding: 20 },
   title: { fontSize: 24, fontWeight: '800', color: theme.text },
   subtitle: { fontSize: 14, color: theme.subtitle, marginBottom: 20 },
@@ -241,4 +245,23 @@ const createStyles = (theme: any) => StyleSheet.create({
   rowLabel: { color: theme.subtitle, fontSize: 14 },
   rowValue: { color: theme.text, fontSize: 14, fontWeight: '600' },
   divider: { height: 1, backgroundColor: theme.cardBorder, marginVertical: 8 },
+
+
+  quickStartButton: {
+    backgroundColor: theme.buttonBackground,
+    paddingVertical: 18,
+    paddingHorizontal: 32,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 'auto',
+    paddingTop: 18,
+    marginBottom: 10,
+  },
+  quickStartButtonText: {
+    color: theme.text,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+
 });

@@ -38,19 +38,10 @@ const DashboardLayout = () => {
                     tabBarIcon: ({ color, size }) => (
                         <MaterialIcons name="home" size={size} color={color} />
                     ), 
-                }} 
+                }}
             />
             
-            <Tabs.Screen 
-                name="testes" 
-                options={{ 
-                    tabBarLabel: "Treino",
-                    title: "Testes",
-                    tabBarIcon: ({ color, size }) => (
-                        <MaterialIcons name="sports-gymnastics" size={size} color={color} />
-                    ), 
-                }} 
-            />
+            
     
             
             <Tabs.Screen 
@@ -65,6 +56,18 @@ const DashboardLayout = () => {
             />
 
             {/* 
+
+            <Tabs.Screen 
+                name="testes" 
+                options={{ 
+                    tabBarLabel: "Treino",
+                    title: "Testes",
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialIcons name="sports-gymnastics" size={size} color={color} />
+                    ), 
+                }} 
+            />
+
             <Tabs.Screen 
                 name="desempenho" 
                 options={{ 

@@ -59,7 +59,7 @@ export default function SelecaoVideoScreen() {
     
     // CORREÇÃO 2: Repassar o atletaId para a Calibração
     router.push({
-      pathname: "/(dashboard)/testes/analise/calibracao",
+      pathname: "/(dashboard)/atletas/atleta/[id]/treino/analise/calibracao",
       params: { 
         videoUri,
         atletaId // <--- Passando adiante!

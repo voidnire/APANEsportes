@@ -51,6 +51,7 @@ export default function RegistrarDados() {
       try {
         setLoading(true);
         const data = await AtletaService.getAtletas();
+        console.log("Pegando atletas pro treino...")
         const sortedData = data.slice().sort((a, b) => a.nomeCompleto.localeCompare(b.nomeCompleto));
         setAtletas(sortedData);
       } catch (error: any) {
@@ -86,7 +87,7 @@ export default function RegistrarDados() {
     }
     // Navega para a seleção de vídeo, passando o ID do atleta para manter o contexto
     router.push({
-        pathname: "/(dashboard)/testes/analise/selecaoVideo",
+        pathname: "/(dashboard)/atletas/atleta/[id]/treino/analise",
         params: { atletaId: selectedAtletaId }
     });
   };

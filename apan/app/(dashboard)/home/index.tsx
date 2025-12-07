@@ -1,7 +1,7 @@
 import {
   StyleSheet,
   View,
-  Text,
+  Text,Alert,
   TouchableOpacity,
   SafeAreaView,
   ScrollView,
@@ -18,6 +18,7 @@ import { useUser } from '@/hooks/useUser'; // 2. AJUSTE: Importar o useUser
 import { Colors } from '@/constants/Colors'; // 3. AJUSTE: Importar Colors para tipagem
 import { router } from 'expo-router';
 import { MaterialIcons,MaterialCommunityIcons } from '@expo/vector-icons';
+import { useAtletas } from '@/hooks/useAtletas';
 
 // 4. AJUSTE: Tipo do 'theme' (nosso padrão)
 type Theme = typeof Colors.light | typeof Colors.dark;
@@ -41,17 +42,19 @@ const HomeScreen = () => {
   const { theme } = themeContext;
   const styles = createStyles(theme);
   const { user } = useUser();
-  
 
-  const handleRegistro = () => {
-    console.log('Navigate to Registrar Treino');
-    router.push('/(dashboard)/testes/registrarTreino');
-  }
+
+  const { data: atletas = [], isLoading, error } = useAtletas();
 
   const handleVideo = () =>{
     console.log('Navigate to Análise de Testes');
-    router.push('/(dashboard)/testes/analise');
-
+    let id = "0";
+    if (atletas.length === 0) {
+      Alert.alert("Cadastre um Atleta", "Você precisa cadastrar um atleta para realizar a gravação.");
+    }else{
+      id = atletas[0].id;
+      router.push(`/(dashboard)/atletas/atleta/${id}/treino`);
+    }
   }
 
   const instrucoes = [
@@ -93,16 +96,6 @@ const HomeScreen = () => {
         {/* Opções do Menu */}
         <View style={styles.menuContainer}>
 
-        {/* Opções do Menu 
-        <TouchableOpacity style={styles.card} onPress={handleRegistro}>  
-          <View style={[styles.iconContainer, { backgroundColor: "#E6F2FF" }]}>
-            <MaterialIcons name="directions-run" size={30} color="#FF6A4D" />
-          </View>
-          <View style={styles.cardTextContainer}>
-            <ThemedText style={styles.cardTitle} title={true}>Registrar Treino</ThemedText>
-            <ThemedText style={styles.cardSubtitle}>Registre manualmente as principais métricas de treino do atleta.</ThemedText>
-          </View>
-        </TouchableOpacity>*/}
 
         <TouchableOpacity style={styles.card} onPress={handleVideo}>
           

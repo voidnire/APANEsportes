@@ -26,6 +26,7 @@ export default function RootLayout(){
 
         <Stack.Screen name="atleta/[id]/desempenho" options={{headerShown: false}}/>
 
+        <Stack.Screen name="atleta/[id]/treino" options={{headerShown: false}}/>
 
         <Stack.Screen name="registrarDados" options={{ title: 'Registrar Dados', headerShown:false }} />
     </Stack>
