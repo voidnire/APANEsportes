@@ -50,14 +50,14 @@ const Login = () => {
         Alert.alert('Atenção', 'Por favor, preencha email e senha');
         return;
       }
-      console.log('Login form submitted: ', email, senha);
+      console.log('Login form submitted: ', email);
 
       // 5. A chamada do login() está CORRETA
       //    (ela bate com o que definimos no UserContext.tsx)
       const result = await login(email, senha);
       if (result.success) {
         // A navegação acontece automaticamente pelo _layout
-        console.log('Login realizado:', result.user);
+        console.log('Login realizado:', result.user?.nomeCompleto);
         router.push({
           pathname: '/', // Caminho completo
           // Passamos o nome para o layout (como o layout esperava)

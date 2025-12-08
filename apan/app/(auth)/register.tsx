@@ -47,7 +47,7 @@ const Register = () => {
         Alert.alert('Atenção', 'Por favor, preencha todos os campos');
         return;
       }
-      console.log('Register form submitted: ', nomeCompleto, email, senha);
+      console.log('Register form submitted: ', nomeCompleto, email);
 
       // 4. AJUSTE CRÍTICO: Passando todos os parâmetros
       //    (Conforme definido no nosso UserContext.tsx)

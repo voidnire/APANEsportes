@@ -9,7 +9,7 @@ export function useAtletas(){
         queryKey: ['atletas'],
     });
 
-    console.log("useAtletas data:", query.data);
+    console.log("useAtletas chamado");
 
     return {...query, data:query.data || []};
 }

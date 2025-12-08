@@ -109,10 +109,10 @@ export default function SettingsScreen() {
     }
   };
 
-  const MENU_ITEMS = [
+  /*const MENU_ITEMS = [
     { id: '1', title: 'Alterar Dados da Conta', screen: 'JumpsScreen' },
     { id: '2', title: 'Alterar Senha', screen: 'StrengthScreen' },
-  ];
+  ];*/
 
   const handlePressMenu = (screen: string) => {
     // ajuste a navegação conforme sua estrutura de rotas:
@@ -147,6 +147,7 @@ export default function SettingsScreen() {
 
       <Spacer height={12} />
 
+      {/** 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Geral</Text>
         <Spacer height={8} />
@@ -160,13 +161,14 @@ export default function SettingsScreen() {
           contentContainerStyle={{ paddingVertical: 8 }}
           scrollEnabled={false}
         />
-      </View>
+      </View>*/}
+      <Spacer />
 
       <ThemedButton onPress={handleLogout} style={styles.logoutButton}>
         <Text style={styles.logoutButtonText}>Sair</Text>
       </ThemedButton>
 
-      <Spacer height={36} />
+      <Spacer height={12} />
     </ScrollView>
   );
 }

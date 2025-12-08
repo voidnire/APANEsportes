@@ -175,7 +175,7 @@ export default function DesempenhoScreen() {
 
     if (jsonStr) {
         router.push({
-            pathname: "/(dashboard)/testes/analise/dashboard",
+            pathname: "/(dashboard)/atletas/atleta/[id]/treino/analise/dashboard",
             params: { 
                 resultData: jsonStr,
                 readOnly: 'true' // <--- IMPORTANTE: Passamos essa flag para esconder o botão salvar
@@ -264,9 +264,7 @@ export default function DesempenhoScreen() {
         <View style={{ padding: 24, alignItems: "center" }}>
           <Text style={{ color: theme.subtitle }}>Nenhum dado gráfico disponível.</Text>
           <Spacer/>
-          <ThemedButton onPress={() => router.push({ pathname: "/(dashboard)/testes/registrarDados", params: { atletaId: id } })}>
-            <ThemedText>Adicionar Registro Manual</ThemedText>
-          </ThemedButton>
+        
         </View>
       ) : (
         modalitiesArray.map((mod: any) => (

@@ -80,7 +80,7 @@ const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
-        <Spacer height={4}/>
+        <Spacer />
         <View style={styles.header}>
           <Image source={APAN}    
           style={{width: 50, height: 50}}/>

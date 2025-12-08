@@ -70,48 +70,15 @@ const Index = () => {
           </ThemedText>
         </View>
 
-        {/* --- AJUSTE AQUI --- */}
         <ThemedText style={styles.welcomeTitle} title={true}>
-          Bem vindo, {user ? user.nomeCompleto : "..."}
+          Bem vindo(a) {user ? user.nomeCompleto : "..."}
         </ThemedText>
-        {/* -------------------- */}
 
         <Spacer height={30} />
 
-        {/* Opções do Menu */}
-        <View style={styles.menuContainer}>
-          <MenuCard
-            iconName="clipboard-list"
-            iconColor="#007AFF"
-            iconBgColor="#E6F2FF"
-            title="Registrar Dados"
-            subtitle="Record athlete performance metrics and test results"
-            onPress={() => console.log("Register Data pressed")}
-          />
-          <MenuCard
-            iconName="chart-bar"
-            iconColor="#FF6A4D"
-            iconBgColor="#FFF0ED"
-            title="Consultar Desempenho"
-            subtitle="View and analyze athlete performance over time"
-            onPress={() => console.log("Dashboard pressed")}
-          />
-          <MenuCard
-            iconName="settings-sharp"
-            iconColor="#555555"
-            iconBgColor="#F4F4F4"
-            title="Configurações"
-            subtitle="Manage sensors, profiles, and export data"
-            onPress={() => console.log("Settings pressed")}
-          />
-        </View>
 
-        {/* Botão de Ação Rápida */}
-        <TouchableOpacity style={styles.quickStartButton}>
-          <Text style={styles.quickStartButtonText}>
-            Quick Start Training Session
-          </Text>
-        </TouchableOpacity>
+        
+
       </ScrollView>
     </SafeAreaView>
   );
@@ -193,22 +160,7 @@ const createStyles = (theme: Theme) =>
       marginTop: 4,
       lineHeight: 18,
     },
-    quickStartButton: {
-      backgroundColor: theme.buttonBackground,
-      paddingVertical: 18,
-      paddingHorizontal: 32,
-      borderRadius: 12,
-      alignItems: "center",
-      justifyContent: "center",
-      marginTop: "auto",
-      paddingTop: 18,
-      marginBottom: 10,
-    },
-    quickStartButtonText: {
-      color: theme.text,
-      fontSize: 16,
-      fontWeight: "bold",
-    },
+
   });
 
 export default Index;
