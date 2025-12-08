@@ -1,4 +1,4 @@
-// (dashboard)/atletas/atleta/[id]/treino/analise/dashboard.tsx
+// (dashboard)/testes/analise/dashboard.tsx
 import React, { useContext, useMemo, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Dimensions, Alert, ActivityIndicator } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -23,11 +23,8 @@ export default function VideoDashboardScreen() {
   const data: AnalysisResult | null = useMemo(() => {
     try { 
         return typeof resultData === 'string' ? JSON.parse(resultData) : null; 
-        
     } catch { return null; }
   }, [resultData]);
-  console.log(resultData)
-  
 
   const handleAutoSave = async () => {
     if (!data || !atletaId) {

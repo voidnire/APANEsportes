@@ -39,7 +39,11 @@ export default function CalibracaoScreen() {
   const RUNPOD_ID = process.env.EXPO_RUNPOD_ID;
   const RUNPOD_API_KEY = process.env.EXPO_RUNPOD_API_KEY;
 
- 
+  //console.log("-------------------------")
+  //console.log("API KEYS:")
+  //console.log(CLOUD_NAME)
+  //console.log(UPLOAD_PRESET)
+  //console.log("-------------------------")
   // ====================================================================
 
   const calculateVideoCoordinates = (screenX: number, screenY: number) => {
