@@ -177,6 +177,7 @@ export default function DesempenhoScreen() {
         router.push({
             pathname: "/(dashboard)/atletas/atleta/[id]/treino/analise/dashboard",
             params: { 
+                id: id,
                 resultData: jsonStr,
                 readOnly: 'true' // <--- IMPORTANTE: Passamos essa flag para esconder o botão salvar
             }

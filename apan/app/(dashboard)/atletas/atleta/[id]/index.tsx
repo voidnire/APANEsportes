@@ -166,7 +166,10 @@ export default function PerfilAtleta() {
     if (!atleta) return;
     router.push({
       pathname: "/(dashboard)/atletas/atleta/[id]/treino",
-      params: { atletaId: atleta.id } // opcional
+      params: { 
+        id: atleta.id,      
+        atletaId: atleta.id 
+      }
     });
 
     console.log('Registrar treino do atleta:', atleta.id);

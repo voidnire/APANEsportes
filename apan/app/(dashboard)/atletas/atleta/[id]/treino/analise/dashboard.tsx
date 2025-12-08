@@ -66,16 +66,16 @@ export default function VideoDashboardScreen() {
             } 
             else if (nome.includes('salto') || nome.includes('altura')) {
                 if (metrica.unidadeMedida.toLowerCase().includes('cm')) {
-                    valor = Number((aiValues.jump * 100).toFixed(1));
+                    valor = Number(((aiValues.jump ?? 0) * 100).toFixed(1));
                 } else {
-                    valor = Number(aiValues.jump.toFixed(3));
+                    valor = Number((aiValues.jump ?? 0).toFixed(3));
                 }
             }
             else if (nome.includes('cadência')) valor = Number(aiValues.cadence.toFixed(2));
             else if (nome.includes('distância')) valor = Number(aiValues.distance.toFixed(2));
 
             if (valor > 0) {
-                resultadosParaSalvar.push({ tipoMetricaId: metrica.id, valor });
+                resultadosParaSalvar.push({ tipoMetrica: metrica.id, valor });
             }
         }
 
@@ -107,7 +107,7 @@ export default function VideoDashboardScreen() {
         const payload = {
             atletaId: String(atletaId),
             modalidadeId: modalidadeAlvo.id,
-            tipo: "POS_TREINO",
+            tipo: "POS_TREINO" as "POS_TREINO",
             observacoes: obsText,
             dataHora: new Date().toISOString(),
             resultados: resultadosParaSalvar
@@ -149,7 +149,7 @@ export default function VideoDashboardScreen() {
       
       <View style={styles.kpiContainer}>
         <KPICard label="Vel. Máxima" value={data.speed?.velocity_max_m_s?.toFixed(2) ?? "0.00"} unit="m/s" theme={theme} />
-        <KPICard label="Salto" value={data.jump?.has_jump ? (data.jump.jump_height_m * 100).toFixed(1) : '--'} unit="cm" theme={theme} highlight />
+        <KPICard label="Salto" value={data.jump?.has_jump ? ((data.jump.jump_height_m ?? 0) * 100).toFixed(1) : '--'} unit="cm" theme={theme} highlight />
         <KPICard label="Cadência" value={data.stride?.stride_cadence_hz?.toFixed(1) ?? '--'} unit="Hz" theme={theme} />
       </View>
 

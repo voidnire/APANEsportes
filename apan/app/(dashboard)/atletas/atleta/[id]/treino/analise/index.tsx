@@ -61,8 +61,9 @@ export default function SelecaoVideoScreen() {
     router.push({
       pathname: "/(dashboard)/atletas/atleta/[id]/treino/analise/calibracao",
       params: { 
+        id: atletaId as string,
         videoUri,
-        atletaId // <--- Passando adiante!
+        atletaId: atletaId as string
       }
     });
   };

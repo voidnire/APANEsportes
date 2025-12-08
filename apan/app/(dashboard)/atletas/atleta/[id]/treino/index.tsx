@@ -88,7 +88,10 @@ export default function RegistrarDados() {
     // Navega para a seleção de vídeo, passando o ID do atleta para manter o contexto
     router.push({
         pathname: "/(dashboard)/atletas/atleta/[id]/treino/analise",
-        params: { atletaId: selectedAtletaId }
+        params: { 
+            id: selectedAtletaId,
+            atletaId: selectedAtletaId
+        }
     });
   };
 

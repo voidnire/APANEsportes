@@ -32,8 +32,9 @@ export default function Atletas() {
 
   const handlePress = (atleta: AtletaResumido) => {
     router.push({
-      pathname: `/(dashboard)/atletas/atleta/${atleta.id}`,
+      pathname: "/(dashboard)/atletas/atleta/[id]",
       params: {
+        id: String(atleta.id), 
         name: atleta.nomeCompleto,
       },
     });

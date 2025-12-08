@@ -121,7 +121,7 @@ export default function CalibracaoScreen() {
         // 1. UPLOAD PARA CLOUDINARY
         const uploadUrl = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/video/upload`;
         const formData = new FormData();
-        formData.append('upload_preset', UPLOAD_PRESET);
+        formData.append('upload_preset', UPLOAD_PRESET || '');
         formData.append('file', {
             uri: videoUri,
             type: 'video/mp4', 
@@ -180,7 +180,7 @@ export default function CalibracaoScreen() {
                 resultData: JSON.stringify(finalOutput),
                 videoUrl: videoUrl,
                 atletaId: atletaId 
-            }
+            } as any
         });
 
     } catch (err: any) {
